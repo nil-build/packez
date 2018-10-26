@@ -1,0 +1,27 @@
+{
+    "name": "packez",
+    "version": "0.0.1",
+    "description": "webpack零配置打包工具",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/nil-build/packez.git"
+    },
+    "files": [
+        "*.md",
+        "*.js"
+    ],
+    "keywords": [
+        "webpack",
+        "build"
+    ],
+    "author": "",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/nil-build/packez/issues"
+    },
+    "homepage": "https://github.com/nil-build/packez#readme"
+}
