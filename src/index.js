@@ -1,12 +1,33 @@
 
+import path from "path";
 const execSync = require('child_process').execSync;
-const fs = require("fs");
+const fs = require("fs-extra");
 const dependencies = require('./config/dependencies.config');
 const webpackConfig = require('./webpack/webpack.config');
 const defaultOptions = require('./defaultOptions');
 const log = require('./logger');
 
 const normalizeConfig = defaultOptions;
+
+export default function (entry = './src/index.js', outputDir = 'dist', opts = {}) {
+    const options = normalizeConfig(opts);
+    const appEntry = {};
+
+    if (typeof entry === 'string' || Array.isArray(entry)) {
+        appEntry['index'] = entry;
+    }
+
+    outputDir = path.resolve(options.cwd, outputDir);
+
+    fs.ensureDirSync(outputDir);
+
+    options.appEntry = appEntry;
+    options.appOutputDir = outputDir;
+
+    installDeps(options);
+
+    return webpackConfig(options);
+}
 
 /**
  * 获取未安装依赖
@@ -51,13 +72,13 @@ function installDeps(cfg) {
     log('依赖安装完成。');
 }
 
-function createWebpackConfig(options = {}) {
-    return webpackConfig(defaultOptions(options));
-}
+// function createWebpackConfig(options = {}) {
+//     return webpackConfig(defaultOptions(options));
+// }
 
-module.exports = {
-    installDeps,
-    normalizeConfig,
-    getDepsFromConfig,
-    createWebpackConfig
-};
+// module.exports = {
+//     installDeps,
+//     normalizeConfig,
+//     getDepsFromConfig,
+//     createWebpackConfig
+// };

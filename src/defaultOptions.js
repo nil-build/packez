@@ -2,6 +2,14 @@ const { resolveCwd } = require('./utils');
 const merge = require("./merge");
 
 const defaults = {
+    cwd: process.cwd(),
+    appEntry: {},
+    appOutputDir: 'dist',
+    //启用默认的 polyfills库 Map Set Promise
+    //whatwg-fetch?
+    //raf?
+    polyfills: require.resolve('./polyfills.js'),
+
     mode: 'development', // development  production
     appPath: resolveCwd("."),
     appSrc: "src", // path.resolve( appPath, appSrc )
@@ -63,13 +71,13 @@ const defaults = {
     rawLoaderRegexp: /\.txt$/,
     //启用模块
     module: {
-        "babel": true,
+        "babel": false,
         "css": true,
         "less": false,
-        "sass": true,
+        "sass": false,
         "eslint": false,
-        "json5": true,
-        "jsx": true,
+        "json5": false,
+        "jsx": false,
         "vue": false,
     },
     watch: false,

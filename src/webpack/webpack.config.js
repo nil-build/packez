@@ -6,20 +6,21 @@ const merge = require('../merge');
 
 module.exports = function (cfg) {
     const assestJs = cfg.assest.js;
-    const entryJs = !Array.isArray(cfg.appEntryJs) ? [cfg.appEntryJs] : cfg.appEntryJs;
-    //process.env.NODE_ENV = cfg.mode;//??
     const options = {
-        context: cfg.appPath,
+        context: cfg.cwd,
         mode: cfg.mode,
         devtool: cfg.devtool, //测试环境用eval 提高编译速度 //"source-map",
-        entry: cfg.entry || {
-            app: [].concat(
-                cfg.appPolyfills || [],
-                entryJs.map(entry => path.resolve(cfg.appPath, cfg.appSrc, entry))
-            ),
-        },
+        entry: (function (entries) {
+            const entry = {};
+
+            Object.keys(entries).forEach(key => {
+                entry[key] = cfg.polyfills ? [].concat(cfg.polyfills, entries[key]) : [].concat(entries[key])
+            });
+
+            return entry;
+        })(cfg.appEntry),
         output: merge({
-            path: path.resolve(cfg.appPath, cfg.appDist),
+            path: cfg.appOutputDir,
             filename: path.join(assestJs.output, assestJs.name),
             chunkFilename: path.join(assestJs.output, assestJs.chunkName),
             publicPath: cfg.publicUrl,
