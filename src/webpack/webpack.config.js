@@ -10,15 +10,7 @@ module.exports = function (cfg) {
         context: cfg.cwd,
         mode: cfg.mode,
         devtool: cfg.devtool, //测试环境用eval 提高编译速度 //"source-map",
-        entry: (function (entries) {
-            const entry = {};
-
-            Object.keys(entries).forEach(key => {
-                entry[key] = cfg.polyfills ? [].concat(cfg.polyfills, entries[key]) : [].concat(entries[key])
-            });
-
-            return entry;
-        })(cfg.appEntry),
+        entry: cfg.entry,
         output: merge({
             path: cfg.appOutputDir,
             filename: path.join(assestJs.output, assestJs.name),

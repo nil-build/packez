@@ -11,20 +11,26 @@ const normalizeConfig = defaultOptions;
 
 export default function (entry = './src/index.js', outputDir = 'dist', opts = {}) {
     const options = normalizeConfig(opts);
-    const appEntry = {};
-
+    let entries = entry;
     if (typeof entry === 'string' || Array.isArray(entry)) {
-        appEntry['index'] = entry;
+        entries = {
+            index: entry
+        };
     }
 
     outputDir = path.resolve(options.cwd, outputDir);
 
     fs.ensureDirSync(outputDir);
 
-    options.appEntry = appEntry;
     options.appOutputDir = outputDir;
 
     installDeps(options);
+
+    options.entry = {};
+
+    Object.keys(entries).forEach(key => {
+        options.entry[key] = options.polyfills ? [].concat(options.polyfills, entries[key]) : [].concat(entries[key])
+    });
 
     return webpackConfig(options);
 }

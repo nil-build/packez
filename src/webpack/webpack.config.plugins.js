@@ -5,7 +5,6 @@ const chalk = require('chalk');
 const warning = chalk.keyword('orange');
 
 module.exports = function (cfg) {
-    const HtmlWebpackPlugin = require('html-webpack-plugin');
 
     const plugins = [
         new webpack.IgnorePlugin(...(cfg.ignore || cfg.IgnorePlugin)),
@@ -33,30 +32,57 @@ module.exports = function (cfg) {
         );
     }
     //打包合并css成文件
-    if (cfg.module.css || cfg.module.less || cfg.module.sass) {
-        const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-        plugins.push(
-            new MiniCssExtractPlugin({
-                filename: cfg.assest.css.output + '/' + cfg.assest.css.name
-            })
-        );
+    if (!cfg.inlineStyle) {
+        if (cfg.module.css || cfg.module.less || cfg.module.sass) {
+            const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+            plugins.push(
+                new MiniCssExtractPlugin({
+                    filename: cfg.assest.css.output + '/' + cfg.assest.css.name
+                })
+            );
+        }
     }
 
     //生成首页html
-    if (cfg.appEntryHtml) {
-        const appEntryHtml = path.resolve(cfg.appPath, cfg.appSrc, cfg.appEntryHtml);
-        const htmlOpts = {
+    // if (cfg.appEntryHtml) {
+    //     const appEntryHtml = path.resolve(cfg.appPath, cfg.appSrc, cfg.appEntryHtml);
+    //     const htmlOpts = {
+    //         inject: true,
+    //     };
+
+    //     if (fs.existsSync(appEntryHtml)) {
+    //         htmlOpts.template = appEntryHtml;
+    //     } else {
+    //         console.log(warning(`Warning: ${appEntryHtml} not exists!`));
+    //     }
+
+    //     if (cfg.mode === 'production') {
+    //         htmlOpts.minify = {
+    //             removeComments: true,
+    //             collapseWhitespace: true,
+    //             removeRedundantAttributes: true,
+    //             useShortDoctype: true,
+    //             removeEmptyAttributes: true,
+    //             removeStyleLinkTypeAttributes: true,
+    //             keepClosingSlash: true,
+    //             minifyJS: true,
+    //             minifyCSS: true,
+    //             minifyURLs: true,
+    //         }
+    //     }
+
+    //     plugins.push(
+    //         new HtmlWebpackPlugin(Object.assign({}, cfg.appEntryHtmlOpts, htmlOpts))
+    //     );
+    // }
+    if (cfg.shouldUseEntryHTML) {
+        const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+        const defaultHtmlOpts = {
             inject: true,
         };
-
-        if (fs.existsSync(appEntryHtml)) {
-            htmlOpts.template = appEntryHtml;
-        } else {
-            console.log(warning(`Warning: ${appEntryHtml} not exists!`));
-        }
-
         if (cfg.mode === 'production') {
-            htmlOpts.minify = {
+            defaultHtmlOpts.minify = {
                 removeComments: true,
                 collapseWhitespace: true,
                 removeRedundantAttributes: true,
@@ -70,9 +96,22 @@ module.exports = function (cfg) {
             }
         }
 
-        plugins.push(
-            new HtmlWebpackPlugin(Object.assign({}, cfg.appEntryHtmlOpts, htmlOpts))
-        );
+        Object.keys(cfg.entry).forEach(key => {
+            var htmlOpts = Object.assign({}, defaultHtmlOpts);
+            let template = cfg.entryHTMLTemplates[key];
+            if (template) {
+                template = path.resolve(cfg.cwd, template);
+                if (fs.existsSync(template)) {
+                    htmlOpts.template = template;
+                }
+            }
+            htmlOpts.filename = key + cfg.entryHTMLExt;
+            htmlOpts.chunks = [key];
+
+            plugins.push(
+                new HtmlWebpackPlugin(htmlOpts)
+            );
+        });
     }
 
     if (cfg.module.vue) {
