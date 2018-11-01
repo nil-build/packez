@@ -14,6 +14,7 @@ function defaultLoaders(cfg) {
         /\.jsx?$/,
         /\.css$/,
         /\.scss$/,
+        /\.sass$/,
         /\.less$/,
         /\.json5?$/,
         /\.html?$/,
@@ -21,17 +22,21 @@ function defaultLoaders(cfg) {
         assestMedia.regexp,
     ];
 
+    if (cfg.module.vue) {
+        exclude.push(/\.vue$/);
+    }
+
     return [
+        //自定义匹配规则
+        {
+            test: cfg.rawLoaderRegexp,
+            loader: require.resolve("raw-loader"),
+        },
         //html文件加载
         {
             test: /\.html?$/,
             loader: require.resolve("html-loader"),
             options: cfg.htmlLoaderOptions
-        },
-        //自定义匹配规则
-        {
-            test: cfg.rawLoaderRegexp,
-            loader: require.resolve("raw-loader"),
         },
         //资源文件如图片
         {
@@ -40,7 +45,7 @@ function defaultLoaders(cfg) {
                 loader: require.resolve('url-loader'),
                 options: {
                     limit: assestMedia.limit,
-                    name: assestMedia.output + '/' + assestMedia.name,
+                    name: path.join(assestMedia.output, assestMedia.name),
                 }
             }]
         },
@@ -49,7 +54,7 @@ function defaultLoaders(cfg) {
             exclude,
             loader: require.resolve('file-loader'),
             options: {
-                name: assestMedia.output + '/' + assestMedia.name,
+                name: path.join(assestMedia.output, assestMedia.name),
             }
         }
     ];
@@ -57,22 +62,84 @@ function defaultLoaders(cfg) {
 
 const loaders = {
     babel(cfg) {
-
+        return {
+            test: /\.jsx?$/,
+            exclude: cfg.babelOptions.exclude,
+            use: [{
+                loader: require.resolve('babel-loader'),
+                options: babelConfig(cfg)
+            }]
+        };
     },
-    css() {
-
+    css(cfg) {
+        return {
+            test: /\.css$/,
+            use: [
+                cfg.inlineStyle
+                    ? require.resolve("style-loader")
+                    : require(require.resolve("mini-css-extract-plugin")).loader,
+                require.resolve('css-loader'),
+                {
+                    loader: require.resolve("postcss-loader"),
+                    options: postConfig(cfg)
+                }
+            ]
+        };
     },
-    scss() {
-
+    less(cfg) {
+        return {
+            test: /\.less$/,
+            use: [
+                cfg.inlineStyle
+                    ? require.resolve("style-loader")
+                    : require(require.resolve("mini-css-extract-plugin")).loader,
+                require.resolve('css-loader'),
+                {
+                    loader: require.resolve("postcss-loader"),
+                    options: {
+                        config: {
+                            path: path.resolve(__dirname, '../config/postcss.config.js')
+                        }
+                    }
+                },
+                require.resolve("less-loader")
+            ]
+        };
     },
-    sass() {
-
+    scss(cfg) {
+        return {
+            test: /\.s(?:a|c)ss$/,
+            use: [
+                cfg.inlineStyle
+                    ? require.resolve("style-loader")
+                    : require(require.resolve("mini-css-extract-plugin")).loader,
+                require.resolve('css-loader'),
+                {
+                    loader: require.resolve("postcss-loader"),
+                    options: {
+                        config: {
+                            path: path.resolve(__dirname, '../config/postcss.config.js')
+                        }
+                    }
+                },
+                require.resolve("sass-loader")
+            ]
+        };
     },
-    json5() {
-
+    sass(cfg) {
+        return this.scss(cfg);
     },
-    vue() {
-
+    json5(cfg) {
+        return {
+            test: /\.json5$/,
+            loader: require.resolve('json5-loader')
+        };
+    },
+    vue(cfg) {
+        return {
+            test: /\.vue$/,
+            loader: require.resolve("vue-loader"),
+        }
     }
 }
 
@@ -102,134 +169,11 @@ module.exports = function (cfg) {
 
     Object.keys(enableModule).forEach(module => {
         if (enableModule[module] && loaders[module]) {
-            rules.push(loaders[module](cfg));
+            oneOf.push(loaders[module](cfg));
         }
     });
 
-    // oneOf.push({
-    //     test: /\.html?$/,
-    //     loader: require.resolve("html-loader"),
-    //     options: cfg.htmlLoaderOptions
-    // });
-
-    // oneOf.push({
-    //     test: cfg.rawLoaderRegexp,
-    //     loader: require.resolve("raw-loader"),
-    // });
-
-    // if (cfg.module.babel) {
-    //     oneOf.push({
-    //         test: /\.jsx?$/,
-    //         exclude: cfg.babelOptions.exclude,
-    //         use: [{
-    //             loader: require.resolve('babel-loader'),
-    //             options: babelConfig(cfg)
-    //         }]
-    //     });
-    // }
-
-    // if (cfg.module.css) {
-    //     oneOf.push({
-    //         test: /\.css$/,
-    //         use: [
-    //             cfg.inlineStyle
-    //                 ? require.resolve("style-loader")
-    //                 : require(require.resolve("mini-css-extract-plugin")).loader,
-    //             require.resolve('css-loader'),
-    //             {
-    //                 loader: require.resolve("postcss-loader"),
-    //                 options: postConfig(cfg)
-    //                 // options: {
-    //                 //     config: {
-    //                 //         path: path.resolve(__dirname, '../config/postcss.config.js')
-    //                 //     }
-    //                 // }
-    //             }
-    //         ]
-    //     });
-    // }
-    // if (cfg.module.less) {
-    //     oneOf.push({
-    //         test: /\.less$/,
-    //         use: [
-    //             cfg.inlineStyle
-    //                 ? require.resolve("style-loader")
-    //                 : require(require.resolve("mini-css-extract-plugin")).loader,
-    //             require.resolve('css-loader'),
-    //             {
-    //                 loader: require.resolve("postcss-loader"),
-    //                 options: {
-    //                     config: {
-    //                         path: path.resolve(__dirname, '../config/postcss.config.js')
-    //                     }
-    //                 }
-    //             },
-    //             require.resolve("less-loader")
-    //         ]
-    //     });
-    // }
-    // if (cfg.module.sass) {
-    //     oneOf.push({
-    //         test: /\.scss$/,
-    //         use: [
-    //             cfg.inlineStyle
-    //                 ? require.resolve("style-loader")
-    //                 : require(require.resolve("mini-css-extract-plugin")).loader,
-    //             require.resolve('css-loader'),
-    //             {
-    //                 loader: require.resolve("postcss-loader"),
-    //                 options: {
-    //                     config: {
-    //                         path: path.resolve(__dirname, '../config/postcss.config.js')
-    //                     }
-    //                 }
-    //             },
-    //             require.resolve("sass-loader")
-    //         ]
-    //     });
-    // }
-    // if (cfg.module.json5) {
-    //     oneOf.push({
-    //         test: /\.json5$/,
-    //         loader: require.resolve('json5-loader')
-    //     });
-    // }
-
-    // oneOf.push({
-    //     test: assestMedia.regexp,
-    //     use: [{
-    //         loader: require.resolve('url-loader'),
-    //         options: {
-    //             limit: assestMedia.limit,
-    //             name: assestMedia.output + '/' + assestMedia.name,
-    //         }
-    //     }]
-    // });
-
-
-    // if (cfg.module.vue) {
-    //     exclude.push(/\.vue$/);
-    // }
-
-    // const exclude = [
-    //     /\.ejs$/,
-    //     /\.jsx?$/,
-    //     /\.css$/,
-    //     /\.scss$/,
-    //     /\.less$/,
-    //     /\.json5?$/,
-    //     /\.html?$/,
-    //     cfg.rawLoaderRegexp,
-    //     assestMedia.regexp,
-    // ];
-
-    // oneOf.push({
-    //     exclude,
-    //     loader: require.resolve('file-loader'),
-    //     options: {
-    //         name: assestMedia.output + '/' + assestMedia.name,
-    //     }
-    // });
+    oneOf.push(...defaultLoaders(cfg));
 
     rules.push({
         oneOf

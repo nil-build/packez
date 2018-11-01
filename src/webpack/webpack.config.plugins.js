@@ -33,11 +33,11 @@ module.exports = function (cfg) {
     }
     //打包合并css成文件
     if (!cfg.inlineStyle) {
-        if (cfg.module.css || cfg.module.less || cfg.module.sass) {
+        if (cfg.module.css || cfg.module.less || cfg.module.sass || cfg.module.scss) {
             const MiniCssExtractPlugin = require("mini-css-extract-plugin");
             plugins.push(
                 new MiniCssExtractPlugin({
-                    filename: cfg.assest.css.output + '/' + cfg.assest.css.name
+                    filename: path.join(cfg.assest.css.output, cfg.assest.css.name)
                 })
             );
         }

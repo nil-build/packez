@@ -22,7 +22,7 @@ export default function (entry = './src/index.js', outputDir = 'dist', opts = {}
 
     fs.ensureDirSync(outputDir);
 
-    options.appOutputDir = outputDir;
+    options.outputDir = outputDir;
 
     installDeps(options);
 

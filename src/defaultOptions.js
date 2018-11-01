@@ -6,7 +6,7 @@ const defaults = {
     entry: {
         index: './src/index.js'
     },
-    appOutputDir: 'dist',
+    outputDir: 'dist',
     //启用默认的 polyfills库 Map Set Promise
     //whatwg-fetch?
     //raf?
@@ -18,18 +18,19 @@ const defaults = {
 
     shouldUseSourceMap: true,//?
 
+    shouldUseSplitChunks: true,
+
     runtimeChunk: false,
 
     inlineStyle: false,
 
-    shouldUseSplitChunks: true,
+    publicPath: '',
 
     mode: 'development', // development  production
     appPath: resolveCwd("."),
     appSrc: "src", // path.resolve( appPath, appSrc )
     appDist: "dist", // path.resolve( appPath, appDist )
     publicUrl: "",
-    devtool: "source-map",
     appPolyfills: require.resolve('./polyfills.js'),
     appEntryJs: "index.js", // path.resolve( appPath, appSrc, appEntryJs )
     appEntryHtml: "index.html", // path.resolve( appPath, appSrc, appEntryHtml )
@@ -37,10 +38,7 @@ const defaults = {
     cleanDist: false,
     splitChunks: true,
     cnpm: false,
-    resolve: {},
-    externals: {},
-    performance: {},
-    target: 'web',
+
     assest: {
         css: {
             name: "[name].[contenthash:8].css",
@@ -71,7 +69,7 @@ const defaults = {
             /(node_modules|bower_components)/m,
         ]
     },
-    babelConfig: {},//自定义babel配置，不建议使用
+    // babelConfig: {},//自定义babel配置，不建议使用
     eslintFile: '', //自定义eslint配置文件
 
     defines: null,
@@ -94,9 +92,16 @@ const defaults = {
         "jsx": false,
         "vue": false,
     },
-    watch: false,
-    // watchOptions: {},
-    devServer: {},
+    // watch: false,
+    // // watchOptions: {},
+    // devServer: {},
+
+    //webpack options
+    target: 'web',
+    devtool: "source-map",
+    resolve: {},
+    externals: {},
+    performance: {},
 };
 
 module.exports = function parseConfig(options) {

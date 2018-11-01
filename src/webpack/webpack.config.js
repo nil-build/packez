@@ -12,10 +12,10 @@ module.exports = function (cfg) {
         devtool: cfg.devtool, //测试环境用eval 提高编译速度 //"source-map",
         entry: cfg.entry,
         output: merge({
-            path: cfg.appOutputDir,
+            path: cfg.outputDir,
             filename: path.join(assestJs.output, assestJs.name),
             chunkFilename: path.join(assestJs.output, assestJs.chunkName),
-            publicPath: cfg.publicUrl,
+            publicPath: cfg.publicPath,
         }, cfg.output || {}),
         module: webpackModule(cfg),
         plugins: webpackPlugins(cfg),
