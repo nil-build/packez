@@ -63,7 +63,7 @@ function defaultLoaders(cfg) {
 const loaders = {
     babel(cfg) {
         return {
-            test: /\.jsx?$/,
+            test: /\.m?jsx?$/,
             exclude: cfg.babelOptions.exclude,
             use: [{
                 loader: require.resolve('babel-loader'),

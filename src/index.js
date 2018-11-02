@@ -1,15 +1,13 @@
 
-import path from "path";
+const path = require('path');
 const execSync = require('child_process').execSync;
 const fs = require("fs-extra");
 const dependencies = require('./config/dependencies.config');
 const webpackConfig = require('./webpack/webpack.config');
-const defaultOptions = require('./defaultOptions');
+const normalizeConfig = require('./defaultOptions');
 const log = require('./logger');
 
-const normalizeConfig = defaultOptions;
-
-export default function (entry = './src/index.js', outputDir = 'dist', opts = {}) {
+module.exports = function (entry = './src/index.js', outputDir = 'dist', opts = {}) {
     const options = normalizeConfig(opts);
     let entries = entry;
     if (typeof entry === 'string' || Array.isArray(entry)) {
@@ -29,8 +27,15 @@ export default function (entry = './src/index.js', outputDir = 'dist', opts = {}
     options.entry = {};
 
     Object.keys(entries).forEach(key => {
-        options.entry[key] = options.polyfills ? [].concat(options.polyfills, entries[key]) : [].concat(entries[key])
+        options.entry[key] = options.polyfills ? [].concat(options.polyfills, entries[key]) : [].concat(entries[key]);
+        if (options.shouldUseFetch) {
+            options.entry[key].unshift(require.resolve('./fetchPolyfills.js'));
+        }
     });
+
+    if (options.clear) {
+        fs.emptyDirSync(outputDir);
+    }
 
     return webpackConfig(options);
 }
@@ -39,7 +44,6 @@ export default function (entry = './src/index.js', outputDir = 'dist', opts = {}
  * 获取未安装依赖
  */
 function getDepsFromConfig(cfg) {
-    cfg = defaultOptions(cfg);
 
     const deps = new Set(dependencies.core);
     const pkgFile = process.cwd() + '/package.json';
@@ -61,9 +65,8 @@ function getDepsFromConfig(cfg) {
     return [...deps].filter(v => !(v in pkgDeps));
 }
 
-function installDeps(cfg) {
-    const options = defaultOptions(cfg);
-    const deps = getDepsFromConfig(cfg);
+function installDeps(options) {
+    const deps = getDepsFromConfig(options);
 
     const executor = options.cnpm ? 'cnpm' : 'npm';
 
@@ -77,14 +80,3 @@ function installDeps(cfg) {
 
     log('依赖安装完成。');
 }
-
-// function createWebpackConfig(options = {}) {
-//     return webpackConfig(defaultOptions(options));
-// }
-
-// module.exports = {
-//     installDeps,
-//     normalizeConfig,
-//     getDepsFromConfig,
-//     createWebpackConfig
-// };

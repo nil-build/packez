@@ -7,13 +7,18 @@ const warning = chalk.keyword('orange');
 module.exports = function (cfg) {
 
     const plugins = [
-        new webpack.IgnorePlugin(...(cfg.ignore || cfg.IgnorePlugin)),
-        new webpack.DefinePlugin(cfg.defines || cfg.DefinePlugin)
+        new webpack.DefinePlugin(cfg.DefinePluginArgs)
     ];
 
-    if (cfg.banner || cfg.BannerPlugin) {
+    plugins.push(
+        ...cfg.IgnoreList.map(ignore => {
+            return new webpack.IgnorePlugin(...ignore);
+        })
+    )
+
+    if (cfg.BannerPluginArgs) {
         plugins.push(
-            new webpack.BannerPlugin(cfg.banner || cfg.BannerPlugin)
+            new webpack.BannerPlugin(cfg.BannerPluginArgs)
         );
     }
 
@@ -23,14 +28,14 @@ module.exports = function (cfg) {
         plugins.push(new ManifestPlugin());
     }
     //打包前清理文件夹
-    if (cfg.cleanDist) {
-        const CleanWebpackPlugin = require('clean-webpack-plugin');
-        plugins.push(
-            new CleanWebpackPlugin(path.basename(cfg.appDist), {
-                root: cfg.appPath
-            })
-        );
-    }
+    // if (cfg.cleanDist) {
+    //     const CleanWebpackPlugin = require('clean-webpack-plugin');
+    //     plugins.push(
+    //         new CleanWebpackPlugin(path.basename(cfg.appDist), {
+    //             root: cfg.appPath
+    //         })
+    //     );
+    // }
     //打包合并css成文件
     if (!cfg.inlineStyle) {
         if (cfg.module.css || cfg.module.less || cfg.module.sass || cfg.module.scss) {
@@ -43,38 +48,7 @@ module.exports = function (cfg) {
         }
     }
 
-    //生成首页html
-    // if (cfg.appEntryHtml) {
-    //     const appEntryHtml = path.resolve(cfg.appPath, cfg.appSrc, cfg.appEntryHtml);
-    //     const htmlOpts = {
-    //         inject: true,
-    //     };
-
-    //     if (fs.existsSync(appEntryHtml)) {
-    //         htmlOpts.template = appEntryHtml;
-    //     } else {
-    //         console.log(warning(`Warning: ${appEntryHtml} not exists!`));
-    //     }
-
-    //     if (cfg.mode === 'production') {
-    //         htmlOpts.minify = {
-    //             removeComments: true,
-    //             collapseWhitespace: true,
-    //             removeRedundantAttributes: true,
-    //             useShortDoctype: true,
-    //             removeEmptyAttributes: true,
-    //             removeStyleLinkTypeAttributes: true,
-    //             keepClosingSlash: true,
-    //             minifyJS: true,
-    //             minifyCSS: true,
-    //             minifyURLs: true,
-    //         }
-    //     }
-
-    //     plugins.push(
-    //         new HtmlWebpackPlugin(Object.assign({}, cfg.appEntryHtmlOpts, htmlOpts))
-    //     );
-    // }
+    //生成html页面
     if (cfg.shouldUseEntryHTML) {
         const HtmlWebpackPlugin = require('html-webpack-plugin');
 

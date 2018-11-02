@@ -8,7 +8,7 @@ module.exports = {
         "extract-loader",
         "webpack-manifest-plugin",
         "html-webpack-plugin",
-        "clean-webpack-plugin",
+        //"clean-webpack-plugin",
         "webpack-dev-server",
         "@babel/runtime",
         "@babel/runtime-corejs2",
@@ -17,6 +17,8 @@ module.exports = {
         "opn",
         "html-loader",
         "autoprefixer",
+        "raf",
+        "whatwg-fetch"
     ],
     "babel": [
         "babel-loader", // webpack loader

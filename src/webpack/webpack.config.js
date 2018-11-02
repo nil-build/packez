@@ -9,7 +9,8 @@ module.exports = function (cfg) {
     const options = {
         context: cfg.cwd,
         mode: cfg.mode,
-        devtool: cfg.devtool, //测试环境用eval 提高编译速度 //"source-map",
+        bail: cfg.mode === 'production' ? true : false,
+        devtool: cfg.shouldUseSourceMap ? cfg.devtool : 'none', //测试环境用eval 提高编译速度 //"source-map",
         entry: cfg.entry,
         output: merge({
             path: cfg.outputDir,
