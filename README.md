@@ -103,13 +103,13 @@ server(options);
     rawLoaderRegexp: /\.txt$/,
     //启用模块
     module: {
-        "babel": false,
+        "babel": true,
         "css": true,
         "less": false,
-        "sass": false,
+        "sass": true,
         "eslint": false,
-        "json5": false,
-        "jsx": false,
+        "json5": true,
+        "jsx": true,
         "vue": false,
     },
 
