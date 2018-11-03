@@ -14,6 +14,8 @@ module.exports = function (entry, output, opts = {}) {
 
     opts = omit(opts, ['devServer', 'watch']);
 
+    installDeps(opts);
+
     const webpackConfig = getWebpackConfig(entry, output, opts);
 
     fs.ensureDirSync(webpackConfig.output.path);
@@ -21,8 +23,6 @@ module.exports = function (entry, output, opts = {}) {
     if (opts.clear) {
         fs.emptyDirSync(webpackConfig.output.path);
     }
-
-    installDeps(opts);
 
     const compiler = webpack(webpackConfig);
 

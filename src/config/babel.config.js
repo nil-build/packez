@@ -2,7 +2,7 @@ const browserslist = require('./browserslist.config');
 
 module.exports = function (cfg) {
     const options = cfg.babelOptions;
-    const useJSX = cfg.module.jsx;
+    const useJSX = cfg.modules.jsx;
     const modules = options.modules;
     const strictMode = options.strictMode;
 
