@@ -6,15 +6,20 @@ const warning = chalk.keyword('orange');
 
 module.exports = function (cfg) {
 
-    const plugins = [
-        new webpack.DefinePlugin(cfg.DefinePluginArgs)
-    ];
+    const plugins = [];
 
     plugins.push(
         ...cfg.IgnoreList.map(ignore => {
             return new webpack.IgnorePlugin(...ignore);
         })
-    )
+    );
+
+
+    if (cfg.DefinePluginArgs) {
+        plugins.push(
+            new webpack.DefinePlugin(cfg.DefinePluginArgs)
+        );
+    }
 
     if (cfg.BannerPluginArgs) {
         plugins.push(
@@ -38,7 +43,7 @@ module.exports = function (cfg) {
     // }
     //打包合并css成文件
     if (!cfg.inlineStyle) {
-        if (cfg.module.css || cfg.module.less || cfg.module.sass || cfg.module.scss) {
+        if (cfg.modules.css || cfg.modules.less || cfg.modules.sass || cfg.modules.scss) {
             const MiniCssExtractPlugin = require("mini-css-extract-plugin");
             plugins.push(
                 new MiniCssExtractPlugin({
@@ -88,7 +93,7 @@ module.exports = function (cfg) {
         });
     }
 
-    if (cfg.module.vue) {
+    if (cfg.modules.vue) {
         const VueLoaderPlugin = require('vue-loader/lib/plugin');
         plugins.push(
             new VueLoaderPlugin()

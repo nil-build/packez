@@ -1,7 +1,11 @@
 
-const packez = require('./lib');
+const {
+    getWebpackConfig,
+    installDeps
+} = require('./lib');
 const webpack = require("webpack");
 const omit = require('object.omit');
+const fs = require("fs-extra");
 const log = require('./lib/logger');
 
 module.exports = function (entry, output, opts = {}) {
@@ -10,7 +14,15 @@ module.exports = function (entry, output, opts = {}) {
 
     opts = omit(opts, ['devServer', 'watch']);
 
-    const webpackConfig = packez(entry, output, opts);
+    const webpackConfig = getWebpackConfig(entry, output, opts);
+
+    fs.ensureDirSync(webpackConfig.output.path);
+
+    if (opts.clear) {
+        fs.emptyDirSync(webpackConfig.output.path);
+    }
+
+    installDeps(opts);
 
     const compiler = webpack(webpackConfig);
 

@@ -13,7 +13,7 @@ program
     .option('-c, --clear', '转换前清空输出目录', true)
     .option('-p, --publicPath [publicPath]', 'publicPath', '')
     .option('-m, --module [module]', 'css,babel,jsx')
-    .option('--config [config]', '配置文件', '')
+    .option('--config', '配置文件', 'webpack.config.js')
     .option('--mode [mode]', '转换模式：development（默认值）、production，production模式下minify生效', 'development')
     .option('--banner [banner]', '在每个转换文件顶部添加注释文本', '')
     .option('--strictMode [strictMode]', '参考 babel', /^true|false$/, 'true')
@@ -56,7 +56,7 @@ program.module = program.module || 'babel,css,jsx';
 program.module.split(',').forEach(m => {
     enableModule[m] = true;
 });
-options.module = enableModule;
+options.modules = enableModule;
 
 let opts = null;
 let entry = './src/index.js';

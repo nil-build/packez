@@ -1,6 +1,6 @@
 {
     "name": "packez",
-    "version": "1.0.5",
+    "version": "1.0.7",
     "description": "",
     "keywords": [
         "react",
@@ -9,7 +9,7 @@
         "build",
         "packez"
     ],
-    "main": "lib/index.js",
+    "main": "index.js",
     "bin": {
         "packez": "./cli.js"
     },
@@ -23,7 +23,8 @@
     "repository": "https://github.com/nil-build/packez.git",
     "license": "MIT",
     "scripts": {
-        "start": "transform-es src -d lib -t node -w"
+        "start": "transform-es src -d lib -t node -w",
+        "tag": "npm publish --tag next"
     },
     "files": [
         "*.md",

@@ -7,7 +7,7 @@ const webpackConfig = require('./webpack/webpack.config');
 const normalizeConfig = require('./defaultOptions');
 const log = require('./logger');
 
-module.exports = function (entry = './src/index.js', outputDir = 'dist', opts = {}) {
+function getWebpackConfig(entry = './src/index.js', outputDir = 'dist', opts = {}) {
     const options = normalizeConfig(opts);
     let entries = entry;
     if (typeof entry === 'string' || Array.isArray(entry)) {
@@ -18,11 +18,11 @@ module.exports = function (entry = './src/index.js', outputDir = 'dist', opts = 
 
     outputDir = path.resolve(options.cwd, outputDir);
 
-    fs.ensureDirSync(outputDir);
-
     options.outputDir = outputDir;
 
-    installDeps(options);
+    //fs.ensureDirSync(outputDir);
+
+    //installDeps(options);
 
     options.entry = {};
 
@@ -33,10 +33,6 @@ module.exports = function (entry = './src/index.js', outputDir = 'dist', opts = 
         }
     });
 
-    if (options.clear) {
-        fs.emptyDirSync(outputDir);
-    }
-
     return webpackConfig(options);
 }
 
@@ -44,7 +40,7 @@ module.exports = function (entry = './src/index.js', outputDir = 'dist', opts = 
  * 获取未安装依赖
  */
 function getDepsFromConfig(cfg) {
-
+    cfg = normalizeConfig(cfg);
     const deps = new Set(dependencies.core);
     const pkgFile = process.cwd() + '/package.json';
     let pkg = {};
@@ -54,7 +50,7 @@ function getDepsFromConfig(cfg) {
 
     const pkgDeps = Object.assign({}, pkg.dependencies, pkg.devDependencies);
 
-    Object.keys(cfg.module).filter(v => cfg.module[v]).forEach(v => {
+    Object.keys(cfg.modules).filter(v => cfg.modules[v]).forEach(v => {
         if (dependencies[v]) {
             dependencies[v].forEach(dep => {
                 deps.add(dep);
@@ -66,6 +62,7 @@ function getDepsFromConfig(cfg) {
 }
 
 function installDeps(options) {
+    options = normalizeConfig(options);
     const deps = getDepsFromConfig(options);
 
     const executor = options.cnpm ? 'cnpm' : 'npm';
@@ -79,4 +76,11 @@ function installDeps(options) {
     execSync(cmd);
 
     log('依赖安装完成。');
+}
+
+module.exports = {
+    getWebpackConfig,
+    getDepsFromConfig,
+    normalizeConfig,
+    installDeps
 }

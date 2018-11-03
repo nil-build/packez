@@ -55,6 +55,7 @@ const defaults = {
             limit: 8192,
         }
     },
+
     manifest: {
         enableMode: 'production',
     },
@@ -74,20 +75,20 @@ const defaults = {
     IgnoreList: [
         [/^\.[\\/]locale$/, /moment$/]
     ],
-    DefinePluginArgs: {},
+    DefinePluginArgs: null,
     BannerPluginArgs: null,
 
     htmlLoaderOptions: {},
     rawLoaderRegexp: /\.txt$/,
     //启用模块
-    module: {
-        "babel": true,
+    modules: {
+        "babel": false,
         "css": true,
         "less": false,
-        "sass": true,
+        "sass": false,
         "eslint": false,
-        "json5": true,
-        "jsx": true,
+        "json5": false,
+        "jsx": false,
         "vue": false,
     },
 

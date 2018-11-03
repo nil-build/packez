@@ -22,7 +22,7 @@ function defaultLoaders(cfg) {
         assestMedia.regexp,
     ];
 
-    if (cfg.module.vue) {
+    if (cfg.modules.vue) {
         exclude.push(/\.vue$/);
     }
 
@@ -146,11 +146,11 @@ const loaders = {
 module.exports = function (cfg) {
     const rules = [];
     const oneOf = [];
-    const enableModule = cfg.module;
+    const enableModule = cfg.modules;
 
     // const assestMedia = cfg.assest.media;
 
-    if (cfg.module.eslint) {
+    if (enableModule.eslint) {
         const eslintFile = fs.existsSync(cfg.eslintFile) ? cfg.eslintFile : null;
         rules.push(
             {

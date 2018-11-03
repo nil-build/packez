@@ -10,15 +10,12 @@
 
 ```
 const packez = require("packez");
-const start = require("packez/start");
-const build = require("packez/build");
-const server = require("packez/server");
 
-const webpackOptions = packez(options);
+packez(entry, output, options);
 
-start(options);
-build(options);
-server(options);
+packez.start(entry, output, options);
+packez.build(entry, output, options);
+packez.server(entry, output, options);
 
 ```
 
@@ -102,14 +99,14 @@ server(options);
     htmlLoaderOptions: {},
     rawLoaderRegexp: /\.txt$/,
     //启用模块
-    module: {
-        "babel": true,
+    modules: {
+        "babel": false,
         "css": true,
         "less": false,
-        "sass": true,
+        "sass": false,
         "eslint": false,
-        "json5": true,
-        "jsx": true,
+        "json5": false,
+        "jsx": false,
         "vue": false,
     },
 
@@ -118,7 +115,7 @@ server(options);
     devtool: "source-map",
     resolve: {},
     externals: {},
-    performance: {},
+    performance: false,
 ```
 
 ## cli
@@ -129,7 +126,7 @@ server(options);
     .option('-t, --target [target]', '转换目标格式：web | node 默认为 web', /^node|web$/, 'web')
     .option('-c, --clear', '转换前清空输出目录', true)
     .option('-p, --publicPath [publicPath]', 'publicPath', '')
-    .option('--config [config]', '配置文件', '')
+    .option('--config ', '配置文件', 'webpack.config.js')
     .option('--mode [mode]', '转换模式：development（默认值）、production，production模式下minify生效', 'development')
     .option('--banner [banner]', '在每个转换文件顶部添加注释文本', '')
     .option('--strictMode [strictMode]', '参考 babel', /^true|false$/, 'true')
