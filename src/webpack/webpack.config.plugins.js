@@ -77,7 +77,10 @@ module.exports = function (cfg) {
 
         Object.keys(cfg.entry).forEach(key => {
             var htmlOpts = Object.assign({}, defaultHtmlOpts);
-            let template = cfg.entryHTMLTemplates[key];
+            const len = cfg.entry[key].length;
+            const entry = cfg.entry[key][len - 1];
+            let template = cfg.entryHTMLTemplates[key] || entry.replace(/\.m?jsx?$/, '.html');
+
             if (template) {
                 template = path.resolve(cfg.cwd, template);
                 if (fs.existsSync(template)) {

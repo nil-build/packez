@@ -1,6 +1,6 @@
 {
     "name": "packez",
-    "version": "1.0.11",
+    "version": "1.0.16",
     "description": "",
     "keywords": [
         "react",
@@ -32,6 +32,10 @@
         "*.js"
     ],
     "devDependencies": {
+        "@babel/plugin-transform-modules-amd": "^7.1.0",
+        "@babel/plugin-transform-modules-commonjs": "^7.1.0",
+        "@babel/plugin-transform-modules-systemjs": "^7.1.3",
+        "@babel/plugin-transform-modules-umd": "^7.1.0",
         "transform-es": "^2.2.4"
     },
     "dependencies": {
