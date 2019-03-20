@@ -45,7 +45,8 @@ function defaultLoaders(cfg) {
                 loader: require.resolve('url-loader'),
                 options: {
                     limit: assestMedia.limit,
-                    name: path.join(assestMedia.output, assestMedia.name),
+                    name: assestMedia.name,
+                    outputPath: assestMedia.output,
                 }
             }]
         },
@@ -54,7 +55,8 @@ function defaultLoaders(cfg) {
             exclude,
             loader: require.resolve('file-loader'),
             options: {
-                name: path.join(assestMedia.output, assestMedia.name),
+                name: assestMedia.name,
+                outputPath: assestMedia.output,
             }
         }
     ];
