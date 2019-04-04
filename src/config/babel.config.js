@@ -5,6 +5,7 @@ module.exports = function (cfg) {
     const useJSX = cfg.modules.jsx;
     const modules = options.modules;
     const strictMode = options.strictMode;
+    const plugins = options.plugins || [];
 
     const presets = [
         [require.resolve('@babel/preset-env'), {
@@ -63,7 +64,8 @@ module.exports = function (cfg) {
                 regenerator: options.regenerator,
                 //useESModules: false,
             }],
-            modulePlugin
+            modulePlugin,
+            ...plugins
         ].filter(v => v)
     };
 
