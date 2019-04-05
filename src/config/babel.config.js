@@ -39,6 +39,7 @@ module.exports = function (cfg) {
         "compact": false,
         "presets": presets.filter(v => v),
         "plugins": [
+            ...plugins,
             require.resolve("@babel/plugin-syntax-dynamic-import"),
             require.resolve("@babel/plugin-proposal-async-generator-functions"),
             require.resolve("@babel/plugin-proposal-class-properties"),
@@ -64,8 +65,7 @@ module.exports = function (cfg) {
                 regenerator: options.regenerator,
                 //useESModules: false,
             }],
-            modulePlugin,
-            ...plugins
+            modulePlugin
         ].filter(v => v)
     };
 
