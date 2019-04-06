@@ -8,14 +8,18 @@ module.exports = function (cfg) {
     const plugins = options.plugins || [];
 
     const presets = [
-        [require.resolve('@babel/preset-env'), {
-            "targets": {
-                //"ie": 9,
-                "browsers": cfg.browsers || browserslist
-            },
-            modules,
-            useBuiltIns: false,
-        }],
+        [
+            require.resolve('@babel/preset-env'),
+            {
+                "targets": {
+                    //"ie": 9,
+                    "browsers": cfg.browsers || browserslist
+                },
+                modules,
+                useBuiltIns: false,
+                exclude: ['transform-typeof-symbol'],
+            }
+        ],
         useJSX ? require.resolve('@babel/preset-react') : null,
         require.resolve('@babel/preset-flow')
     ];
@@ -42,7 +46,17 @@ module.exports = function (cfg) {
             ...plugins,
             require.resolve("@babel/plugin-syntax-dynamic-import"),
             require.resolve("@babel/plugin-proposal-async-generator-functions"),
-            require.resolve("@babel/plugin-proposal-class-properties"),
+            [
+                require.resolve("@babel/plugin-proposal-decorators"), {
+                    legacy: true
+                }
+            ],
+            [
+                require.resolve("@babel/plugin-proposal-class-properties"),
+                {
+                    loose: true
+                }
+            ],
             require.resolve("@babel/plugin-proposal-do-expressions"),
             require.resolve("@babel/plugin-proposal-export-default-from"),
             require.resolve("@babel/plugin-proposal-export-namespace-from"),
@@ -54,9 +68,6 @@ module.exports = function (cfg) {
             require.resolve("@babel/plugin-proposal-throw-expressions"),
             useJSX ? require.resolve("@babel/plugin-transform-react-jsx") : null,
             //"@babel/plugin-transform-react-jsx-self", //self
-            [require.resolve("@babel/plugin-proposal-decorators"), {
-                legacy: true
-            }],
             require.resolve("@babel/plugin-transform-proto-to-assign"), //Internet Explorer(10 and below)
             [require.resolve("@babel/plugin-proposal-pipeline-operator"), { "proposal": "minimal" }],
             [require.resolve("@babel/plugin-transform-runtime"), {
