@@ -48,7 +48,9 @@ module.exports = function (cfg) {
             require.resolve("@babel/plugin-proposal-async-generator-functions"),
             [
                 require.resolve("@babel/plugin-proposal-decorators"), {
-                    legacy: true
+                    decoratorsBeforeExport: true,
+                    legacy: false,
+                    // legacy: true
                 }
             ],
             [
