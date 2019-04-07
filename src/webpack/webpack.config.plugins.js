@@ -1,66 +1,47 @@
 const path = require('path');
 const fs = require("fs");
 const webpack = require('webpack');
-const chalk = require('chalk');
-const warning = chalk.keyword('orange');
 
-module.exports = function (cfg) {
+const ManifestPlugin = require('webpack-manifest-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
-    const plugins = [];
-
-    plugins.push(
-        ...cfg.IgnoreList.map(ignore => {
-            return new webpack.IgnorePlugin(...ignore);
+module.exports = function (opts) {
+    const isEnvProduction = opts.mode === 'production';
+    const isEnvDevelopment = !isEnvProduction;
+    const loaders = opts.loaders;
+    const corePlugins = opts.plugins;
+    const plugins = [
+        new webpack.IgnorePlugin({
+            resourceRegExp: /^\.\/locale$/,
+            contextRegExp: /moment$/
         })
-    );
-
-
-    if (cfg.DefinePluginArgs) {
-        plugins.push(
-            new webpack.DefinePlugin(cfg.DefinePluginArgs)
-        );
-    }
-
-    if (cfg.BannerPluginArgs) {
-        plugins.push(
-            new webpack.BannerPlugin(cfg.BannerPluginArgs)
-        );
-    }
+    ].filter(Boolean);
 
     //开启manifest模式
-    if (cfg.manifest.enableMode === cfg.mode) {
-        const ManifestPlugin = require('webpack-manifest-plugin');
-        plugins.push(new ManifestPlugin());
+    if (corePlugins.manifest && isEnvProduction) {
+        plugins.push(new ManifestPlugin({ ...corePlugins.manifest }));
     }
-    //打包前清理文件夹
-    // if (cfg.cleanDist) {
-    //     const CleanWebpackPlugin = require('clean-webpack-plugin');
-    //     plugins.push(
-    //         new CleanWebpackPlugin(path.basename(cfg.appDist), {
-    //             root: cfg.appPath
-    //         })
-    //     );
-    // }
+
     //打包合并css成文件
-    if (!cfg.inlineStyle) {
-        if (cfg.modules.css || cfg.modules.less || cfg.modules.sass || cfg.modules.scss) {
-            const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+    if (!opts.inlineStyle) {
+        if (loaders.css || loaders.less || loaders.sass || loaders.scss) {
             plugins.push(
                 new MiniCssExtractPlugin({
-                    filename: path.join(cfg.assest.css.output, cfg.assest.css.name)
+                    filename: [opts.assest.css.output, opts.assest.css.name].join('/'),
+                    chunkFilename: [opts.assest.css.output, opts.assest.css.chunkName].join('/'),
                 })
             );
         }
     }
 
     //生成html页面
-    if (cfg.shouldUseEntryHTML) {
-        const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+    if (opts.shouldUseEntryHTML) {
         const defaultHtmlOpts = {
             inject: true,
         };
-        if (cfg.mode === 'production') {
+        if (isEnvProduction) {
             defaultHtmlOpts.minify = {
                 removeComments: true,
                 collapseWhitespace: true,
@@ -75,19 +56,21 @@ module.exports = function (cfg) {
             }
         }
 
-        Object.keys(cfg.entry).forEach(key => {
+        Object.keys(opts.entry).forEach(key => {
             var htmlOpts = Object.assign({}, defaultHtmlOpts);
-            const len = cfg.entry[key].length;
-            const entry = cfg.entry[key][len - 1];
-            let template = cfg.entryHTMLTemplates[key] || entry.replace(/\.m?jsx?$/, '.html');
+            const len = opts.entry[key].length;
+            const entry = opts.entry[key][len - 1];
+            let template = opts.entryHTMLTemplates[key] || entry.replace(/\.(?:js|mjs|jsx|ts|tsx)$/, '.html');
 
             if (template) {
-                template = path.resolve(cfg.cwd, template);
+                template = path.resolve(opts.cwd, template);
                 if (fs.existsSync(template)) {
                     htmlOpts.template = template;
+                } else {
+                    htmlOpts.template = path.resolve(__dirname, '../public/index.html');
                 }
             }
-            htmlOpts.filename = key + cfg.entryHTMLExt;
+            htmlOpts.filename = key + opts.entryHTMLExt;
             htmlOpts.chunks = [key];
 
             plugins.push(
@@ -96,12 +79,11 @@ module.exports = function (cfg) {
         });
     }
 
-    //if (cfg.modules.vue) {
-    const VueLoaderPlugin = require('vue-loader/lib/plugin');
-    plugins.push(
-        new VueLoaderPlugin()
-    );
-    //}
+    if (loaders.vue) {
+        plugins.push(
+            new VueLoaderPlugin()
+        );
+    }
 
     return plugins;
 }

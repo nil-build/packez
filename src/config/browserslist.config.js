@@ -8,4 +8,8 @@ module.exports = [
     //'last 1 version', // >= ie11
     //'last 2 version', // >= ie10
     //'last 3 version', // >= ie9
+    // ">0.2%",
+    // "not dead",
+    // "not ie <= 11",
+    // "not op_mini all",
 ];

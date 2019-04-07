@@ -4,7 +4,7 @@ const execSync = require('child_process').execSync;
 const fs = require("fs-extra");
 const dependencies = require('./config/dependencies.config');
 const webpackConfig = require('./webpack/webpack.config');
-const normalizeConfig = require('./defaultOptions');
+import normalizeConfig from './config';
 const log = require('./logger');
 
 function getWebpackConfig(entry = './src/index.js', outputDir = 'dist', opts = {}) {

@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require("fs");
+import _ from 'lodash';
 const babelConfig = require('../config/babel.config');
 const postConfig = require('../config/postcss.config');
 
@@ -22,7 +23,7 @@ function defaultLoaders(cfg) {
         assestMedia.regexp,
     ];
 
-    if (cfg.modules.vue) {
+    if (cfg.loaders.vue) {
         exclude.push(/\.vue$/);
     }
 
@@ -147,10 +148,14 @@ const loaders = {
 
 
 module.exports = function (opts) {
-    // const rules = [];
-    // const oneOf = [];
-    // const enableModule = cfg.modules;
-
+    let oneOf = [];
+    const isEnvProduction = opts.mode === 'production';
+    const isEnvDevelopment = !isEnvProduction;
+    const mediaPublicPath = _.get(opts, 'assest.media.publicPath', opts.publicPath);
+    const assestMedia = opts.assest.media;
+    const loaders = opts.loaders || {};
+    const preLoaderExtra = opts.preLoaderExtra || [];
+    const loaderExtra = opts.loaderExtra || [];
     const cssRegex = /\.css$/;
     const cssModuleRegex = /\.module\.css$/;
     const sassRegex = /\.(scss|sass)$/;
@@ -159,6 +164,8 @@ module.exports = function (opts) {
     const lessModuleRegex = /\.module\.less$/;
 
     const getStyleLoaders = function (cssOptions, preProcessor) {
+        const publicPath = _.get(opts, 'assest.css.publicPath', opts.publicPath);
+
         return [
             {
                 test: cssOptions.cssRegex,
@@ -166,7 +173,12 @@ module.exports = function (opts) {
                 use: [
                     opts.inlineStyle ?
                         require.resolve("style-loader") :
-                        require(require.resolve("mini-css-extract-plugin")).loader,
+                        {
+                            loader: require(require.resolve("mini-css-extract-plugin")).loader,
+                            options: {
+                                publicPath,
+                            }
+                        },
                     {
                         loader: require.resolve('css-loader'),
                         options: {
@@ -190,7 +202,7 @@ module.exports = function (opts) {
                         loader: require.resolve('css-loader'),
                         options: {
                             importLoaders: cssOptions.importLoaders,
-                            modules: true,
+                            loaders: true,
                         },
                     },
                     {
@@ -203,146 +215,149 @@ module.exports = function (opts) {
         ];
     }
 
-    // if (enableModule.eslint) {
-    //     const eslintFile = fs.existsSync(cfg.eslintFile) ? cfg.eslintFile : null;
-    //     rules.push(
-    //         {
-    //             enforce: "pre",
-    //             test: /\.jsx?$/,
-    //             exclude: /node_modules/,
-    //             loader: require.resolve("eslint-loader"),
-    //             options: {
-    //                 baseConfig: require('../config/eslint.config.js'),
-    //                 useEslintrc: false,
-    //                 configFile: eslintFile,
-    //             }
-    //         }
-    //     );
-    // }
+    oneOf = [
+        //扩展模块
+        ...loaderExtra,
+        //自定义匹配规则
+        loaders.raw && {
+            test: _.get(loaders, 'raw.test') || /\.txt$/,
+            loader: require.resolve("raw-loader"),
+        },
+        //html文件加载
+        loaders.html && {
+            test: /\.html?$/,
+            loader: require.resolve("html-loader"),
+            options: {
+                ...loaders.html
+            }
+        },
+        //资源文件如图片
+        assestMedia.regexp && {
+            test: assestMedia.regexp,
+            use: [{
+                loader: require.resolve('url-loader'),
+                options: {
+                    limit: assestMedia.limit,
+                    name: assestMedia.name,
+                    outputPath: assestMedia.output,
+                    publicPath: mediaPublicPath,
+                }
+            }]
+        },
+        // js文件处理
+        loaders.babel && {
+            test: /\.(js|mjs|jsx|ts|tsx)$/,
+            loader: require.resolve('babel-loader'),
+            exclude: [/@babel(?:\/|\\{1,2})runtime/, /core\-js/],
+            options: {
+                babelrc: false,
+                configFile: true,
+                compact: false,
+                presets: [
+                    [
+                        require.resolve("babel-preset-packez"),
+                        {
+                            // helpers: true,
+                            ...loaders.babel
+                        },
+                    ],
+                ],
+                cacheDirectory: true,
+                cacheCompression: isEnvProduction,
+                compact: isEnvProduction,
+            },
+        },
 
-    // Object.keys(enableModule).forEach(module => {
-    //     if (enableModule[module] && loaders[module]) {
-    //         oneOf.push(loaders[module](cfg));
-    //     }
-    // });
+        //处理json5
+        loaders.json5 && {
+            test: /\.json5$/,
+            loader: require.resolve('json5-loader')
+        },
 
-    // oneOf.push(...defaultLoaders(cfg));
+        //处理vue格式文件
+        loaders.vue && {
+            test: /\.vue$/,
+            loader: require.resolve("vue-loader"),
+        },
 
-    // rules.push({
-    //     oneOf
-    // });
+    ].filter(Boolean);
+
+    if (loaders.css) {
+        oneOf.push(
+            ...getStyleLoaders(
+                {
+                    cssRegex,
+                    cssModuleRegex,
+                    importLoaders: 1,
+                },
+            )
+        );
+    }
+
+    if (loaders.scss || loaders.sass) {
+        oneOf.push(
+            ...getStyleLoaders(
+                {
+                    cssRegex: sassRegex,
+                    cssModuleRegex: sassModuleRegex,
+                    importLoaders: 2,
+                },
+                'sass-loader'
+            )
+        );
+    }
+
+    if (loaders.less) {
+        oneOf.push(
+            ...getStyleLoaders(
+                {
+                    cssRegex: lessRegex,
+                    cssModuleRegex: lessModuleRegex,
+                    importLoaders: 2,
+                },
+                'less-loader'
+            )
+        );
+    }
+    // 使用file-loader处理其他文件
+    oneOf.push(
+        {
+            loader: require.resolve('file-loader'),
+            // exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.vue$/, /\.json5?$/],
+            options: {
+                name: assestMedia.name,
+                outputPath: assestMedia.output,
+                publicPath: mediaPublicPath,
+            },
+        }
+    );
 
     return {
         rules: [
             // Disable require.ensure
             { parser: { requireEnsure: false } },
 
+            ...preLoaderExtra.map(loader => {
+                return {
+                    ...loader,
+                    enforce: 'pre',
+                }
+            }),
+
             // run the linter.
-            {
+            loaders.eslint && {
                 enforce: 'pre',
                 test: /\.(js|mjs|jsx)$/,
                 exclude: /node_modules/,
-                use: [
-                    {
-                        options: {
-                            // formatter: require.resolve('react-dev-utils/eslintFormatter'),
-                            eslintPath: require.resolve('eslint'),
-
-                        },
-                        loader: require.resolve('eslint-loader'),
-                    },
-                ],
-                // include: paths.appSrc,
+                loader: require.resolve('eslint-loader'),
+                options: {
+                    ...loaders.eslint,
+                    baseConfig: require('../config/eslint.config.js'),
+                    eslintPath: require.resolve('eslint'),
+                },
             },
             {
-                oneOf: [
-                    //static/media
-                    {
-                        test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-                        loader: require.resolve('url-loader'),
-                        options: {
-                            limit: 10000,
-                            name: 'static/media/[name].[hash:8].[ext]',
-                        },
-                    },
-
-                    // Process JS with Babel.
-                    {
-                        test: /\.(js|mjs|jsx|ts|tsx)$/,
-                        loader: require.resolve('babel-loader'),
-                        // exclude: cfg.babelOptions.exclude,
-                        exclude: [/@babel(?:\/|\\{1,2})runtime/, /core\-js/],
-                        use: [{
-                            loader: require.resolve('babel-loader'),
-                            options: {
-                                babelrc: false,
-                                configFile: true,
-                                compact: false,
-                                presets: [
-                                    [
-                                        require.resolve("babel-preset-packez"),
-                                        {
-                                            helpers: true
-                                        },
-                                    ],
-                                ],
-                            }
-                        }],
-                        cacheDirectory: true,
-                        // cacheCompression: isEnvProduction,
-                        // compact: isEnvProduction,
-                    },
-
-                    // Process CSS.
-                    ...getStyleLoaders(
-                        {
-                            cssRegex,
-                            cssModuleRegex,
-                            importLoaders: 1,
-                        },
-                    ),
-                    ...getStyleLoaders(
-                        {
-                            cssRegex: sassRegex,
-                            cssModuleRegex: sassModuleRegex,
-                            importLoaders: 2,
-                        },
-                        'sass-loader'
-                    ),
-                    ...getStyleLoaders(
-                        {
-                            cssRegex: lessRegex,
-                            cssModuleRegex: lessModuleRegex,
-                            importLoaders: 2,
-                        },
-                        'less-loader'
-                    ),
-
-                    //Process json5.
-                    {
-                        test: /\.json5$/,
-                        loader: require.resolve('json5-loader')
-                    },
-
-                    //Process Vue2.
-                    {
-                        test: /\.vue$/,
-                        loader: require.resolve("vue-loader"),
-                    },
-
-                    //
-                    {
-                        loader: require.resolve('file-loader'),
-                        // Exclude `js` files to keep "css" loader working as it injects
-                        // its runtime that would otherwise be processed through "file" loader.
-                        // Also exclude `html` and `json` extensions so they get processed
-                        // by webpacks internal loaders.
-                        exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.vue$/, /\.json5?$/],
-                        options: {
-                            name: 'static/media/[name].[hash:8].[ext]',
-                        },
-                    },
-                ]
+                oneOf
             }
         ].filter(Boolean)
     };
