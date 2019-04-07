@@ -96,12 +96,12 @@ module.exports = function (cfg) {
         });
     }
 
-    if (cfg.modules.vue) {
-        const VueLoaderPlugin = require('vue-loader/lib/plugin');
-        plugins.push(
-            new VueLoaderPlugin()
-        );
-    }
+    //if (cfg.modules.vue) {
+    const VueLoaderPlugin = require('vue-loader/lib/plugin');
+    plugins.push(
+        new VueLoaderPlugin()
+    );
+    //}
 
     return plugins;
 }

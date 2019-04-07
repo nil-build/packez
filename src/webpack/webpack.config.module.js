@@ -145,41 +145,205 @@ const loaders = {
     }
 }
 
-module.exports = function (cfg) {
-    const rules = [];
-    const oneOf = [];
-    const enableModule = cfg.modules;
 
-    // const assestMedia = cfg.assest.media;
+module.exports = function (opts) {
+    // const rules = [];
+    // const oneOf = [];
+    // const enableModule = cfg.modules;
 
-    if (enableModule.eslint) {
-        const eslintFile = fs.existsSync(cfg.eslintFile) ? cfg.eslintFile : null;
-        rules.push(
+    const cssRegex = /\.css$/;
+    const cssModuleRegex = /\.module\.css$/;
+    const sassRegex = /\.(scss|sass)$/;
+    const sassModuleRegex = /\.module\.(scss|sass)$/;
+    const lessRegex = /\.less$/;
+    const lessModuleRegex = /\.module\.less$/;
+
+    const getStyleLoaders = function (cssOptions, preProcessor) {
+        return [
             {
-                enforce: "pre",
-                test: /\.jsx?$/,
-                exclude: /node_modules/,
-                loader: require.resolve("eslint-loader"),
-                options: {
-                    baseConfig: require('../config/eslint.config.js'),
-                    useEslintrc: false,
-                    configFile: eslintFile,
-                }
+                test: cssOptions.cssRegex,
+                exclude: cssOptions.cssModuleRegex,
+                use: [
+                    opts.inlineStyle ?
+                        require.resolve("style-loader") :
+                        require(require.resolve("mini-css-extract-plugin")).loader,
+                    {
+                        loader: require.resolve('css-loader'),
+                        options: {
+                            importLoaders: cssOptions.importLoaders,
+                        },
+                    },
+                    {
+                        loader: require.resolve("postcss-loader"),
+                        options: postConfig(opts)
+                    },
+                    preProcessor && require.resolve(preProcessor),
+                ].filter(Boolean)
+            },
+            {
+                test: cssOptions.cssModuleRegex,
+                use: [
+                    opts.inlineStyle ?
+                        require.resolve("style-loader") :
+                        require(require.resolve("mini-css-extract-plugin")).loader,
+                    {
+                        loader: require.resolve('css-loader'),
+                        options: {
+                            importLoaders: cssOptions.importLoaders,
+                            modules: true,
+                        },
+                    },
+                    {
+                        loader: require.resolve("postcss-loader"),
+                        options: postConfig(opts)
+                    },
+                    preProcessor && require.resolve(preProcessor),
+                ].filter(Boolean)
             }
-        );
+        ];
     }
 
-    Object.keys(enableModule).forEach(module => {
-        if (enableModule[module] && loaders[module]) {
-            oneOf.push(loaders[module](cfg));
-        }
-    });
+    // if (enableModule.eslint) {
+    //     const eslintFile = fs.existsSync(cfg.eslintFile) ? cfg.eslintFile : null;
+    //     rules.push(
+    //         {
+    //             enforce: "pre",
+    //             test: /\.jsx?$/,
+    //             exclude: /node_modules/,
+    //             loader: require.resolve("eslint-loader"),
+    //             options: {
+    //                 baseConfig: require('../config/eslint.config.js'),
+    //                 useEslintrc: false,
+    //                 configFile: eslintFile,
+    //             }
+    //         }
+    //     );
+    // }
 
-    oneOf.push(...defaultLoaders(cfg));
+    // Object.keys(enableModule).forEach(module => {
+    //     if (enableModule[module] && loaders[module]) {
+    //         oneOf.push(loaders[module](cfg));
+    //     }
+    // });
 
-    rules.push({
-        oneOf
-    });
+    // oneOf.push(...defaultLoaders(cfg));
 
-    return { rules };
+    // rules.push({
+    //     oneOf
+    // });
+
+    return {
+        rules: [
+            // Disable require.ensure
+            { parser: { requireEnsure: false } },
+
+            // run the linter.
+            {
+                enforce: 'pre',
+                test: /\.(js|mjs|jsx)$/,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        options: {
+                            // formatter: require.resolve('react-dev-utils/eslintFormatter'),
+                            eslintPath: require.resolve('eslint'),
+
+                        },
+                        loader: require.resolve('eslint-loader'),
+                    },
+                ],
+                // include: paths.appSrc,
+            },
+            {
+                oneOf: [
+                    //static/media
+                    {
+                        test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+                        loader: require.resolve('url-loader'),
+                        options: {
+                            limit: 10000,
+                            name: 'static/media/[name].[hash:8].[ext]',
+                        },
+                    },
+
+                    // Process JS with Babel.
+                    {
+                        test: /\.(js|mjs|jsx|ts|tsx)$/,
+                        loader: require.resolve('babel-loader'),
+                        // exclude: cfg.babelOptions.exclude,
+                        exclude: [/@babel(?:\/|\\{1,2})runtime/, /core\-js/],
+                        use: [{
+                            loader: require.resolve('babel-loader'),
+                            options: {
+                                babelrc: false,
+                                configFile: true,
+                                compact: false,
+                                presets: [
+                                    [
+                                        require.resolve("babel-preset-packez"),
+                                        {
+                                            helpers: true
+                                        },
+                                    ],
+                                ],
+                            }
+                        }],
+                        cacheDirectory: true,
+                        // cacheCompression: isEnvProduction,
+                        // compact: isEnvProduction,
+                    },
+
+                    // Process CSS.
+                    ...getStyleLoaders(
+                        {
+                            cssRegex,
+                            cssModuleRegex,
+                            importLoaders: 1,
+                        },
+                    ),
+                    ...getStyleLoaders(
+                        {
+                            cssRegex: sassRegex,
+                            cssModuleRegex: sassModuleRegex,
+                            importLoaders: 2,
+                        },
+                        'sass-loader'
+                    ),
+                    ...getStyleLoaders(
+                        {
+                            cssRegex: lessRegex,
+                            cssModuleRegex: lessModuleRegex,
+                            importLoaders: 2,
+                        },
+                        'less-loader'
+                    ),
+
+                    //Process json5.
+                    {
+                        test: /\.json5$/,
+                        loader: require.resolve('json5-loader')
+                    },
+
+                    //Process Vue2.
+                    {
+                        test: /\.vue$/,
+                        loader: require.resolve("vue-loader"),
+                    },
+
+                    //
+                    {
+                        loader: require.resolve('file-loader'),
+                        // Exclude `js` files to keep "css" loader working as it injects
+                        // its runtime that would otherwise be processed through "file" loader.
+                        // Also exclude `html` and `json` extensions so they get processed
+                        // by webpacks internal loaders.
+                        exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.vue$/, /\.json5?$/],
+                        options: {
+                            name: 'static/media/[name].[hash:8].[ext]',
+                        },
+                    },
+                ]
+            }
+        ].filter(Boolean)
+    };
 }

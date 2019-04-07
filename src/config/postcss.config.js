@@ -1,15 +1,18 @@
 const browserslist = require('./browserslist.config');
-const autoprefixer = require('autoprefixer');
+// const autoprefixer = require('autoprefixer');
 
-module.exports = function (cfg) {
+module.exports = function (opts) {
     return {
         ident: 'postcss',
-        plugins: [
+        plugins: () => [
             require('postcss-flexbugs-fixes'),
-            autoprefixer({
-                browsers: cfg.browsers || browserslist,
-                flexbox: 'no-2009',
-            }),
+            require('postcss-preset-env')({
+                autoprefixer: {
+                    // browsers: opts.browsers || browserslist,
+                    flexbox: 'no-2009',
+                },
+                stage: 3,
+            })
         ]
     }
 };
