@@ -47,7 +47,7 @@ module.exports = function (cfg) {
             const MiniCssExtractPlugin = require("mini-css-extract-plugin");
             plugins.push(
                 new MiniCssExtractPlugin({
-                    filename: path.join(cfg.assest.css.output, cfg.assest.css.name)
+                    filename: [cfg.assest.css.output, cfg.assest.css.name].join('/')
                 })
             );
         }

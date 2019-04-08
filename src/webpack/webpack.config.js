@@ -15,8 +15,8 @@ module.exports = function (cfg) {
         output: merge(
             {
                 path: cfg.outputDir,
-                filename: path.join(assestJs.output, assestJs.name),
-                chunkFilename: path.join(assestJs.output, assestJs.chunkName),
+                filename: [assestJs.output, assestJs.name].join('/'),
+                chunkFilename: [assestJs.output, assestJs.chunkName].join('/'),
                 publicPath: cfg.publicPath,
             },
             cfg.output || {}
