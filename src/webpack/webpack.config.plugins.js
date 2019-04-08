@@ -29,8 +29,8 @@ module.exports = function (opts) {
         if (loaders.css || loaders.less || loaders.sass || loaders.scss) {
             plugins.push(
                 new MiniCssExtractPlugin({
-                    filename: [opts.assest.css.output, opts.assest.css.name].join('/'),
-                    chunkFilename: [opts.assest.css.output, opts.assest.css.chunkName].join('/'),
+                    filename: [opts.assest.css.output || ".", opts.assest.css.name].join('/'),
+                    chunkFilename: [opts.assest.css.output || ".", opts.assest.css.chunkName].join('/'),
                 })
             );
         }

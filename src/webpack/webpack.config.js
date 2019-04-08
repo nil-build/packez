@@ -15,8 +15,8 @@ module.exports = function (opts) {
         entry: opts.entry,
         output: {
             path: path.resolve(opts.outputDir),
-            filename: [assestJs.output, assestJs.name].join('/'),
-            chunkFilename: [assestJs.output, assestJs.chunkName].join('/'),
+            filename: [assestJs.output || ".", assestJs.name].join('/'),
+            chunkFilename: [assestJs.output || ".", assestJs.chunkName].join('/'),
             publicPath: opts.publicPath,
         },
         module: getWebpackModule(opts),
