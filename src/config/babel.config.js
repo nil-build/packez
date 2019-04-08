@@ -17,7 +17,11 @@ module.exports = function (cfg) {
                 },
                 modules,
                 useBuiltIns: false,
-                exclude: ['transform-typeof-symbol'],
+                exclude: [
+                    'transform-typeof-symbol',
+                    'transform-unicode-regex',
+                    'transform-sticky-regex',
+                ],
             }
         ],
         useJSX ? require.resolve('@babel/preset-react') : null,
