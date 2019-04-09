@@ -256,10 +256,23 @@ module.exports = function (opts) {
                 presets: [
                     [
                         require.resolve("babel-preset-packez"),
-                        {
-                            // helpers: true,
-                            ...loaders.babel
-                        },
+                        _.defaultsDeep(
+                            {},
+                            _.isObject(loaders.babel) ? loaders.babel : {},
+                            {
+                                runtimeOptions: {
+                                    corejs: 2,
+                                    helpers: true,
+                                    regenerator: true,
+                                },
+                                modules: "commonjs",
+                                strictMode: true,
+                                // exclude: [
+                                //     /(node_modules|bower_components)/m,
+                                // ]
+
+                            }
+                        ),
                     ],
                 ],
                 cacheDirectory: true,
