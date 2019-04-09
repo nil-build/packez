@@ -1,4 +1,4 @@
-import "./style/common.css"
+// import "./style/common.css"
 import "./style/index.css"
 var sum = require('./lib/sum')
 var max = require('./lib/max')
