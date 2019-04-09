@@ -9,7 +9,6 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = function (opts) {
     const isEnvProduction = opts.mode === 'production';
-    const isEnvDevelopment = !isEnvProduction;
     const loaders = opts.loaders;
     const corePlugins = opts.plugins;
     const plugins = [
@@ -55,6 +54,12 @@ module.exports = function (opts) {
                 minifyURLs: true,
             }
         }
+        // 示例
+        // entry: {
+        //     app1: './src/index.js',
+        //     app2: './src/app.js',
+        // }
+        // 如果不指定html模板则默认寻找 ./src/index.html 和 ./src/app.html 文件
 
         Object.keys(opts.entry).forEach(key => {
             var htmlOpts = Object.assign({}, defaultHtmlOpts);
@@ -70,7 +75,7 @@ module.exports = function (opts) {
                     htmlOpts.template = path.resolve(__dirname, '../public/index.html');
                 }
             }
-            htmlOpts.filename = key + opts.entryHTMLExt;
+            htmlOpts.filename = key + '.html';
             htmlOpts.chunks = [key];
 
             plugins.push(

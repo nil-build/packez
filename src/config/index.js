@@ -9,15 +9,15 @@ export default function (opts = {}) {
     const defaultOptions = {
         mode: 'development', // development  production
         cwd: process.cwd(),
-        entry: {
-            index: './src/index.js'
-        },
+        // entry: {
+        //     index: './src/index.js'
+        // },
         outputDir: 'dist',
         publicPath: '',
 
         configPath: true,
 
-        useTypeScript: false,
+        //useTypeScript: false,
 
         //启用默认的 polyfills库 Map Set Promise
         //whatwg-fetch?
@@ -28,11 +28,11 @@ export default function (opts = {}) {
         shouldUseEntryHTML: true,
         //默认根据entry自动获取对于的.html文件
         entryHTMLTemplates: {},
-        entryHTMLExt: '.html',
+        //entryHTMLExt: '.html',
 
         shouldUseSourceMap: true,
 
-        shouldUseSplitChunks: true,
+        //shouldUseSplitChunks: true,
 
         runtimeChunk: false,
 
@@ -74,6 +74,7 @@ export default function (opts = {}) {
         //内置插件
         plugins: {
             "manifest": true,
+            // "analyzer": false,// webpack-bundle-analyzer
         },
         //扩展插件
         pluginExtra: [],
@@ -98,8 +99,9 @@ export default function (opts = {}) {
         },
 
         //webpack options
+        optimization: {},
         target: 'web',
-        devtool: "source-map",
+        //devtool: "source-map",
         resolve: {},
         externals: {},
         performance: false,

@@ -1,40 +1,18 @@
-const merge = require('../merge');
+import { defaultsDeep } from 'lodash';
 
-module.exports = function (cfg) {
+module.exports = function (opts) {
 
-    const cacheGroups = {};
-
-    if (!cfg.shouldUseSplitChunks) {
-        cacheGroups['vendors'] = false;
-        cacheGroups['default'] = false;
-    }
-
-    return merge(
+    return defaultsDeep(
         {
-            nodeEnv: cfg.mode,
-            runtimeChunk: cfg.runtimeChunk ? {
-                name: entrypoint => `runtime.${entrypoint.name}`
-            } : false,
+            nodeEnv: opts.mode,
+        },
+        opts.optimization || {},
+        {
+            runtimeChunk: true,
             splitChunks: {
-                name: 'commons',
                 chunks: 'all',
-                // maxAsyncRequests: 5,
-                // maxInitialRequests: 5,
-                minSize: 30000,
-                cacheGroups: {
-                    vendors: {
-                        name: "vendors",
-                        test: /[\\/]node_modules[\\/]/,
-                        priority: -10
-                    },
-                }
+                name: false,
             }
-        },
-        {
-            splitChunks: {
-                cacheGroups
-            }
-        },
-        cfg.optimization
+        }
     );
 }

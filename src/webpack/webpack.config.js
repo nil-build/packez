@@ -7,11 +7,17 @@ const merge = require('../merge');
 module.exports = function (opts) {
     const assestJs = opts.assest.js;
     const isEnvProduction = opts.mode === 'production';
+    const isEnvDevelopment = opts.mode === 'development';
     const options = {
         context: opts.cwd,
         mode: opts.mode,
         bail: isEnvProduction,
-        devtool: opts.shouldUseSourceMap ? opts.devtool : 'none', //测试环境用eval 提高编译速度 //"source-map",
+        devtool: isEnvProduction
+            ? opts.shouldUseSourceMap
+                ? 'source-map'
+                : false
+            : isEnvDevelopment && 'cheap-module-source-map',
+        //devtool: opts.shouldUseSourceMap ? opts.devtool : 'none', //测试环境用eval 提高编译速度 //"source-map",
         entry: opts.entry,
         output: {
             path: path.resolve(opts.outputDir),
