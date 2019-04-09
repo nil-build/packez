@@ -87,19 +87,6 @@ module.exports = function (opts) {
                 ...loaders.html
             }
         },
-        //资源文件如图片
-        assestMedia.regexp && {
-            test: assestMedia.regexp,
-            use: [{
-                loader: require.resolve('url-loader'),
-                options: {
-                    limit: assestMedia.limit,
-                    name: assestMedia.name,
-                    outputPath: assestMedia.output,
-                    publicPath: mediaPublicPath,
-                }
-            }]
-        },
         // js文件处理
         loaders.babel && {
             test: /\.(js|mjs|jsx|ts|tsx)$/,
@@ -145,6 +132,20 @@ module.exports = function (opts) {
                 cacheCompression: isEnvProduction,
                 compact: isEnvProduction,
             },
+        },
+
+        //资源文件如图片
+        assestMedia.regexp && {
+            test: assestMedia.regexp,
+            use: [{
+                loader: require.resolve('url-loader'),
+                options: {
+                    limit: assestMedia.limit,
+                    name: assestMedia.name,
+                    outputPath: assestMedia.output,
+                    publicPath: mediaPublicPath,
+                }
+            }]
         },
 
         //处理json5
