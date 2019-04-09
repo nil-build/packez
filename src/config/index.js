@@ -34,7 +34,7 @@ export default function (opts = {}) {
 
         //shouldUseSplitChunks: true,
 
-        runtimeChunk: false,
+        //runtimeChunk: false,
 
         inlineStyle: false,
 
@@ -45,7 +45,7 @@ export default function (opts = {}) {
         //内置加载器
         loaders: {
             //eslint-loader
-            "eslint": true,
+            "eslint": false,
             //raw-loader
             "raw": {
                 test: /\.txt$/,
