@@ -18,11 +18,6 @@ module.exports = function (opts) {
         })
     ].filter(Boolean);
 
-    //开启manifest模式
-    if (corePlugins.manifest && isEnvProduction) {
-        plugins.push(new ManifestPlugin({ ...corePlugins.manifest }));
-    }
-
     //打包合并css成文件
     if (!opts.inlineStyle) {
         if (loaders.css || loaders.less || loaders.sass || loaders.scss) {
@@ -33,6 +28,11 @@ module.exports = function (opts) {
                 })
             );
         }
+    }
+
+    //开启manifest模式
+    if (corePlugins.manifest && isEnvProduction) {
+        plugins.push(new ManifestPlugin({ ...corePlugins.manifest }));
     }
 
     //生成html页面
