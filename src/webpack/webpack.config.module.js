@@ -91,7 +91,7 @@ module.exports = function (opts) {
         loaders.babel && {
             test: /\.(js|mjs|jsx|ts|tsx)$/,
             loader: require.resolve('babel-loader'),
-            //exclude: [/@babel(?:\/|\\{1,2})runtime/, /core\-js/],
+            // exclude: [/@babel(?:\/|\\{1,2})runtime/, /core\-js/],
             exclude: /node_modules/,
             options: {
                 babelrc: false,
@@ -100,32 +100,23 @@ module.exports = function (opts) {
                 presets: [
                     [
                         require.resolve("babel-preset-packez"),
-                        {
-                            useBuiltIns: false,
-                            modules: "commonjs",
-                            runtimeOptions: {
-                                corejs: 2,
-                                helpers: true,
-                                regenerator: true,
-                            },
-                        }
-                        // _.defaultsDeep(
-                        //     {},
-                        //     _.isObject(loaders.babel) ? loaders.babel : {},
-                        //     {
-                        //         runtimeOptions: {
-                        //             corejs: 2,
-                        //             helpers: true,
-                        //             regenerator: true,
-                        //         },
-                        //         modules: "commonjs",
-                        //         strictMode: true,
-                        //         // exclude: [
-                        //         //     /(node_modules|bower_components)/m,
-                        //         // ]
+                        _.defaultsDeep(
+                            {},
+                            _.isObject(loaders.babel) ? loaders.babel : {},
+                            {
+                                runtimeOptions: {
+                                    corejs: 2,
+                                    helpers: true,
+                                    regenerator: true,
+                                },
+                                modules: "commonjs",
+                                strictMode: true,
+                                // exclude: [
+                                //     /(node_modules|bower_components)/m,
+                                // ]
 
-                        //     }
-                        // ),
+                            }
+                        ),
                     ],
                 ],
                 cacheDirectory: true,
@@ -207,7 +198,7 @@ module.exports = function (opts) {
             // its runtime that would otherwise be processed through "file" loader.
             // Also exclude `html` and `json` extensions so they get processed
             // by webpacks internal loaders.
-            exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
+            exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.json$/],
             options: {
                 name: assestMedia.name,
                 outputPath: assestMedia.output,
