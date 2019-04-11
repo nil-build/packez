@@ -1,8 +1,5 @@
-const path = require('path');
-const fs = require("fs");
 import _ from 'lodash';
 const postConfig = require('../config/postcss.config');
-
 
 module.exports = function (opts) {
     let oneOf = [];
@@ -39,6 +36,7 @@ module.exports = function (opts) {
                         loader: require.resolve('css-loader'),
                         options: {
                             importLoaders: cssOptions.importLoaders,
+                            sourceMap: isEnvProduction && shouldUseSourceMap,
                         },
                     },
                     {
@@ -53,12 +51,18 @@ module.exports = function (opts) {
                 use: [
                     opts.inlineStyle ?
                         require.resolve("style-loader") :
-                        require(require.resolve("mini-css-extract-plugin")).loader,
+                        {
+                            loader: require(require.resolve("mini-css-extract-plugin")).loader,
+                            options: {
+                                publicPath,
+                            }
+                        },
                     {
                         loader: require.resolve('css-loader'),
                         options: {
                             importLoaders: cssOptions.importLoaders,
-                            loaders: true,
+                            modules: true,
+                            sourceMap: isEnvProduction && shouldUseSourceMap,
                         },
                     },
                     {
@@ -91,11 +95,10 @@ module.exports = function (opts) {
         loaders.babel && {
             test: /\.(js|mjs|jsx|ts|tsx)$/,
             loader: require.resolve('babel-loader'),
-            // exclude: [/@babel(?:\/|\\{1,2})runtime/, /core\-js/],
             exclude: /node_modules/,
             options: {
                 babelrc: false,
-                configFile: true,
+                configFile: false,
                 compact: false,
                 presets: [
                     [
@@ -111,10 +114,6 @@ module.exports = function (opts) {
                                 },
                                 modules: "commonjs",
                                 strictMode: true,
-                                // exclude: [
-                                //     /(node_modules|bower_components)/m,
-                                // ]
-
                             }
                         ),
                     ],

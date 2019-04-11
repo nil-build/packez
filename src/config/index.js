@@ -23,6 +23,13 @@ export default function (opts = {}) {
         //whatwg-fetch?
         //raf?
         // polyfills: require.resolve('./polyfills.js'),
+        // polyfills: {
+        //     Promise: true,
+        //     Set: true,
+        //     Map: true,
+        //     raf: true,
+        //     fetch: true,
+        // },
 
         // shouldUseFetch: true,
         shouldUseEntryHTML: true,
@@ -33,7 +40,6 @@ export default function (opts = {}) {
         shouldUseSourceMap: true,
 
         //shouldUseSplitChunks: true,
-
         //runtimeChunk: false,
 
         inlineStyle: false,

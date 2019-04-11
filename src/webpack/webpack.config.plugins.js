@@ -6,13 +6,17 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+//var Visualizer = require('webpack-visualizer-plugin');
 
 module.exports = function (opts) {
     const isEnvProduction = opts.mode === 'production';
     const loaders = opts.loaders;
     const corePlugins = opts.plugins;
     const plugins = [
+        // new Visualizer({
+        //     filename: './statistics.html'
+        // }),
         //new BundleAnalyzerPlugin(),
         new webpack.IgnorePlugin({
             resourceRegExp: /^\.\/locale$/,

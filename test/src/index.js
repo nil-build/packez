@@ -12,6 +12,16 @@ import a1 from "./index.ext";
 
 // import("react");
 
+const set = new Set();
+const map = new Map();
+
+const s = [];
+
+s.from([]);
+
+Object.assign({}, {})
+
+
 sum();
 max();
 min();

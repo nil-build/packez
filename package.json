@@ -42,7 +42,8 @@
         "react-dom": "^16.8.6",
         "transform-es": "^2.3.0",
         "warning": "^4.0.3",
-        "webpack-bundle-analyzer": "^3.3.0"
+        "webpack-bundle-analyzer": "^3.3.0",
+        "webpack-visualizer-plugin": "^0.1.11"
     },
     "dependencies": {
         "@babel/runtime": "^7.4.3",

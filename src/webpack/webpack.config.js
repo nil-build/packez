@@ -17,7 +17,6 @@ module.exports = function (opts) {
                 ? 'source-map'
                 : false
             : isEnvDevelopment && 'cheap-module-source-map',
-        //devtool: opts.shouldUseSourceMap ? opts.devtool : 'none', //测试环境用eval 提高编译速度 //"source-map",
         entry: opts.entry,
         output: {
             path: path.resolve(opts.outputDir),
@@ -26,15 +25,13 @@ module.exports = function (opts) {
             publicPath: opts.publicPath,
         },
         module: getWebpackModule(opts),
-        plugins: getWebpackPlugins(opts), //[...(opts.plugins || []), ...getWebpackPlugins(opts)],
+        plugins: getWebpackPlugins(opts),
         optimization: getWebpackOptimization(opts),
         externals: opts.externals,
         resolve: opts.resolve,
         performance: opts.performance,
         target: opts.target,
     };
-
-    //options.output.path = path.resolve(options.output.path);
 
     if (opts.node) {
         options.node = opts.node;
