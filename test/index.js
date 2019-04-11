@@ -9,7 +9,7 @@ const omit = require('object.omit');
 const fs = require("fs-extra");
 const log = require('../lib/logger');
 
-
+const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 console.log(require.resolve('./src/index.js'));
 
 const dist = __dirname + '/dist';
@@ -36,10 +36,13 @@ const compilerCb = function (err, stats) {
         return log(err);
     }
 
-    log(stats.toString({
-        chunks: false,
-        colors: true,
-    }));
+    const msg = stats.toJson({ all: false, assets: true, warnings: true, errors: true });
+    console.log(msg);
+
+    // log(stats.toString({
+    //     chunks: false,
+    //     colors: true,
+    // }));
 }
 if (1) {
     compiler.watch({
