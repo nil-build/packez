@@ -1,6 +1,7 @@
 import fs from "fs-extra";
-const dependencies = require('./config/dependencies.config');
-const log = require('./logger');
+import { execSync } from 'child_process';
+import dependencies from './config/dependencies.config';
+import log from './logger';
 /**
  * 获取未安装依赖
  */
