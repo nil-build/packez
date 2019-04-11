@@ -1,5 +1,6 @@
 import fs from "fs-extra";
 const dependencies = require('./config/dependencies.config');
+const log = require('./logger');
 /**
  * 获取未安装依赖
  */
