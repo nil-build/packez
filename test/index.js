@@ -7,7 +7,7 @@ const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 
 const dist = __dirname + '/dist';
 
-packez.start(
+packez.build(
     [
         require.resolve('./src/boot.js'),
         require.resolve('./src/index.js')

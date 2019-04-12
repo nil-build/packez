@@ -1,16 +1,24 @@
 import filesize from 'filesize';
+import fs from 'fs-extra';
+import path from 'path';
 import stripAnsi from 'strip-ansi';
-const chalk = require('chalk');
+import chalk from 'chalk';
+import gzipSize from 'gzip-size';
 
-export default function printFileSizesAfterBuild(stats) {
+export default function printFileSizesAfterBuild(stats, config) {
+    const root = config.output.path;
+
     const assets = stats
         .toJson({ all: false, assets: true })
         .assets
-        .filter(assest => /\.(?:css|js)$/.test(assest.name))
+        .filter(assest => /\.(?:css|js|html?)$/.test(assest.name))
         .map(asset => {
+            const fileContents = fs.readFileSync(path.join(root, asset.name));
+            const gsize = chalk.green(filesize(gzipSize.sync(fileContents)));
             return {
                 ...asset,
-                sizeLabel: filesize(asset.size)
+                gsizeLabel: 'gzip:' + gsize,
+                sizeLabel: filesize(asset.size) + `(${gsize})`
             }
         });
 
@@ -23,10 +31,10 @@ export default function printFileSizesAfterBuild(stats) {
     );
 
     assets.forEach(asset => {
-        var sizeLabel = asset.sizeLabel;
-        var sizeLength = stripAnsi(sizeLabel).length;
+        let sizeLabel = asset.sizeLabel;
+        let sizeLength = stripAnsi(sizeLabel).length;
         if (sizeLength < longestSizeLabelLength) {
-            var rightPadding = ' '.repeat(longestSizeLabelLength - sizeLength);
+            let rightPadding = ' '.repeat(longestSizeLabelLength - sizeLength);
             sizeLabel += rightPadding;
         }
 

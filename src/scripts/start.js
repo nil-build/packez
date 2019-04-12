@@ -8,18 +8,18 @@ import run from './run';
 export default function (entry, output, opts = {}) {
     opts = _.omit(opts, ['devServer']);
 
-    opts = initConfig(entry, output, opts);
+    const config = initConfig(entry, output, opts);
 
-    checkDeps(opts);
+    checkDeps(config);
 
-    const webpackConfig = getWebpackConfig(opts);
+    const webpackConfig = getWebpackConfig(config);
 
     fs.ensureDirSync(webpackConfig.output.path);
 
-    if (opts.clear) {
+    if (config.clear) {
         fs.emptyDirSync(webpackConfig.output.path);
     }
-
+    //config.watch
     run(
         _.defaultsDeep(
             webpackConfig,

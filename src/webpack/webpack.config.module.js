@@ -36,7 +36,7 @@ module.exports = function (opts) {
                         loader: require.resolve('css-loader'),
                         options: {
                             importLoaders: cssOptions.importLoaders,
-                            sourceMap: isEnvProduction && shouldUseSourceMap,
+                            sourceMap: isEnvProduction && opts.shouldUseSourceMap,
                         },
                     },
                     {
@@ -62,7 +62,7 @@ module.exports = function (opts) {
                         options: {
                             importLoaders: cssOptions.importLoaders,
                             modules: true,
-                            sourceMap: isEnvProduction && shouldUseSourceMap,
+                            sourceMap: isEnvProduction && opts.shouldUseSourceMap,
                         },
                     },
                     {

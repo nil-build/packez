@@ -67,7 +67,7 @@ export default function (config) {
         } else {
             log(chalk.green('Compiled successfully.\n'));
 
-            printFileSizesAfterBuild(stats)
+            printFileSizesAfterBuild(stats, config)
         }
     };
 
