@@ -1,15 +1,12 @@
-import webpack from "webpack";
 import _ from "lodash";
 import fs from "fs-extra";
-import log from '../logger';
 import initConfig from "../initConfig";
 import checkDeps from "../checkDeps";
 import getWebpackConfig from '../webpack/webpack.config';
+import run from './run';
 
 export default function (entry, output, opts = {}) {
-    const watch = opts.watch;
-
-    opts = _.omit(opts, ['devServer', 'watch']);
+    opts = _.omit(opts, ['devServer']);
 
     opts = initConfig(entry, output, opts);
 
@@ -23,25 +20,17 @@ export default function (entry, output, opts = {}) {
         fs.emptyDirSync(webpackConfig.output.path);
     }
 
-    const compiler = webpack(webpackConfig);
-
-    const compilerCb = function (err, stats) {
-        if (err) {
-            return log(err);
-        }
-
-        log(stats.toString({
-            chunks: false,
-            colors: true,
-        }));
-    }
-    if (watch) {
-        compiler.watch({
-            aggregateTimeout: 300,
-            poll: undefined
-        }, compilerCb);
-    } else {
-        compiler.run(compilerCb);
-    }
+    run(
+        _.defaultsDeep(
+            webpackConfig,
+            {
+                watch: true,
+                watchOptions: {
+                    aggregateTimeout: 300,
+                    poll: undefined
+                }
+            }
+        )
+    );
 
 }

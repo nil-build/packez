@@ -3,7 +3,7 @@
 const packez = require("../lib")
 
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
-console.log(require.resolve('./src/index.js'));
+//console.log(require.resolve('./src/index.js'));
 
 const dist = __dirname + '/dist';
 

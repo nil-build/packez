@@ -51,7 +51,7 @@ export default function (opts = {}) {
         //内置加载器
         loaders: {
             //eslint-loader
-            "eslint": false,
+            "eslint": true,
             //raw-loader
             "raw": {
                 test: /\.txt$/,

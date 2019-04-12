@@ -24,12 +24,15 @@ module.exports = {
     "eslint": [
         "eslint",
         "babel-eslint",
+        "eslint-loader",
         "eslint-config-react-app",
+        "eslint-plugin-flowtype",
+        "eslint-plugin-import",
         //"eslint-config-alloy",
         // "eslint-config-airbnb",
         // "eslint-plugin-import",
-        // "eslint-plugin-react",
-        // "eslint-plugin-jsx-a11y",
+        "eslint-plugin-react",
+        "eslint-plugin-jsx-a11y",
     ],
     "json5": [
         "json5-loader"

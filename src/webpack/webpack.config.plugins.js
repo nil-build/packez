@@ -2,10 +2,8 @@ const path = require('path');
 const fs = require("fs");
 const webpack = require('webpack');
 
-const ManifestPlugin = require('webpack-manifest-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+// 
 //const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 //var Visualizer = require('webpack-visualizer-plugin');
 
@@ -27,6 +25,7 @@ module.exports = function (opts) {
     //打包合并css成文件
     if (!opts.inlineStyle) {
         if (loaders.css || loaders.less || loaders.sass || loaders.scss) {
+            const MiniCssExtractPlugin = require("mini-css-extract-plugin");
             plugins.push(
                 new MiniCssExtractPlugin({
                     filename: [opts.assest.css.output || ".", opts.assest.css.name].join('/'),
@@ -38,6 +37,7 @@ module.exports = function (opts) {
 
     //开启manifest模式
     if (corePlugins.manifest && isEnvProduction) {
+        const ManifestPlugin = require('webpack-manifest-plugin');
         plugins.push(new ManifestPlugin({ ...corePlugins.manifest }));
     }
 
@@ -91,6 +91,7 @@ module.exports = function (opts) {
     }
 
     if (loaders.vue) {
+        const VueLoaderPlugin = require('vue-loader/lib/plugin');
         plugins.push(
             new VueLoaderPlugin()
         );
