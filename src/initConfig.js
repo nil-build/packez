@@ -1,4 +1,4 @@
-const path = require('path');
+import path from 'path';
 import getConfig from './config';
 
 export default function initConfig(entry = './src/index.js', outputDir = 'dist', opts = {}) {

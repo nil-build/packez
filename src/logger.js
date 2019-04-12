@@ -1,4 +1,4 @@
-module.exports = function (msg, ...rest) {
-    const date = (new Date()).toISOString();
+export default function (msg, ...rest) {
+    const date = (new Date()).toLocaleString();
     console.log('[' + date + '] - ' + msg, ...rest);
 }
