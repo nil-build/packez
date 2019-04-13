@@ -7,18 +7,24 @@ import gzipSize from 'gzip-size';
 
 export default function printFileSizesAfterBuild(stats, config) {
     const root = config.output.path;
+    const isEnvProduction = config.mode === 'production';
 
     const assets = stats
         .toJson({ all: false, assets: true })
         .assets
         .filter(assest => /\.(?:css|js|html?)$/.test(assest.name))
         .map(asset => {
-            const fileContents = fs.readFileSync(path.join(root, asset.name));
-            const gsize = chalk.green(filesize(gzipSize.sync(fileContents)));
+            let sizeLabel = filesize(asset.size);
+
+            if (isEnvProduction) {
+                const fileContents = fs.readFileSync(path.join(root, asset.name));
+                const gsize = chalk.green(filesize(gzipSize.sync(fileContents)));
+                sizeLabel += `(${gsize})`;
+            }
+
             return {
                 ...asset,
-                gsizeLabel: 'gzip:' + gsize,
-                sizeLabel: filesize(asset.size) + `(${gsize})`
+                sizeLabel,
             }
         });
 

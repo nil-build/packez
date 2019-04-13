@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import { execSync } from 'child_process';
 import dependencies from './config/dependencies.config';
-import log from './logger';
+import log from './utils/logger';
 /**
  * 获取未安装依赖
  */

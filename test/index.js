@@ -6,12 +6,15 @@ const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 //console.log(require.resolve('./src/index.js'));
 
 const dist = __dirname + '/dist';
-
-packez.build(
-    [
-        require.resolve('./src/boot.js'),
-        require.resolve('./src/index.js')
-    ],
+// start build analyzer server
+packez.server(
+    {
+        index: [
+            require.resolve('./src/boot.js'),
+            require.resolve('./src/index.js')
+        ],
+        app: require.resolve('./src/news.js')
+    },
     dist,
     {
         //runtimeChunk: true,

@@ -9,9 +9,6 @@ export default function (opts = {}) {
     const defaultOptions = {
         mode: 'development', // development  production
         cwd: process.cwd(),
-        // entry: {
-        //     index: './src/index.js'
-        // },
         outputDir: 'dist',
         publicPath: '',
 
@@ -23,13 +20,13 @@ export default function (opts = {}) {
         //whatwg-fetch?
         //raf?
         // polyfills: require.resolve('./polyfills.js'),
-        // polyfills: {
-        //     Promise: true,
-        //     Set: true,
-        //     Map: true,
-        //     raf: true,
-        //     fetch: true,
-        // },
+        polyfills: {
+            Promise: true,
+            Set: true,
+            Map: true,
+            raf: true,
+            fetch: true,
+        },
 
         // shouldUseFetch: true,
         shouldUseEntryHTML: true,
@@ -80,7 +77,6 @@ export default function (opts = {}) {
         //内置插件
         plugins: {
             "manifest": true,
-            // "analyzer": false,// webpack-bundle-analyzer
         },
         //扩展插件
         pluginExtra: [],
@@ -111,6 +107,25 @@ export default function (opts = {}) {
         resolve: {},
         externals: {},
         performance: false,
+
+        //watch
+        watch: false,
+        watchOptions: {
+            aggregateTimeout: 300,
+            poll: undefined
+        },
+        //devServer
+        devServer: {
+            host: '0.0.0.0',
+            clientLogLevel: 'none',
+            quiet: true,
+            watchContentBase: true,
+            hot: false,
+            overlay: false,
+            compress: true,
+            port: 9000,
+            publicPath: '/'
+        }
     };
 
     const _opts = defaultsDeep({}, opts, defaultOptions);

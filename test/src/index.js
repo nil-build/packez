@@ -14,19 +14,19 @@ var min = require('./lib/min')
 
 //var sx = 11;
 //eslint-disable-next-line
-console.log(jQuery)
+//console.log(jQuery)
 
 const set = new Set();
 const map = new Map();
-var z = 1111;
+var z = 111;
 
-const s = [];
+// const s = [];
 
-s.from([]);
+// s.from([]);
 
-Object.assign({}, {})
+// Object.assign({}, {})
+// sum();
+// max();
+// min();
 
-
-sum();
-max();
-min();
+console.log(z)

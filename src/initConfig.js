@@ -15,12 +15,16 @@ export default function initConfig(entry = './src/index.js', outputDir = 'dist',
     options.outputDir = outputDir;
 
     options.entry = {};
+    const polyfills = [];
+    Object.keys(options.polyfills)
+        .forEach(name => {
+            if (options.polyfills[name]) {
+                polyfills.push(require.resolve(`./polyfills/${name}.js`));
+            }
+        });
 
     Object.keys(entries).forEach(key => {
-        options.entry[key] = options.polyfills ? [].concat(options.polyfills, entries[key]) : [].concat(entries[key]);
-        if (options.shouldUseFetch) {
-            options.entry[key].unshift(require.resolve('./fetchPolyfills.js'));
-        }
+        options.entry[key] = polyfills.concat(entries[key]);
     });
 
     return options;

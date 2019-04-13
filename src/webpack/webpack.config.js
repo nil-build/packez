@@ -19,7 +19,7 @@ module.exports = function (opts) {
             : isEnvDevelopment && 'cheap-module-source-map',
         entry: opts.entry,
         output: {
-            path: path.resolve(opts.outputDir),
+            path: path.resolve(opts.cwd, opts.outputDir),
             filename: [assestJs.output || ".", assestJs.name].join('/'),
             chunkFilename: [assestJs.output || ".", assestJs.chunkName].join('/'),
             publicPath: opts.publicPath,

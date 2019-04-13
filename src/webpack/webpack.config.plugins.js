@@ -12,6 +12,7 @@ module.exports = function (opts) {
     const loaders = opts.loaders;
     const corePlugins = opts.plugins;
     const plugins = [
+        ...opts.pluginExtra,
         // new Visualizer({
         //     filename: './statistics.html'
         // }),
