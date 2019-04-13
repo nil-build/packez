@@ -8,7 +8,7 @@ export default function (opts = {}) {
     const defaultOptions = {
         mode: 'development', // development  production
         cwd: process.cwd(),
-        outputDir: 'dist',
+        //outputDir: 'dist',
         publicPath: '',
 
         configPath: true,
@@ -16,7 +16,7 @@ export default function (opts = {}) {
         //useTypeScript: false,
 
         polyfills: {
-            Promise: false,
+            Promise: true,
             Set: false,
             Map: false,
             raf: false,
@@ -89,7 +89,8 @@ export default function (opts = {}) {
                 limit: 10000,
             }
         },
-
+        //打包时如果检查到package.json未设置browserslist时则将该配置写到package.json中
+        //后续如果需要修改browserslist则直接修改package.json文件
         "browserslist": [
             ">0.2%",
             "not dead",
@@ -121,6 +122,15 @@ export default function (opts = {}) {
             compress: true,
             port: 9000,
             publicPath: '/'
+        },
+        node: {
+            module: 'empty',
+            dgram: 'empty',
+            dns: 'mock',
+            fs: 'empty',
+            net: 'empty',
+            tls: 'empty',
+            child_process: 'empty',
         }
     };
 

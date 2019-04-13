@@ -8,9 +8,7 @@ module.exports = {
         "css-loader",
         "postcss-loader",
         "mini-css-extract-plugin",
-        // "precss",
         "postcss-flexbugs-fixes",
-        //"autoprefixer",
         "postcss-preset-env"
     ],
     "less": [

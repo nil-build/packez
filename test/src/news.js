@@ -1,3 +1,5 @@
 import "./style/product.css"
 
-require('jquery')
+// require('jquery')
+
+// Promise.resolve();

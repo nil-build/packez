@@ -1,12 +1,15 @@
 // import "./style/common.css"
+// import React from 'react';
+// import ReactDOM from 'react-dom';
 import "./style/index.css"
 import a from "./index.html";
 import a1 from "./index.ext";
 import j from "./index.json"
-var sum = require('./lib/sum')
-var max = require('./lib/max')
-// var min = require('lodash')
-var min = require('./lib/min')
+// var sum = require('./lib/sum')
+// var max = require('./lib/max')
+// // var min = require('lodash')
+// var min = require('./lib/min')
+
 // var react = require('./vendor/react-dom')
 // require('jquery')
 
@@ -18,7 +21,12 @@ var min = require('./lib/min')
 
 const set = new Set();
 const map = new Map();
+
+Promise.resolve();
+
 var z = 111;
+
+Object.assign({})
 
 // const s = [];
 
