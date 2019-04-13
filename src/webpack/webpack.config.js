@@ -2,7 +2,6 @@ const path = require('path');
 const getWebpackModule = require('./webpack.config.module');
 const getWebpackPlugins = require('./webpack.config.plugins');
 const getWebpackOptimization = require('./webpack.config.optimization');
-const merge = require('../merge');
 
 module.exports = function (opts) {
     const assestJs = opts.assest.js;

@@ -1,4 +1,4 @@
-const browserslist = require('./browserslist.config');
+//const browserslist = require('./browserslist.config');
 // const autoprefixer = require('autoprefixer');
 
 module.exports = function (opts) {

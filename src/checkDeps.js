@@ -2,6 +2,7 @@ import fs from "fs-extra";
 import { execSync } from 'child_process';
 import dependencies from './config/dependencies.config';
 import log from './utils/logger';
+import os from 'os';
 /**
  * 获取未安装依赖
  */
@@ -11,6 +12,15 @@ function getDeps(opts) {
     let pkg = {};
     if (fs.existsSync(pkgFile)) {
         pkg = require(pkgFile);
+    }
+
+    if (!pkg.browserslist) {
+        pkg.browserslist = opts.browserslist;
+
+        fs.writeFileSync(
+            pkgFile,
+            JSON.stringify(pkg, null, 2) + os.EOL
+        );
     }
 
     const pkgDeps = Object.assign({}, pkg.dependencies, pkg.devDependencies);

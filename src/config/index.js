@@ -1,7 +1,6 @@
 import { defaultsDeep, isFunction, isString } from 'lodash';
 import path from 'path';
 import fs from 'fs-extra';
-//packez.config.js
 
 export default function (opts = {}) {
     opts = { ...opts };
@@ -16,33 +15,24 @@ export default function (opts = {}) {
 
         //useTypeScript: false,
 
-        //启用默认的 polyfills库 Map Set Promise
-        //whatwg-fetch?
-        //raf?
-        // polyfills: require.resolve('./polyfills.js'),
         polyfills: {
-            Promise: true,
-            Set: true,
-            Map: true,
-            raf: true,
-            fetch: true,
+            Promise: false,
+            Set: false,
+            Map: false,
+            raf: false,
+            fetch: false,
         },
 
-        // shouldUseFetch: true,
         shouldUseEntryHTML: true,
         //默认根据entry自动获取对于的.html文件
         entryHTMLTemplates: {},
-        //entryHTMLExt: '.html',
 
         shouldUseSourceMap: true,
-
-        //shouldUseSplitChunks: true,
-        //runtimeChunk: false,
 
         inlineStyle: false,
 
         cnpm: false,
-        //构建前清空outputDir目录
+
         clear: true,
 
         //内置加载器
@@ -100,10 +90,16 @@ export default function (opts = {}) {
             }
         },
 
+        "browserslist": [
+            ">0.2%",
+            "not dead",
+            "not ie <= 11",
+            "not op_mini all"
+        ],
+
         //webpack options
         optimization: {},
         target: 'web',
-        //devtool: "source-map",
         resolve: {},
         externals: {},
         performance: false,

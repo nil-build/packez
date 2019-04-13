@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require("fs");
 const webpack = require('webpack');
+const _ = require('lodash');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // 
@@ -46,6 +47,9 @@ module.exports = function (opts) {
     if (opts.shouldUseEntryHTML) {
         const defaultHtmlOpts = {
             inject: true,
+            templateParameters: {
+                PUBLIC_URL: [opts.publicPath || '.'].join('/'), //, path.relative(opts.outputDir,1)
+            }
         };
         if (isEnvProduction) {
             defaultHtmlOpts.minify = {
@@ -74,14 +78,14 @@ module.exports = function (opts) {
             const entry = opts.entry[key][len - 1];
             let template = opts.entryHTMLTemplates[key] || entry.replace(/\.(?:js|mjs|jsx|ts|tsx)$/, '.html');
 
-            if (template) {
-                template = path.resolve(opts.cwd, template);
-                if (fs.existsSync(template)) {
-                    htmlOpts.template = template;
-                } else {
-                    htmlOpts.template = path.resolve(__dirname, '../public/index.html');
-                }
+            // if (template) {
+            template = path.resolve(opts.cwd, template);
+            if (fs.existsSync(template)) {
+                htmlOpts.template = template;
+            } else {
+                htmlOpts.template = path.resolve(__dirname, '../template_index.ejs');
             }
+            //}
             htmlOpts.filename = key + '.html';
             htmlOpts.chunks = [key];
 

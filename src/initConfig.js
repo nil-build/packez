@@ -10,8 +10,7 @@ export default function initConfig(entry = './src/index.js', outputDir = 'dist',
         };
     }
 
-    outputDir = path.resolve(options.cwd, outputDir);
-
+    // outputDir = path.resolve(options.cwd, outputDir);
     options.outputDir = outputDir;
 
     options.entry = {};

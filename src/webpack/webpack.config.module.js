@@ -83,6 +83,12 @@ module.exports = function (opts) {
             test: _.get(loaders, 'raw.test') || /\.txt$/,
             loader: require.resolve("raw-loader"),
         },
+
+        {
+            test: /\.ejs?$/,
+            loader: require.resolve("ejs-loader")
+        },
+
         //html文件加载
         loaders.html && {
             test: /\.html?$/,
@@ -197,7 +203,7 @@ module.exports = function (opts) {
             // its runtime that would otherwise be processed through "file" loader.
             // Also exclude `html` and `json` extensions so they get processed
             // by webpacks internal loaders.
-            exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.json$/],
+            exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.ejs$/, /\.json$/],
             options: {
                 name: assestMedia.name,
                 outputPath: assestMedia.output,
