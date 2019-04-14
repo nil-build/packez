@@ -1,95 +1,95 @@
 {
-  "name": "packez",
-  "version": "2.0.2-beta4",
-  "description": "",
-  "keywords": [
-    "react",
-    "webpack",
-    "create-app",
-    "build",
-    "packez"
-  ],
-  "main": "index.js",
-  "bin": {
-    "packez": "./cli.js"
-  },
-  "homepage": "https://github.com/nil-build/packez",
-  "author": {
-    "name": "nobo.zhou@foxmail.com"
-  },
-  "bugs": {
-    "url": "https://github.com/nil-build/packez/issues"
-  },
-  "repository": "https://github.com/nil-build/packez.git",
-  "license": "MIT",
-  "scripts": {
-    "start": "transform-es src -d lib -t node -w -c",
-    "test": "node test/index",
-    "tag": "npm publish --tag next"
-  },
-  "files": [
-    "*.md",
-    "lib",
-    "*.js"
-  ],
-  "devDependencies": {
-    "@babel/plugin-transform-modules-amd": "^7.2.0",
-    "@babel/plugin-transform-modules-commonjs": "^7.4.3",
-    "@babel/plugin-transform-modules-systemjs": "^7.4.0",
-    "@babel/plugin-transform-modules-umd": "^7.2.0",
-    "babel-eslint": "^10.0.1",
-    "babel-loader": "^8.0.5",
-    "babel-preset-packez": "^0.2.0",
-    "css-loader": "^2.1.1",
-    "eslint": "^5.16.0",
-    "eslint-config-packez": "^0.3.0",
-    "eslint-loader": "^2.1.2",
-    "jquery": "^3.3.1",
-    "json5-loader": "^2.0.0",
-    "less": "^3.9.0",
-    "less-loader": "^4.1.0",
-    "mini-css-extract-plugin": "^0.6.0",
-    "node-sass": "^4.11.0",
-    "postcss-flexbugs-fixes": "^4.1.0",
-    "postcss-loader": "^3.0.0",
-    "postcss-preset-env": "^6.6.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "sass-loader": "^7.1.0",
-    "transform-es": "^2.3.0",
-    "warning": "^4.0.3"
-  },
-  "dependencies": {
-    "@babel/runtime": "^7.4.3",
-    "@babel/runtime-corejs2": "^7.4.3",
-    "babel-core": "^6.26.3",
-    "chalk": "^2.4.2",
-    "commander": "^2.20.0",
-    "ejs-loader": "^0.3.3",
-    "extract-loader": "^2.0.1",
-    "file-loader": "^1.1.11",
-    "filesize": "^4.1.2",
-    "fs-extra": "^7.0.1",
-    "gzip-size": "^5.0.0",
-    "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^4.0.0-beta.5",
-    "lodash": "^4.17.11",
-    "opn": "^5.5.0",
-    "raf": "^3.4.1",
-    "raw-loader": "^0.5.1",
-    "strip-ansi": "^5.2.0",
-    "style-loader": "^0.23.1",
-    "url-loader": "^1.0.1",
-    "webpack": "^4.29.6",
-    "webpack-bundle-analyzer": "^3.3.0",
-    "webpack-dev-server": "^3.2.1",
-    "webpack-manifest-plugin": "^2.0.3",
-    "whatwg-fetch": "^3.0.0"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+    "name": "packez",
+    "version": "2.0.0-beta5",
+    "description": "",
+    "keywords": [
+        "react",
+        "webpack",
+        "create-app",
+        "build",
+        "packez"
+    ],
+    "main": "index.js",
+    "bin": {
+        "packez": "./cli.js"
+    },
+    "homepage": "https://github.com/nil-build/packez",
+    "author": {
+        "name": "nobo.zhou@foxmail.com"
+    },
+    "bugs": {
+        "url": "https://github.com/nil-build/packez/issues"
+    },
+    "repository": "https://github.com/nil-build/packez.git",
+    "license": "MIT",
+    "scripts": {
+        "start": "transform-es src -d lib -t node -w -c",
+        "test": "node test/index",
+        "tag": "npm publish --tag next"
+    },
+    "files": [
+        "*.md",
+        "lib",
+        "*.js"
+    ],
+    "devDependencies": {
+        "@babel/plugin-transform-modules-amd": "^7.2.0",
+        "@babel/plugin-transform-modules-commonjs": "^7.4.3",
+        "@babel/plugin-transform-modules-systemjs": "^7.4.0",
+        "@babel/plugin-transform-modules-umd": "^7.2.0",
+        "babel-eslint": "^10.0.1",
+        "babel-loader": "^8.0.5",
+        "babel-preset-packez": "^0.2.0",
+        "css-loader": "^2.1.1",
+        "eslint": "^5.16.0",
+        "eslint-config-packez": "^0.3.0",
+        "eslint-loader": "^2.1.2",
+        "jquery": "^3.3.1",
+        "json5-loader": "^2.0.0",
+        "less": "^3.9.0",
+        "less-loader": "^4.1.0",
+        "mini-css-extract-plugin": "^0.6.0",
+        "node-sass": "^4.11.0",
+        "postcss-flexbugs-fixes": "^4.1.0",
+        "postcss-loader": "^3.0.0",
+        "postcss-preset-env": "^6.6.0",
+        "react": "^16.8.6",
+        "react-dom": "^16.8.6",
+        "sass-loader": "^7.1.0",
+        "transform-es": "^2.3.0",
+        "warning": "^4.0.3"
+    },
+    "dependencies": {
+        "@babel/runtime": "^7.4.3",
+        "@babel/runtime-corejs2": "^7.4.3",
+        "babel-core": "^6.26.3",
+        "chalk": "^2.4.2",
+        "commander": "^2.20.0",
+        "ejs-loader": "^0.3.3",
+        "extract-loader": "^2.0.1",
+        "file-loader": "^1.1.11",
+        "filesize": "^4.1.2",
+        "fs-extra": "^7.0.1",
+        "gzip-size": "^5.0.0",
+        "html-loader": "^0.5.5",
+        "html-webpack-plugin": "^4.0.0-beta.5",
+        "lodash": "^4.17.11",
+        "opn": "^5.5.0",
+        "raf": "^3.4.1",
+        "raw-loader": "^0.5.1",
+        "strip-ansi": "^5.2.0",
+        "style-loader": "^0.23.1",
+        "url-loader": "^1.0.1",
+        "webpack": "^4.29.6",
+        "webpack-bundle-analyzer": "^3.3.0",
+        "webpack-dev-server": "^3.2.1",
+        "webpack-manifest-plugin": "^2.0.3",
+        "whatwg-fetch": "^3.0.0"
+    },
+    "browserslist": [
+        ">0.2%",
+        "not dead",
+        "not ie <= 11",
+        "not op_mini all"
+    ]
 }

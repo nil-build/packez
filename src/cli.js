@@ -5,7 +5,7 @@ import os from 'os';
 import fs from 'fs-extra';
 import _ from 'lodash';
 import pkg from '../package.json';
-import packez from './index';
+import * as packez from './index';
 import log from './utils/logger';
 
 program
