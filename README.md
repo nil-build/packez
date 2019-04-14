@@ -4,7 +4,21 @@
 
 ## Useage
 
-`packez src -d dist -w -c`;
+cli
+
+npx `packez start ./src/index.js -d dist -w -c`
+
+npx `packez server ./src/index.js -d dist -w -c`;
+
+npx `packez build ./src/index.js -d dist -w -c`;
+
+npx `packez analyzer ./src/index.js -d dist -w -c`;
+
+初始化cli：
+
+`npx packez init`
+
+`npm start` or `npm run build`
 
 ## API
 
@@ -327,17 +341,17 @@ e.g.
 
 ## cli
 
+`packez [start|build|server|analyzer] [file|dir] -d -w -c ...`
+
 ```
-    .option('-w, --watch', '是否监控文件改变', true)
+    .option('-w, --watch', '是否监控文件改变')
     .option('-d, --outDir [outDir]', '输出到指定目录，默认为 dist', 'dist')
     .option('-t, --target [target]', '转换目标格式：web | node 默认为 web', /^node|web$/, 'web')
-    .option('-c, --clear', '转换前清空输出目录', true)
+    .option('-c, --clear', '转换前清空输出目录')
     .option('-p, --publicPath [publicPath]', 'publicPath', '')
-    .option('--config ', '配置文件', 'webpack.config.js')
-    .option('--mode [mode]', '转换模式：development（默认值）、production，production模式下minify生效', 'development')
-    .option('--banner [banner]', '在每个转换文件顶部添加注释文本', '')
-    .option('--strictMode [strictMode]', '参考 babel', /^true|false$/, 'true')
-    .option('--cnpm', '使用cnpm安装依赖', true)
+    .option('-l, --loaders [loaders]')
+    .option('--polyfills [polyfills]', '设置polyfills文件,e.g. Promise,Set,Map,raf,fetch', '')
+    .option('--cnpm', '使用cnpm安装依赖')
     .option('--corejs [corejs]', '参考 babel-runtime', true)
     .option('--helpers [helpers]', '参考 babel-runtime', true)
     .option('--regenerator [regenerator]', '参考 babel-runtime', true)

@@ -2,3 +2,4 @@
 /test/dist
 /.idea
 /test/dist-build
+/test/dist-cli
