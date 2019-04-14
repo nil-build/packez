@@ -1,6 +1,6 @@
 {
     "name": "packez",
-    "version": "2.0.0-beta4",
+    "version": "2.0.1-beta4",
     "description": "",
     "keywords": [
         "react",
@@ -68,6 +68,7 @@
     "dependencies": {
         "@babel/runtime": "^7.4.3",
         "@babel/runtime-corejs2": "^7.4.3",
+        "babel-core": "^6.26.3",
         "chalk": "^2.4.2",
         "commander": "^2.20.0",
         "ejs-loader": "^0.3.3",
