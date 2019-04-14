@@ -70,6 +70,8 @@ packez.start({
 
 是否开启`packez.config.js`
 
+`CLI`模式下有效
+
 ### `clear`
 `boolean` 默认：`true`
 
@@ -176,6 +178,21 @@ e.g. `./src/app1.js` 实际会查找 `./src/app1.html` 如果查找失败则使�
 }
 ```
 内置webpack加载器 
+
+如果传对象则会传递给加载器
+e.g. 
+```
+{
+    eslit:{
+        globals: {
+            $: true,
+        },
+        rules: {
+            "no-undef": "off"
+        }
+    }
+}
+```
 
 ### `loaderExtra`
 `array`

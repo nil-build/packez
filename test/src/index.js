@@ -10,6 +10,8 @@ import j from "./index.json"
 // // var min = require('lodash')
 // var min = require('./lib/min')
 
+const React = () => { }
+
 // var react = require('./vendor/react-dom')
 // require('jquery')
 
@@ -21,6 +23,8 @@ import j from "./index.json"
 
 const set = new Set();
 const map = new Map();
+
+const c = <div>111</div>;
 
 Promise.resolve();
 

@@ -1,4 +1,7 @@
 module.exports = {
+    "core": [
+        "babel-core",
+    ],
     "babel": [
         "babel-loader",
         "babel-preset-packez",
