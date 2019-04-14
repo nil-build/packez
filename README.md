@@ -190,15 +190,36 @@ e.g.
 ```
 {
     eslit:{
-        globals: {
-            $: true,
-        },
         rules: {
             "no-undef": "off"
         }
     }
 }
 ```
+其他
+#### `loaders.babel` 
+`boolean` or `object` 默认：`true`
+
+当为`object`是默认为：
+```
+{
+    babelrc: false,
+    configFile: false,
+    compact: false,
+    plugins: [],
+    runtimeOptions: {
+        corejs: 2,
+        helpers: true,
+        regenerator: true,
+    },
+    modules: "commonjs",
+    strictMode: true,
+    其他可参考：@babel/preset-env
+}
+```
+[transform-runtime](https://babeljs.io/docs/en/next/babel-plugin-transform-runtime)
+
+[@babel/preset-env](https://babeljs.io/docs/en/next/babel-preset-env)
 
 ### `loaderExtra`
 `array`
@@ -295,6 +316,12 @@ e.g.
 参考`webpack.devServer`
 
 `目前不支持HMR，hot不要开启`
+
+
+### `getWebpackConfig`
+`function(webpackConfig) => object`
+
+接收`packez`生成的webpackConfig配置对象
 
 
 

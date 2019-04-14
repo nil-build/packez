@@ -83,6 +83,47 @@ module.exports = function (opts) {
         ];
     }
 
+    const getBabelLoader = function (babelOptions) {
+        babelOptions = _.isObject(loaders.babel) ? loaders.babel : {};
+        const plugins = babelOptions.plugins || [];
+
+        return {
+            test: /\.(js|mjs|jsx|ts|tsx)$/,
+            loader: require.resolve('babel-loader'),
+            include: includePaths,
+            exclude: /node_modules/,
+            options: {
+                babelrc: _.get(babelOptions, 'babelrc', false),
+                configFile: _.get(babelOptions, 'configFile', false),
+                compact: _.get(babelOptions, 'compact', false),
+                presets: [
+                    [
+                        require.resolve("babel-preset-packez"),
+                        _.defaultsDeep(
+                            {},
+                            _.omit(babelOptions, ['plugins', 'babelrc', 'configFile', 'compact']),
+                            {
+                                runtimeOptions: {
+                                    corejs: 2,
+                                    helpers: true,
+                                    regenerator: true,
+                                },
+                                modules: "commonjs",
+                                strictMode: true,
+                            }
+                        ),
+                    ],
+                ],
+                plugins: [
+                    ...plugins
+                ],
+                cacheDirectory: true,
+                cacheCompression: isEnvProduction,
+                compact: isEnvProduction,
+            },
+        };
+    }
+
     oneOf = [
         //扩展模块
         ...loaderExtra,
@@ -106,38 +147,7 @@ module.exports = function (opts) {
             }
         },
         // js文件处理
-        loaders.babel && {
-            test: /\.(js|mjs|jsx|ts|tsx)$/,
-            loader: require.resolve('babel-loader'),
-            include: includePaths,
-            exclude: /node_modules/,
-            options: {
-                babelrc: false,
-                configFile: false,
-                compact: false,
-                presets: [
-                    [
-                        require.resolve("babel-preset-packez"),
-                        _.defaultsDeep(
-                            {},
-                            _.isObject(loaders.babel) ? loaders.babel : {},
-                            {
-                                runtimeOptions: {
-                                    corejs: 2,
-                                    helpers: true,
-                                    regenerator: true,
-                                },
-                                modules: "commonjs",
-                                strictMode: true,
-                            }
-                        ),
-                    ],
-                ],
-                cacheDirectory: true,
-                cacheCompression: isEnvProduction,
-                compact: isEnvProduction,
-            },
-        },
+        loaders.babel && getBabelLoader(loaders.babel),
 
         //资源文件如图片
         assestMedia.regexp && {

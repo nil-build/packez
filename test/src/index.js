@@ -2,6 +2,7 @@
 // import React from 'react';
 // import ReactDOM from 'react-dom';
 import "./style/index.css"
+import scope from "./style/index.module.css"
 import a from "./index.html";
 import a1 from "./index.ext";
 import j from "./index.json"
@@ -9,6 +10,8 @@ import j from "./index.json"
 // var max = require('./lib/max')
 // // var min = require('lodash')
 // var min = require('./lib/min')
+
+console.log(scope)
 
 const React = () => { }
 
