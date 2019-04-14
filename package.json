@@ -1,6 +1,6 @@
 {
     "name": "packez",
-    "version": "2.0.0-beta5",
+    "version": "2.0.0",
     "description": "",
     "keywords": [
         "react",
@@ -25,6 +25,7 @@
     "scripts": {
         "start": "transform-es src -d lib -t node -w -c",
         "test": "node test/index",
+        "cli": "node cli ./test/src/index.js -d ./test/dist-cli",
         "tag": "npm publish --tag next"
     },
     "files": [
