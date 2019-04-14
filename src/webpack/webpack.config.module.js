@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { pathToFileURL } from 'url';
 const postConfig = require('../config/postcss.config');
 
 module.exports = function (opts) {
@@ -15,6 +16,13 @@ module.exports = function (opts) {
     const sassModuleRegex = /\.module\.(scss|sass)$/;
     const lessRegex = /\.less$/;
     const lessModuleRegex = /\.module\.less$/;
+
+    const appSrc = Array.isArray(opts.appSrc) ? opts.appSrc : [opts.appSrc];
+    let includePaths = [
+        ...appSrc.filter(Boolean).map(appPath => path.resolve(opts.cwd, appPath))
+    ];
+
+    includePaths = includePaths.length ? includePaths : undefined;
 
     const getStyleLoaders = function (cssOptions, preProcessor) {
         const publicPath = _.get(opts, 'assest.css.publicPath', opts.publicPath);
@@ -101,6 +109,7 @@ module.exports = function (opts) {
         loaders.babel && {
             test: /\.(js|mjs|jsx|ts|tsx)$/,
             loader: require.resolve('babel-loader'),
+            include: includePaths,
             exclude: /node_modules/,
             options: {
                 babelrc: false,
@@ -228,6 +237,7 @@ module.exports = function (opts) {
             loaders.eslint && {
                 enforce: 'pre',
                 test: /\.(js|mjs|jsx)$/,
+                include: includePaths,
                 exclude: /node_modules/,
                 loader: require.resolve('eslint-loader'),
                 options: {

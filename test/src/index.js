@@ -15,11 +15,23 @@ const React = () => { }
 // var react = require('./vendor/react-dom')
 // require('jquery')
 
-// import("react");
-
 //var sx = 11;
 //eslint-disable-next-line
 //console.log(jQuery)
+
+class AsyncLoadSetting extends React.Component {
+
+    state = { Ctrl: () => '加载中...' }
+
+    componentDidMount() {
+        import('./lib/sum').then(Ctrl => this.setState({ Ctrl: Ctrl.default }));
+    }
+
+    render() {
+        const { Ctrl } = this.state;
+        return <Ctrl {...this.props} />
+    }
+}
 
 const set = new Set();
 const map = new Map();
@@ -32,6 +44,9 @@ var z = 111;
 
 Object.assign({})
 
+function avc() {
+    import("react").then();
+}
 // const s = [];
 
 // s.from([]);

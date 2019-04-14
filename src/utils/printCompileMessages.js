@@ -40,9 +40,10 @@ export default (stats, config) => {
             chalk.cyan('// eslint-disable-next-line') +
             ' to the line before.\n'
         );
-    } else {
-        log(chalk.green('Compiled successfully.\n'));
-
-        printFileSizesAfterBuild(stats, config)
     }
+
+    log(chalk.green('Compiled successfully.\n'));
+
+    printFileSizesAfterBuild(stats, config)
+
 }

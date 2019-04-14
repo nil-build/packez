@@ -8,6 +8,7 @@ export default function (opts = {}) {
     const defaultOptions = {
         mode: 'development', // development  production
         cwd: process.cwd(),
+        appSrc: [],
         //outputDir: 'dist',
         publicPath: '',
 

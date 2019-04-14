@@ -51,6 +51,14 @@ packez.start({
 
 当前工作路径
 
+### `appSrc`
+
+`string` or `array`
+
+设置项目目录，改选项不是必须，设定后babel-loader及eslint只会对appSrc的文件进行处理及校验。
+
+`注`：`node_modules`一直都会被排除
+
 ### `mode`
 `string` 
 
