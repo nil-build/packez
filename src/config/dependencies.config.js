@@ -1,7 +1,4 @@
 module.exports = {
-    "core": [
-        "babel-core",
-    ],
     "babel": [
         "babel-loader",
         "babel-preset-packez",
@@ -22,18 +19,23 @@ module.exports = {
         "node-sass",
         "sass-loader"
     ],
+    "scss": [
+        "node-sass",
+        "sass-loader"
+    ],
     "eslint": [
         "eslint",
         "babel-eslint",
         "eslint-loader",
-        "eslint-config-react-app",
-        "eslint-plugin-flowtype",
-        "eslint-plugin-import",
-        //"eslint-config-alloy",
-        // "eslint-config-airbnb",
+        "eslint-config-packez",
+        // "eslint-plugin-flowtype",
         // "eslint-plugin-import",
-        "eslint-plugin-react",
-        "eslint-plugin-jsx-a11y",
+        // "eslint-plugin-import",
+        // "eslint-plugin-react",
+        // "eslint-plugin-jsx-a11y",
+
+        // "eslint-config-alloy",
+        // "eslint-config-airbnb",
     ],
     "json5": [
         "json5-loader"
