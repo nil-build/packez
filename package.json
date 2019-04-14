@@ -1,6 +1,6 @@
 {
     "name": "packez",
-    "version": "2.0.0-beta1",
+    "version": "2.0.0-beta2",
     "description": "",
     "keywords": [
         "react",
@@ -23,7 +23,7 @@
     "repository": "https://github.com/nil-build/packez.git",
     "license": "MIT",
     "scripts": {
-        "start": "transform-es src -d lib -t node -w",
+        "start": "transform-es src -d lib -t node -w -c",
         "test": "node test/index",
         "tag": "npm publish --tag next"
     },

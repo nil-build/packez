@@ -11,7 +11,7 @@ export default function (opts = {}) {
         //outputDir: 'dist',
         publicPath: '',
 
-        configPath: true,
+        configPath: false,
 
         //useTypeScript: false,
 
@@ -134,24 +134,24 @@ export default function (opts = {}) {
         }
     };
 
-    return defaultsDeep({}, opts, defaultOptions);
+    // return defaultsDeep({}, opts, defaultOptions);
 
-    // const _opts = defaultsDeep({}, opts, defaultOptions);
+    const _opts = defaultsDeep({}, opts, defaultOptions);
 
-    // let configFile = isString(_opts.configPath) ?
-    //     path.join(_opts.cwd, _opts.configPath) :
-    //     path.join(_opts.cwd, 'packez.config.js');
-    // let config = {};
+    let configFile = isString(_opts.configPath) ?
+        path.resolve(_opts.cwd, _opts.configPath) :
+        path.resolve(_opts.cwd, 'packez.config.js');
+    let config = {};
 
 
-    // if (_opts.configPath !== false && fs.existsSync(configFile)) {
-    //     config = require(configFile);
-    //     if (isFunction(config)) {
-    //         config = config(opts.mode, _opts);
-    //     }
-    // }
+    if (_opts.configPath !== false && fs.existsSync(configFile)) {
+        config = require(configFile);
+        if (isFunction(config)) {
+            config = config(opts.mode, _opts);
+        }
+    }
 
-    // defaultsDeep(opts, config, defaultOptions);
+    defaultsDeep(opts, config, defaultOptions);
 
-    // return opts;
+    return opts;
 }

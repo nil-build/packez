@@ -66,11 +66,9 @@ packez.start({
 作用同`webpack.publicPath`
 
 ### `configPath`
-`string` or `boolean` 默认： `true`
+`string` or `boolean` 默认： `false`
 
 是否开启`packez.config.js`
-
-`CLI`模式下有效
 
 ### `clear`
 `boolean` 默认：`true`
