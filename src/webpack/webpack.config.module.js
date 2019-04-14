@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { pathToFileURL } from 'url';
+import path from 'path';
 const postConfig = require('../config/postcss.config');
 
 module.exports = function (opts) {
