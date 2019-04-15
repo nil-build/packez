@@ -12,7 +12,7 @@ export default function (opts = {}) {
         //outputDir: 'dist',
         publicPath: '',
 
-        configPath: false,
+        configPath: true,
 
         //useTypeScript: false,
 

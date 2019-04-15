@@ -69,7 +69,7 @@ packez.start({
 
 `string` or `array`
 
-设置项目目录，改选项不是必须，设定后babel-loader及eslint只会对appSrc的文件进行处理及校验。
+设置项目目录，该选项不是必须，设定后babel-loader及eslint只会对appSrc的文件进行处理及校验。
 
 `注`：`node_modules`一直都会被排除
 
@@ -88,7 +88,7 @@ packez.start({
 作用同`webpack.publicPath`
 
 ### `configPath`
-`string` or `boolean` 默认： `false`
+`string` or `boolean` 默认： `true`
 
 是否开启`packez.config.js`
 
