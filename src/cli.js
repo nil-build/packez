@@ -45,7 +45,15 @@ let executor = 'start';
 
 if (args[0] === 'init') {
     const pkgFile = process.cwd() + '/package.json';
-    const scripts = pkg.scripts;
+    let userPkg = {};
+    if (fs.existsSync(pkgFile)) {
+        userPkg = require(pkgFile);
+    }
+
+    const scripts = userPkg.scripts || {};
+
+    userPkg.scripts = scripts;
+
     fs.writeFileSync(path.resolve(process.cwd(), 'packez.config.js'), fs.readFileSync(__dirname + '/packez.config.ejs'));
 
     if (!scripts.start) {
@@ -72,7 +80,7 @@ if (args[0] === 'init') {
 
     fs.writeFileSync(
         pkgFile,
-        JSON.stringify(pkg, null, 2) + os.EOL
+        JSON.stringify(userPkg, null, 2) + os.EOL
     );
 
     process.exit(1);
