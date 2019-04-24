@@ -148,7 +148,7 @@ export default function (opts = {}) {
     if (_opts.configPath !== false && fs.existsSync(configFile)) {
         config = require(configFile);
         if (isFunction(config)) {
-            config = config(opts.mode, _opts);
+            config = config(_opts);
         }
     }
 
