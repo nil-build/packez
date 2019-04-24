@@ -1,4 +1,5 @@
 const path = require('path');
+const _ = require('lodash');
 const getWebpackModule = require('./webpack.config.module');
 const getWebpackPlugins = require('./webpack.config.plugins');
 const getWebpackOptimization = require('./webpack.config.optimization');
@@ -17,12 +18,12 @@ module.exports = function (opts) {
                 : false
             : isEnvDevelopment && 'cheap-module-source-map',
         entry: opts.entry,
-        output: {
+        output: _.defaultsDeep({
             path: path.resolve(opts.cwd, opts.outputDir),
             filename: [assestJs.output || ".", assestJs.name].join('/'),
             chunkFilename: [assestJs.output || ".", assestJs.chunkName].join('/'),
             publicPath: opts.publicPath,
-        },
+        }, opts.output || {}),
         module: getWebpackModule(opts),
         plugins: getWebpackPlugins(opts),
         optimization: getWebpackOptimization(opts),
