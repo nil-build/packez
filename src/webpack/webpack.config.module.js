@@ -1,11 +1,15 @@
-import _ from 'lodash';
-import path from 'path';
-const postConfig = require('../config/postcss.config');
+import _ from "lodash";
+import path from "path";
+const postConfig = require("../config/postcss.config");
 
-module.exports = function (opts) {
+module.exports = function(opts) {
     let oneOf = [];
-    const isEnvProduction = opts.mode === 'production';
-    const mediaPublicPath = _.get(opts, 'assest.media.publicPath', opts.publicPath);
+    const isEnvProduction = opts.mode === "production";
+    const mediaPublicPath = _.get(
+        opts,
+        "assest.media.publicPath",
+        opts.publicPath
+    );
     const assestMedia = opts.assest.media;
     const loaders = opts.loaders || {};
     const preLoaderExtra = opts.preLoaderExtra || [];
@@ -19,118 +23,133 @@ module.exports = function (opts) {
 
     const appSrc = Array.isArray(opts.appSrc) ? opts.appSrc : [opts.appSrc];
     let includePaths = [
-        ...appSrc.filter(Boolean).map(appPath => path.resolve(opts.cwd, appPath))
+        ...appSrc
+            .filter(Boolean)
+            .map(appPath => path.resolve(opts.cwd, appPath))
     ];
 
     includePaths = includePaths.length ? includePaths : undefined;
 
-    const getStyleLoaders = function (cssOptions, preProcessor) {
-        const publicPath = _.get(opts, 'assest.css.publicPath', opts.publicPath);
+    const getStyleLoaders = function(cssOptions, preProcessor) {
+        const publicPath = _.get(
+            opts,
+            "assest.css.publicPath",
+            opts.publicPath
+        );
 
         return [
             {
                 test: cssOptions.cssRegex,
                 exclude: cssOptions.cssModuleRegex,
                 use: [
-                    opts.inlineStyle ?
-                        require.resolve("style-loader") :
-                        {
-                            loader: require(require.resolve("mini-css-extract-plugin")).loader,
-                            options: {
-                                publicPath,
-                            }
-                        },
+                    opts.inlineStyle
+                        ? require.resolve("style-loader")
+                        : {
+                              loader: require(require.resolve(
+                                  "mini-css-extract-plugin"
+                              )).loader,
+                              options: {
+                                  publicPath
+                              }
+                          },
                     {
-                        loader: require.resolve('css-loader'),
+                        loader: require.resolve("css-loader"),
                         options: {
                             importLoaders: cssOptions.importLoaders,
-                            sourceMap: isEnvProduction && opts.shouldUseSourceMap,
-                        },
+                            sourceMap:
+                                isEnvProduction && opts.shouldUseSourceMap
+                        }
                     },
                     {
                         loader: require.resolve("postcss-loader"),
                         options: postConfig(opts)
                     },
-                    preProcessor && require.resolve(preProcessor),
+                    preProcessor && require.resolve(preProcessor)
                 ].filter(Boolean)
             },
             {
                 test: cssOptions.cssModuleRegex,
                 use: [
-                    opts.inlineStyle ?
-                        require.resolve("style-loader") :
-                        {
-                            loader: require(require.resolve("mini-css-extract-plugin")).loader,
-                            options: {
-                                publicPath,
-                            }
-                        },
+                    opts.inlineStyle
+                        ? require.resolve("style-loader")
+                        : {
+                              loader: require(require.resolve(
+                                  "mini-css-extract-plugin"
+                              )).loader,
+                              options: {
+                                  publicPath
+                              }
+                          },
                     {
-                        loader: require.resolve('css-loader'),
+                        loader: require.resolve("css-loader"),
                         options: {
                             importLoaders: cssOptions.importLoaders,
                             modules: true,
-                            sourceMap: isEnvProduction && opts.shouldUseSourceMap,
-                        },
+                            sourceMap:
+                                isEnvProduction && opts.shouldUseSourceMap
+                        }
                     },
                     {
                         loader: require.resolve("postcss-loader"),
                         options: postConfig(opts)
                     },
-                    preProcessor && require.resolve(preProcessor),
+                    preProcessor && require.resolve(preProcessor)
                 ].filter(Boolean)
             }
         ];
-    }
+    };
 
-    const getBabelLoader = function (babelOptions) {
+    const getBabelLoader = function(babelOptions) {
         babelOptions = _.isObject(loaders.babel) ? loaders.babel : {};
         const plugins = babelOptions.plugins || [];
 
         return {
             test: /\.(js|mjs|jsx|ts|tsx)$/,
-            loader: require.resolve('babel-loader'),
+            loader: require.resolve("babel-loader"),
             include: includePaths,
             exclude: /node_modules/,
             options: {
-                babelrc: _.get(babelOptions, 'babelrc', false),
-                configFile: _.get(babelOptions, 'configFile', false),
-                compact: _.get(babelOptions, 'compact', false),
+                babelrc: _.get(babelOptions, "babelrc", false),
+                configFile: _.get(babelOptions, "configFile", false),
+                compact: _.get(babelOptions, "compact", false),
                 presets: [
                     [
                         require.resolve("babel-preset-packez"),
                         _.defaultsDeep(
                             {},
-                            _.omit(babelOptions, ['plugins', 'babelrc', 'configFile', 'compact']),
+                            _.omit(babelOptions, [
+                                "plugins",
+                                "babelrc",
+                                "configFile",
+                                "compact"
+                            ]),
                             {
                                 runtimeOptions: {
                                     corejs: 2,
                                     helpers: true,
-                                    regenerator: true,
+                                    regenerator: true
                                 },
                                 modules: "commonjs",
-                                strictMode: true,
+                                strictMode: true
                             }
-                        ),
-                    ],
+                        )
+                    ]
                 ],
-                plugins: [
-                    ...plugins
-                ],
+                plugins: [...plugins],
                 cacheDirectory: true,
                 cacheCompression: isEnvProduction,
-                compact: isEnvProduction,
-            },
+                compact: isEnvProduction
+            }
         };
-    }
+    };
 
     oneOf = [
         //扩展模块
         ...loaderExtra,
         //自定义匹配规则
         loaders.raw && {
-            test: _.get(loaders, 'raw.test') || /\.txt$/,
-            loader: require.resolve("raw-loader"),
+            test: _.get(loaders, "raw.test") || /\.txt$/,
+            loader: require.resolve("raw-loader")
         },
 
         {
@@ -152,40 +171,39 @@ module.exports = function (opts) {
         //资源文件如图片
         assestMedia.regexp && {
             test: assestMedia.regexp,
-            use: [{
-                loader: require.resolve('url-loader'),
-                options: {
-                    limit: assestMedia.limit,
-                    name: assestMedia.name,
-                    outputPath: assestMedia.output,
-                    publicPath: mediaPublicPath,
+            use: [
+                {
+                    loader: require.resolve("url-loader"),
+                    options: {
+                        limit: assestMedia.limit,
+                        name: assestMedia.name,
+                        outputPath: assestMedia.output,
+                        publicPath: mediaPublicPath
+                    }
                 }
-            }]
+            ]
         },
 
         //处理json5
         loaders.json5 && {
             test: /\.json5$/,
-            loader: require.resolve('json5-loader')
+            loader: require.resolve("json5-loader")
         },
 
         //处理vue格式文件
         loaders.vue && {
             test: /\.vue$/,
-            loader: require.resolve("vue-loader"),
-        },
-
+            loader: require.resolve("vue-loader")
+        }
     ].filter(Boolean);
 
     if (loaders.css) {
         oneOf.push(
-            ...getStyleLoaders(
-                {
-                    cssRegex,
-                    cssModuleRegex,
-                    importLoaders: 1,
-                },
-            )
+            ...getStyleLoaders({
+                cssRegex,
+                cssModuleRegex,
+                importLoaders: 1
+            })
         );
     }
 
@@ -195,9 +213,9 @@ module.exports = function (opts) {
                 {
                     cssRegex: sassRegex,
                     cssModuleRegex: sassModuleRegex,
-                    importLoaders: 2,
+                    importLoaders: 2
                 },
-                'sass-loader'
+                "sass-loader"
             )
         );
     }
@@ -208,28 +226,26 @@ module.exports = function (opts) {
                 {
                     cssRegex: lessRegex,
                     cssModuleRegex: lessModuleRegex,
-                    importLoaders: 2,
+                    importLoaders: 2
                 },
-                'less-loader'
+                "less-loader"
             )
         );
     }
     // 使用file-loader处理其他文件
-    oneOf.push(
-        {
-            loader: require.resolve('file-loader'),
-            // Exclude `js` files to keep "css" loader working as it injects
-            // its runtime that would otherwise be processed through "file" loader.
-            // Also exclude `html` and `json` extensions so they get processed
-            // by webpacks internal loaders.
-            exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.ejs$/, /\.json$/],
-            options: {
-                name: assestMedia.name,
-                outputPath: assestMedia.output,
-                publicPath: mediaPublicPath,
-            },
+    oneOf.push({
+        loader: require.resolve("file-loader"),
+        // Exclude `js` files to keep "css" loader working as it injects
+        // its runtime that would otherwise be processed through "file" loader.
+        // Also exclude `html` and `json` extensions so they get processed
+        // by webpacks internal loaders.
+        exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.ejs$/, /\.json$/],
+        options: {
+            name: assestMedia.name,
+            outputPath: assestMedia.output,
+            publicPath: mediaPublicPath
         }
-    );
+    });
 
     return {
         rules: [
@@ -239,26 +255,26 @@ module.exports = function (opts) {
             ...preLoaderExtra.map(loader => {
                 return {
                     ...loader,
-                    enforce: 'pre',
-                }
+                    enforce: "pre"
+                };
             }),
 
             // run the linter.
             loaders.eslint && {
-                enforce: 'pre',
+                enforce: "pre",
                 test: /\.(js|mjs|jsx)$/,
                 include: includePaths,
                 exclude: /node_modules/,
-                loader: require.resolve('eslint-loader'),
+                loader: require.resolve("eslint-loader"),
                 options: {
                     ...loaders.eslint,
-                    baseConfig: require('../config/eslint.config.js'),
-                    eslintPath: require.resolve('eslint'),
-                },
+                    baseConfig: require("../config/eslint.config.js"),
+                    eslintPath: require.resolve("eslint")
+                }
             },
             {
                 oneOf
             }
         ].filter(Boolean)
     };
-}
+};
