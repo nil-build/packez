@@ -1,28 +1,22 @@
-import { defaultsDeep, isFunction, isString } from 'lodash';
-import path from 'path';
-import fs from 'fs-extra';
+import { defaultsDeep, isFunction, isString } from "lodash";
+import path from "path";
+import fs from "fs-extra";
 
-export default function (opts = {}) {
+export default function(opts = {}) {
     opts = { ...opts };
 
     const defaultOptions = {
-        mode: 'development', // development  production
+        mode: "development", // development  production
         cwd: process.cwd(),
         appSrc: [],
         //outputDir: 'dist',
-        publicPath: '',
+        publicPath: "",
 
         configPath: true,
 
         //useTypeScript: false,
 
-        polyfills: {
-            Promise: true,
-            Set: false,
-            Map: false,
-            raf: false,
-            fetch: false,
-        },
+        polyfills: require.resolve("../polyfills"),
 
         shouldUseEntryHTML: true,
         //默认根据entry自动获取对于的.html文件
@@ -39,27 +33,27 @@ export default function (opts = {}) {
         //内置加载器
         loaders: {
             //eslint-loader
-            "eslint": true,
+            eslint: true,
             //raw-loader
-            "raw": {
-                test: /\.txt$/,
+            raw: {
+                test: /\.txt$/
             },
             //babel-loader
-            "babel": true,
+            babel: true,
             //css-loader
-            "css": true,
+            css: true,
             //less-loader
-            "less": false,
+            less: false,
             //sass-loader
-            "scss": false,
+            scss: false,
             //sass-loader
-            "sass": false,
+            sass: false,
             //json5-loader
-            "json5": true,
+            json5: true,
             //vue-loader
-            "vue": false,
+            vue: false,
             //html-loader
-            "html": true,
+            html: true
         },
         //扩展加载器
         loaderExtra: [],
@@ -67,7 +61,7 @@ export default function (opts = {}) {
         preLoaderExtra: [],
         //内置插件
         plugins: {
-            "manifest": true,
+            manifest: true
         },
         //扩展插件
         pluginExtra: [],
@@ -76,7 +70,7 @@ export default function (opts = {}) {
             css: {
                 name: "[name].[contenthash:8].css",
                 chunkName: "[name].[chunkhash:8].chunk.css",
-                output: "static/css",
+                output: "static/css"
             },
             js: {
                 name: "[name].[chunkhash:8].js",
@@ -87,13 +81,14 @@ export default function (opts = {}) {
                 regexp: /\.(?:png|jpe?g|gif|bmp)$/,
                 name: "[name].[hash:8].[ext]",
                 output: "static/media",
-                limit: 10000,
+                limit: 10000
             }
         },
         //打包时如果检查到package.json未设置browserslist时则将该配置写到package.json中
         //后续如果需要修改browserslist则直接修改package.json文件
-        "browserslist": [
-            ">0.2%",
+        browserslist: [
+            "> 1%",
+            "last 2 versions",
             "not dead",
             "not ie <= 11",
             "not op_mini all"
@@ -101,7 +96,7 @@ export default function (opts = {}) {
 
         //webpack options
         optimization: {},
-        target: 'web',
+        target: "web",
         resolve: {},
         externals: {},
         performance: false,
@@ -114,24 +109,24 @@ export default function (opts = {}) {
         },
         //devServer
         devServer: {
-            host: '0.0.0.0',
-            clientLogLevel: 'none',
+            host: "0.0.0.0",
+            clientLogLevel: "none",
             quiet: true,
             watchContentBase: true,
             hot: false,
             overlay: false,
             compress: true,
             port: 9000,
-            publicPath: '/'
+            publicPath: "/"
         },
         node: {
-            module: 'empty',
-            dgram: 'empty',
-            dns: 'mock',
-            fs: 'empty',
-            net: 'empty',
-            tls: 'empty',
-            child_process: 'empty',
+            module: "empty",
+            dgram: "empty",
+            dns: "mock",
+            fs: "empty",
+            net: "empty",
+            tls: "empty",
+            child_process: "empty"
         }
     };
 
@@ -139,11 +134,10 @@ export default function (opts = {}) {
 
     const _opts = defaultsDeep({}, opts, defaultOptions);
 
-    let configFile = isString(_opts.configPath) ?
-        path.resolve(_opts.cwd, _opts.configPath) :
-        path.resolve(_opts.cwd, 'packez.config.js');
+    let configFile = isString(_opts.configPath)
+        ? path.resolve(_opts.cwd, _opts.configPath)
+        : path.resolve(_opts.cwd, "packez.config.js");
     let config = {};
-
 
     if (_opts.configPath !== false && fs.existsSync(configFile)) {
         config = require(configFile);

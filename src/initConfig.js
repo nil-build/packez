@@ -1,10 +1,14 @@
-import path from 'path';
-import getConfig from './config';
+import path from "path";
+import getConfig from "./config";
 
-export default function initConfig(entry = './src/index.js', outputDir = 'dist', opts = {}) {
+export default function initConfig(
+    entry = "./src/index.js",
+    outputDir = "dist",
+    opts = {}
+) {
     const options = getConfig(opts);
     let entries = entry;
-    if (typeof entry === 'string' || Array.isArray(entry)) {
+    if (typeof entry === "string" || Array.isArray(entry)) {
         entries = {
             index: entry
         };
@@ -14,16 +18,14 @@ export default function initConfig(entry = './src/index.js', outputDir = 'dist',
     options.outputDir = outputDir;
 
     options.entry = {};
-    const polyfills = [];
-    Object.keys(options.polyfills)
-        .forEach(name => {
-            if (options.polyfills[name]) {
-                polyfills.push(require.resolve(`./polyfills/${name}.js`));
-            }
-        });
+    let polyfills = options.polyfills
+        ? options.polyfills
+        : [require.resolve(`./polyfills`)];
+
+    polyfills = Array.isArray(polyfills) ? polyfills : [polyfills];
 
     Object.keys(entries).forEach(key => {
-        options.entry[key] = polyfills.concat(entries[key]);
+        options.entry[key] = [].concat(polyfills, entries[key]);
     });
 
     return options;

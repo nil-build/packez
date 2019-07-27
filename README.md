@@ -14,7 +14,7 @@ npx `packez build ./src/index.js -d dist -w -c`;
 
 npx `packez analyzer ./src/index.js -d dist -w -c`;
 
-初始化cli：
+初始化 cli：
 
 `npx packez init`
 
@@ -38,7 +38,8 @@ packez.analyzer(entry, output, options);
 
 `array` | `string` | `object` default: `./src/index.js`
 
-eg: 
+eg:
+
 ```
 //string
 packez.start('./src/app.js')
@@ -57,10 +58,10 @@ packez.start({
 
 `string` default: `dist`
 
-
 ## options
 
 ### `cwd`
+
 `string` 默认：`process.cwd()`
 
 当前工作路径
@@ -69,60 +70,70 @@ packez.start({
 
 `string` or `array`
 
-设置项目目录，该选项不是必须，设定后babel-loader及eslint只会对appSrc的文件进行处理及校验。
+设置项目目录，该选项不是必须，设定后 babel-loader 及 eslint 只会对 appSrc 的文件进行处理及校验。
 
 `注`：`node_modules`一直都会被排除
 
 ### `mode`
-`string` 
 
-作用同`webpack.mode` 
+`string`
+
+作用同`webpack.mode`
 
 `start()` `server()` 调用默认为 `development`
 
 `build()` `analyzer()` 调用默认为 `production`
 
 ### `publicPath`
-`string` 
+
+`string`
 
 作用同`webpack.publicPath`
 
 ### `configPath`
+
 `string` or `boolean` 默认： `true`
 
 是否开启`packez.config.js`
 
 ### `clear`
+
 `boolean` 默认：`true`
 
 启动打包时是否清空输出目录。
 
 ### `cnpm`
+
 `boolean` 默认：`false`
 
 是否使用`cnpm`来安装依赖。
 
 ### `inlineStyle`
+
 `boolean` 默认：false
 
 开启后使用`style-loader` 否则使用 `mini-css-extract-plugin`。前提是需要先开启`loaders.css: true`
 
 ### `shouldUseSourceMap`
+
 `boolean` 默认：`true`
 
-是否生成sourcemap文件，该参数只对`mode=production`有效
+是否生成 sourcemap 文件，该参数只对`mode=production`有效
 
 ### `shouldUseEntryHTML`
+
 `boolean` 默认：`true`
 
-是否开启`HtmlWebpackPlugin`生成html页面
+是否开启`HtmlWebpackPlugin`生成 html 页面
 
 ### `entryHTMLTemplates`
-`object` 
+
+`object`
 
 开启`shouldUseEntryHTML`后会根据`entry`中的`key`在`entryHTMLTemplates`中查找。
 
-e.g. 
+e.g.
+
 ```
 packez.start({
     index: './src/app1.js',
@@ -136,26 +147,28 @@ packez.start({
 
 ```
 
-`注`：如果未设置`entryHTMLTemplates`时则会替换entry的后缀为`.html`并寻找。
+`注`：如果未设置`entryHTMLTemplates`时则会替换 entry 的后缀为`.html`并寻找。
 
 e.g. `./src/app1.js` 实际会查找 `./src/app1.html` 如果查找失败则使用默认模版。
 
 ### `polyfills`
-`object` 默认：
+
+`string | array` 默认加载以下 polyfills
+
 ```
-{
-    Promise: true,
-    Set: false,
-    Map: false,
-    raf: false,
-    fetch: false,
-}
+import "core-js/modules/es.array.iterator";
+import "core-js/modules/es.promise";
+import "core-js/modules/es.promise.finally";
+import "core-js/modules/es.object.assign";
+
 ```
 
-内置的polyfills，可以通过`entry`为数组的方式来扩展自己的`polyfills`
+内置的 polyfills，可以通过`entry`为数组的方式来扩展自己的`polyfills`
 
 ### `assest`
+
 `object` 默认：
+
 ```
 {
     css: {
@@ -177,10 +190,12 @@ e.g. `./src/app1.js` 实际会查找 `./src/app1.html` 如果查找失败则使�
 }
 ```
 
-设置输出文件的路径就文件名规则，`注`:在`start` `server`下 `name`和`chunkName`默认不会设置`chunkhash:8`
+> 设置输出文件的路径就文件名规则，`注`:在`start` `server`下 `name`和`chunkName`默认不会设置`chunkhash:8`
 
 ### `loaders`
+
 `object` 默认：
+
 ```
 {
     "eslint": true,
@@ -197,10 +212,12 @@ e.g. `./src/app1.js` 实际会查找 `./src/app1.html` 如果查找失败则使�
     "html": true,
 }
 ```
-内置webpack加载器 
+
+内置 webpack 加载器
 
 如果传对象则会传递给加载器
-e.g. 
+e.g.
+
 ```
 {
     eslit:{
@@ -210,43 +227,51 @@ e.g.
     }
 }
 ```
+
 其他
-#### `loaders.babel` 
+
+#### `loaders.babel`
+
 `boolean` or `object` 默认：`true`
 
 当为`object`是默认为：
+
 ```
 {
     babelrc: false,
     configFile: false,
     compact: false,
+    presets: [],
     plugins: [],
-    runtimeOptions: {
-        corejs: 2,
-        helpers: true,
-        regenerator: true,
-    },
+    runtimeOptions: {},
+    corejs: 3,
+    useBuiltIns: "usage",
     modules: "commonjs",
     strictMode: true,
     其他可参考：@babel/preset-env
 }
 ```
-[transform-runtime](https://babeljs.io/docs/en/next/babel-plugin-transform-runtime)
+
+runtimeOptions: [transform-runtime](https://babeljs.io/docs/en/next/babel-plugin-transform-runtime)
 
 [@babel/preset-env](https://babeljs.io/docs/en/next/babel-preset-env)
 
 ### `loaderExtra`
+
 `array`
 
-自定义webpack加载器
+自定义 webpack 加载器
 
 ### `pluginExtra`
+
 `array`
 
-自定义webpack插件
+自定义 webpack 插件
 
 ### `browserslist`
+
 `array` 默认：
+
 ```
 [
     ">0.2%",
@@ -262,7 +287,8 @@ e.g.
 
 参考`webpack.optimization`
 
-默认: 
+默认:
+
 ```
 {
     runtimeChunk: true,
@@ -294,12 +320,15 @@ e.g.
 默认：`false`
 
 ### `watch`
-`boolean` 
+
+`boolean`
 
 只有调用`start()`时有效，默认：`true`
 
 ### `watchOptions`
+
 `object` 默认：
+
 ```
 {
     aggregateTimeout: 300,
@@ -310,9 +339,11 @@ e.g.
 详细参考 `webpack.watchOptions`
 
 ### `devServer`
+
 `object`
 
 只有调用`server()`时有效，默认：
+
 ```
 {
     host: '0.0.0.0',
@@ -331,13 +362,11 @@ e.g.
 
 `目前不支持HMR，hot不要开启`
 
-
 ### `getWebpackConfig`
+
 `function(webpackConfig) => object`
 
-接收`packez`生成的webpackConfig配置对象
-
-
+接收`packez`生成的 webpackConfig 配置对象
 
 ## cli
 

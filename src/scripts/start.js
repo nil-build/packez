@@ -2,27 +2,26 @@ import _ from "lodash";
 import fs from "fs-extra";
 import initConfig from "../initConfig";
 import checkDeps from "../checkDeps";
-import getWebpackConfig from '../webpack/webpack.config';
-import run from '../utils/webpackRun';
+import getWebpackConfig from "../webpack/webpack.config";
+import run from "../utils/webpackRun";
 
-export default function (entry, output, opts = {}) {
-
-    if (opts.mode !== 'production') {
+export default function(entry, output, opts = {}) {
+    if (opts.mode !== "production") {
         opts = _.defaultsDeep({}, opts, {
             assest: {
                 css: {
                     name: "[name].css",
-                    chunkName: "[name].chunk.css",
+                    chunkName: "[name].chunk.css"
                 },
                 js: {
                     name: "[name].js",
-                    chunkName: "[name].chunk.js",
+                    chunkName: "[name].chunk.js"
                 },
                 media: {
-                    name: "[name].[ext]",
+                    name: "[name].[ext]"
                 }
             },
-            watch: true,
+            watch: true
         });
     }
 
@@ -47,13 +46,9 @@ export default function (entry, output, opts = {}) {
     const watchOptions = config.watchOptions;
 
     run(
-        Object.assign(
-            webpackConfig,
-            {
-                watch,
-                watchOptions,
-            }
-        )
+        Object.assign(webpackConfig, {
+            watch,
+            watchOptions
+        })
     );
-
 }

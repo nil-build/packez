@@ -102,6 +102,7 @@ module.exports = function(opts) {
     const getBabelLoader = function(babelOptions) {
         babelOptions = _.isObject(loaders.babel) ? loaders.babel : {};
         const plugins = babelOptions.plugins || [];
+        const presets = babelOptions.presets || [];
 
         return {
             test: /\.(js|mjs|jsx|ts|tsx)$/,
@@ -118,22 +119,26 @@ module.exports = function(opts) {
                         _.defaultsDeep(
                             {},
                             _.omit(babelOptions, [
+                                "presets",
                                 "plugins",
                                 "babelrc",
                                 "configFile",
                                 "compact"
                             ]),
                             {
-                                runtimeOptions: {
-                                    corejs: 2,
-                                    helpers: true,
-                                    regenerator: true
-                                },
+                                // runtimeOptions: {
+                                //     corejs: 2,
+                                //     helpers: true,
+                                //     regenerator: true
+                                // },
+                                corejs: 3,
+                                useBuiltIns: "usage",
                                 modules: "commonjs",
                                 strictMode: true
                             }
                         )
-                    ]
+                    ],
+                    ...presets
                 ],
                 plugins: [...plugins],
                 cacheDirectory: true,
