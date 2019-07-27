@@ -234,7 +234,7 @@ e.g.
 
 `boolean` or `object` 默认：`true`
 
-当为`object`是默认为：
+当为`object`时默认为：
 
 ```
 {
@@ -274,7 +274,8 @@ runtimeOptions: [transform-runtime](https://babeljs.io/docs/en/next/babel-plugin
 
 ```
 [
-    ">0.2%",
+    "> 0.5%",
+    "last 2 versions",
     "not dead",
     "not ie <= 11",
     "not op_mini all"
