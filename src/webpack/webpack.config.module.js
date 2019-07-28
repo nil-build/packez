@@ -127,7 +127,7 @@ module.exports = function(opts) {
                             ]),
                             {
                                 // runtimeOptions: {
-                                //     corejs: 2,
+                                //     corejs: 3,
                                 //     helpers: true,
                                 //     regenerator: true
                                 // },

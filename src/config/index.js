@@ -86,13 +86,7 @@ export default function(opts = {}) {
         },
         //打包时如果检查到package.json未设置browserslist时则将该配置写到package.json中
         //后续如果需要修改browserslist则直接修改package.json文件
-        browserslist: [
-            "> 0.5%",
-            "last 2 versions",
-            "not dead",
-            "not ie <= 11",
-            "not op_mini all"
-        ],
+        browserslist: [">0.2%", "not dead", "not ie <= 11", "not op_mini all"],
 
         //webpack options
         optimization: {},

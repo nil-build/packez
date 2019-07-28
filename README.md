@@ -274,11 +274,7 @@ runtimeOptions: [transform-runtime](https://babeljs.io/docs/en/next/babel-plugin
 
 ```
 [
-    "> 0.5%",
-    "last 2 versions",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
+    ">0.2%", "not dead", "not ie <= 11", "not op_mini all"
 ]
 ```
 

@@ -18,11 +18,12 @@ export default function initConfig(
     options.outputDir = outputDir;
 
     options.entry = {};
-    let polyfills = options.polyfills
-        ? options.polyfills
-        : [require.resolve(`./polyfills`)];
-
-    polyfills = Array.isArray(polyfills) ? polyfills : [polyfills];
+    let polyfills = options.polyfills;
+    if (polyfills) {
+        polyfills = Array.isArray(polyfills) ? polyfills : [polyfills];
+    } else {
+        polyfills = [];
+    }
 
     Object.keys(entries).forEach(key => {
         options.entry[key] = [].concat(polyfills, entries[key]);
