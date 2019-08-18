@@ -110,8 +110,8 @@ module.exports = function(opts) {
             include: includePaths,
             exclude: /node_modules/,
             options: {
-                babelrc: _.get(babelOptions, "babelrc", false),
-                configFile: _.get(babelOptions, "configFile", false),
+                babelrc: _.get(babelOptions, "babelrc", true),
+                configFile: _.get(babelOptions, "configFile", true),
                 compact: _.get(babelOptions, "compact", false),
                 presets: [
                     [

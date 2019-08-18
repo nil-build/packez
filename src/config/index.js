@@ -12,7 +12,7 @@ export default function(opts = {}) {
         //outputDir: 'dist',
         publicPath: "",
 
-        configPath: true,
+        configFile: "./packez.config.js",
 
         //useTypeScript: false,
 
@@ -128,19 +128,17 @@ export default function(opts = {}) {
 
     const _opts = defaultsDeep({}, opts, defaultOptions);
 
-    let configFile = isString(_opts.configPath)
-        ? path.resolve(_opts.cwd, _opts.configPath)
-        : path.resolve(_opts.cwd, "packez.config.js");
+    let configFile = isString(_opts.configFile)
+        ? path.resolve(_opts.cwd, _opts.configFile)
+        : _opts.configFile;
     let config = {};
 
-    if (_opts.configPath !== false && fs.existsSync(configFile)) {
+    if (configFile !== false && fs.existsSync(configFile)) {
         config = require(configFile);
         if (isFunction(config)) {
             config = config(_opts);
         }
     }
 
-    defaultsDeep(opts, config, defaultOptions);
-
-    return opts;
+    return defaultsDeep(config, opts, defaultOptions);
 }

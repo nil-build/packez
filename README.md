@@ -90,11 +90,9 @@ packez.start({
 
 作用同`webpack.publicPath`
 
-### `configPath`
+### `configFile`
 
-`string` or `boolean` 默认： `true`
-
-是否开启`packez.config.js`
+`string` or `boolean` 默认： `./packez.config.js`
 
 ### `clear`
 
@@ -376,7 +374,6 @@ runtimeOptions: [transform-runtime](https://babeljs.io/docs/en/next/babel-plugin
     .option('-c, --clear', '转换前清空输出目录')
     .option('-p, --publicPath [publicPath]', 'publicPath', '')
     .option('-l, --loaders [loaders]')
-    .option('--polyfills [polyfills]', '设置polyfills文件,e.g. Promise,Set,Map,raf,fetch', '')
     .option('--cnpm', '使用cnpm安装依赖')
     .option('--corejs [corejs]', '参考 babel-runtime', true)
     .option('--helpers [helpers]', '参考 babel-runtime', true)
