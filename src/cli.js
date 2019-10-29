@@ -22,7 +22,6 @@ program
     .option("-l, --loaders [loaders]")
     .option("--config [config]", "configFile", "./packez.config.js")
     .option("--cnpm", "使用cnpm安装依赖")
-    // .option("--corejs [corejs]", "参考 babel-runtime", false)
     .option("--helpers [helpers]", "参考 babel-runtime", false)
     .option("--regenerator [regenerator]", "参考 babel-runtime", false)
     .option("--state [state]", "state", "")
@@ -34,7 +33,6 @@ const options = {
     clear: _.get(program, "clear", true),
     cnpm: _.get(program, "cnpm", false),
     publicPath: _.get(program, "publicPath", ""),
-    // corejs: _.get(program, "corejs", true),
     helpers: _.get(program, "helpers", true),
     regenerator: _.get(program, "regenerator", true),
     loaders: _.get(program, "loaders", "")
@@ -135,15 +133,13 @@ packez[executor](entry, outputDir, {
     loaders: {
         babel: {
             runtimeOptions: {
-                // corejs: options.corejs ? 3 : false,
                 helpers: options.helpers,
                 regenerator: options.regenerator
             }
         },
         scss: options.loaders.indexOf("scss") !== -1,
         sass: options.loaders.indexOf("sass") !== -1,
-        less: options.loaders.indexOf("less") !== -1,
-        vue: options.loaders.indexOf("vue") !== -1
+        less: options.loaders.indexOf("less") !== -1
     },
     program
 });

@@ -206,7 +206,6 @@ import "core-js/modules/es.object.assign";
     "scss": false,
     "sass": false,
     "json5": true,
-    "vue": false,
     "html": true,
 }
 ```
@@ -236,6 +235,7 @@ e.g.
 
 ```
 {
+    exclude: null,
     babelrc: false,
     configFile: false,
     compact: false,
@@ -243,6 +243,7 @@ e.g.
     plugins: [],
     runtimeOptions: {},
     corejs: 3,
+    loose: true,
     useBuiltIns: "usage",
     modules: "commonjs",
     strictMode: true,

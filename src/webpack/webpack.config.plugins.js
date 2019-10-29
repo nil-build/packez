@@ -1,15 +1,15 @@
-const path = require('path');
+const path = require("path");
 const fs = require("fs");
-const webpack = require('webpack');
-const _ = require('lodash');
+const webpack = require("webpack");
+const _ = require("lodash");
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-// 
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+//
 //const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 //var Visualizer = require('webpack-visualizer-plugin');
 
-module.exports = function (opts) {
-    const isEnvProduction = opts.mode === 'production';
+module.exports = function(opts) {
+    const isEnvProduction = opts.mode === "production";
     const loaders = opts.loaders;
     const corePlugins = opts.plugins;
     const plugins = [
@@ -30,8 +30,14 @@ module.exports = function (opts) {
             const MiniCssExtractPlugin = require("mini-css-extract-plugin");
             plugins.push(
                 new MiniCssExtractPlugin({
-                    filename: [opts.assest.css.output || ".", opts.assest.css.name].join('/'),
-                    chunkFilename: [opts.assest.css.output || ".", opts.assest.css.chunkName].join('/'),
+                    filename: [
+                        opts.assest.css.output || ".",
+                        opts.assest.css.name
+                    ].join("/"),
+                    chunkFilename: [
+                        opts.assest.css.output || ".",
+                        opts.assest.css.chunkName
+                    ].join("/")
                 })
             );
         }
@@ -39,7 +45,7 @@ module.exports = function (opts) {
 
     //开启manifest模式
     if (corePlugins.manifest && isEnvProduction) {
-        const ManifestPlugin = require('webpack-manifest-plugin');
+        const ManifestPlugin = require("webpack-manifest-plugin");
         plugins.push(new ManifestPlugin({ ...corePlugins.manifest }));
     }
 
@@ -48,7 +54,7 @@ module.exports = function (opts) {
         const defaultHtmlOpts = {
             inject: true,
             templateParameters: {
-                PUBLIC_URL: [opts.publicPath || '.'].join('/'), //, path.relative(opts.outputDir,1)
+                PUBLIC_URL: [opts.publicPath || "."].join("/") //, path.relative(opts.outputDir,1)
             }
         };
         if (isEnvProduction) {
@@ -62,8 +68,8 @@ module.exports = function (opts) {
                 keepClosingSlash: true,
                 minifyJS: true,
                 minifyCSS: true,
-                minifyURLs: true,
-            }
+                minifyURLs: true
+            };
         }
         // 示例
         // entry: {
@@ -76,31 +82,27 @@ module.exports = function (opts) {
             var htmlOpts = Object.assign({}, defaultHtmlOpts);
             const len = opts.entry[key].length;
             const entry = opts.entry[key][len - 1];
-            let template = opts.entryHTMLTemplates[key] || entry.replace(/\.(?:js|mjs|jsx|ts|tsx)$/, '.html');
+            let template =
+                opts.entryHTMLTemplates[key] ||
+                entry.replace(/\.(?:js|mjs|jsx|ts|tsx)$/, ".html");
 
             // if (template) {
             template = path.resolve(opts.cwd, template);
             if (fs.existsSync(template)) {
                 htmlOpts.template = template;
             } else {
-                htmlOpts.template = path.resolve(__dirname, '../template_index.ejs');
+                htmlOpts.template = path.resolve(
+                    __dirname,
+                    "../template_index.ejs"
+                );
             }
             //}
-            htmlOpts.filename = key + '.html';
+            htmlOpts.filename = key + ".html";
             htmlOpts.chunks = [key];
 
-            plugins.push(
-                new HtmlWebpackPlugin(htmlOpts)
-            );
+            plugins.push(new HtmlWebpackPlugin(htmlOpts));
         });
     }
 
-    if (loaders.vue) {
-        const VueLoaderPlugin = require('vue-loader/lib/plugin');
-        plugins.push(
-            new VueLoaderPlugin()
-        );
-    }
-
     return plugins;
-}
+};

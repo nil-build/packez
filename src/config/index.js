@@ -6,8 +6,8 @@ export default function(opts = {}) {
     opts = { ...opts };
 
     const defaultOptions = {
-        mode: "development", // development  production
         cwd: process.cwd(),
+        mode: "development", // development  production
         appSrc: [],
         //outputDir: 'dist',
         publicPath: "",
@@ -22,7 +22,7 @@ export default function(opts = {}) {
         //默认根据entry自动获取对于的.html文件
         entryHTMLTemplates: {},
 
-        shouldUseSourceMap: true,
+        shouldUseSourceMap: false,
 
         inlineStyle: false,
 
@@ -50,8 +50,6 @@ export default function(opts = {}) {
             sass: false,
             //json5-loader
             json5: true,
-            //vue-loader
-            vue: false,
             //html-loader
             html: true
         },
@@ -86,7 +84,16 @@ export default function(opts = {}) {
         },
         //打包时如果检查到package.json未设置browserslist时则将该配置写到package.json中
         //后续如果需要修改browserslist则直接修改package.json文件
-        browserslist: [">0.2%", "not dead", "not ie <= 11", "not op_mini all"],
+        browserslist: [
+            ">= .25%",
+            "not dead",
+            "not op_mini all",
+            "not Android 4.4.3-4.4.4",
+            "not ios_saf < 10",
+            // "not ie <= 11",
+            "not Chrome < 50", // caniuse lastest is reporting chrome 29
+            "firefox ESR"
+        ],
 
         //webpack options
         optimization: {},
@@ -123,8 +130,6 @@ export default function(opts = {}) {
             child_process: "empty"
         }
     };
-
-    // return defaultsDeep({}, opts, defaultOptions);
 
     const _opts = defaultsDeep({}, opts, defaultOptions);
 

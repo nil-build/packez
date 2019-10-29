@@ -27,6 +27,5 @@ module.exports = {
         // "eslint-config-alloy",
         // "eslint-config-airbnb",
     ],
-    json5: ["json5-loader"],
-    vue: ["vue-loader", "vue-template-compiler"]
+    json5: ["json5-loader"]
 };

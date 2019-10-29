@@ -14,7 +14,6 @@ export default function initConfig(
         };
     }
 
-    // outputDir = path.resolve(options.cwd, outputDir);
     options.outputDir = outputDir;
 
     options.entry = {};

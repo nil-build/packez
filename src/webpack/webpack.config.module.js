@@ -101,14 +101,17 @@ module.exports = function(opts) {
 
     const getBabelLoader = function(babelOptions) {
         babelOptions = _.isObject(loaders.babel) ? loaders.babel : {};
+        const exclude = babelOptions.exclude;
         const plugins = babelOptions.plugins || [];
         const presets = babelOptions.presets || [];
 
+        delete babelOptions.exclude;
+
         return {
-            test: /\.(js|mjs|jsx|ts|tsx)$/,
+            test: /\.(js|mjs|jsx)$/,
             loader: require.resolve("babel-loader"),
             include: includePaths,
-            exclude: /node_modules/,
+            exclude: exclude || /node_modules/,
             options: {
                 babelrc: _.get(babelOptions, "babelrc", true),
                 configFile: _.get(babelOptions, "configFile", true),
@@ -126,15 +129,12 @@ module.exports = function(opts) {
                                 "compact"
                             ]),
                             {
-                                // runtimeOptions: {
-                                //     corejs: 3,
-                                //     helpers: true,
-                                //     regenerator: true
-                                // },
                                 corejs: 3,
-                                useBuiltIns: "usage",
+                                loose: true,
+                                strictMode: true,
                                 modules: "commonjs",
-                                strictMode: true
+                                useBuiltIns: "usage",
+                                decoratorsBeforeExport: true
                             }
                         )
                     ],
@@ -193,12 +193,6 @@ module.exports = function(opts) {
         loaders.json5 && {
             test: /\.json5$/,
             loader: require.resolve("json5-loader")
-        },
-
-        //处理vue格式文件
-        loaders.vue && {
-            test: /\.vue$/,
-            loader: require.resolve("vue-loader")
         }
     ].filter(Boolean);
 
