@@ -1,5 +1,5 @@
 module.exports = {
-    babel: ["babel-loader", "babel-preset-packez"],
+    babel: ["babel-loader", "babel-preset-packez", "core-js"],
     css: [
         "style-loader",
         "css-loader",

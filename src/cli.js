@@ -22,9 +22,10 @@ program
     .option("-l, --loaders [loaders]")
     .option("--config [config]", "configFile", "./packez.config.js")
     .option("--cnpm", "使用cnpm安装依赖")
-    .option("--corejs [corejs]", "参考 babel-runtime", false)
+    // .option("--corejs [corejs]", "参考 babel-runtime", false)
     .option("--helpers [helpers]", "参考 babel-runtime", false)
     .option("--regenerator [regenerator]", "参考 babel-runtime", false)
+    .option("--state [state]", "state", "")
     .parse(process.argv);
 
 const options = {
@@ -33,7 +34,7 @@ const options = {
     clear: _.get(program, "clear", true),
     cnpm: _.get(program, "cnpm", false),
     publicPath: _.get(program, "publicPath", ""),
-    corejs: _.get(program, "corejs", true),
+    // corejs: _.get(program, "corejs", true),
     helpers: _.get(program, "helpers", true),
     regenerator: _.get(program, "regenerator", true),
     loaders: _.get(program, "loaders", "")
@@ -56,10 +57,12 @@ if (args[0] === "init") {
 
     userPkg.scripts = scripts;
 
-    fs.writeFileSync(
-        path.resolve(process.cwd(), "packez.config.js"),
-        fs.readFileSync(__dirname + "/packez.config.ejs")
-    );
+    if (!fs.existsSync(path.resolve(process.cwd(), "packez.config.js"))) {
+        fs.writeFileSync(
+            path.resolve(process.cwd(), "packez.config.js"),
+            fs.readFileSync(__dirname + "/packez.config.ejs")
+        );
+    }
 
     if (!scripts.start) {
         scripts.start = "packez start ./src/index.js -w -c";
@@ -132,7 +135,7 @@ packez[executor](entry, outputDir, {
     loaders: {
         babel: {
             runtimeOptions: {
-                corejs: options.corejs ? 3 : false,
+                // corejs: options.corejs ? 3 : false,
                 helpers: options.helpers,
                 regenerator: options.regenerator
             }
