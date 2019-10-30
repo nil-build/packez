@@ -1,4 +1,5 @@
-import path from "path";
+// import path from "path";
+import isObject from "lodash/isObject";
 import getConfig from "./config";
 
 export default function initConfig(
@@ -6,17 +7,24 @@ export default function initConfig(
     outputDir = "dist",
     opts = {}
 ) {
+    if (arguments.length === 1 && isObject(entry)) {
+        opts = entry;
+        entry = "./src/index.js";
+        outputDir = "dist";
+    }
+
     const options = getConfig(opts);
-    let entries = entry;
+
+    let entries = options.entry || entry;
     if (typeof entry === "string" || Array.isArray(entry)) {
         entries = {
             index: entry
         };
     }
 
-    options.outputDir = outputDir;
+    options.entry = entries;
+    options.outputDir = options.outputDir || outputDir;
 
-    options.entry = {};
     let polyfills = options.polyfills;
     if (polyfills) {
         polyfills = Array.isArray(polyfills) ? polyfills : [polyfills];
@@ -25,7 +33,7 @@ export default function initConfig(
     }
 
     Object.keys(entries).forEach(key => {
-        options.entry[key] = [].concat(polyfills, entries[key]);
+        entries[key] = [].concat(polyfills, entries[key]);
     });
 
     return options;

@@ -129,11 +129,9 @@ module.exports = function(opts) {
                                 "compact"
                             ]),
                             {
-                                corejs: 3,
                                 loose: true,
                                 strictMode: true,
                                 modules: "commonjs",
-                                useBuiltIns: "usage",
                                 decoratorsBeforeExport: true
                             }
                         )

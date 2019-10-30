@@ -89,9 +89,13 @@ if (args[0] === "init") {
     process.exit(1);
 }
 
+let isShortCmd = false;
+
 if (args.length === 1) {
     if (validExecuors.indexOf(args[0]) === -1) {
         entry = args[0];
+    } else {
+        isShortCmd = true;
     }
 } else if (args.length > 1) {
     executor = args[0];
@@ -104,22 +108,24 @@ if (validExecuors.indexOf(executor) === -1) {
     );
 }
 
-if (!fs.existsSync(entry)) {
-    throw new Error(`entry file [${entry}] not exists!`);
-}
+if (!isShortCmd) {
+    if (!fs.existsSync(entry)) {
+        throw new Error(`entry file [${entry}] not exists!`);
+    }
 
-const stats = fs.statSync(entry);
+    const stats = fs.statSync(entry);
 
-if (stats.isDirectory()) {
-    const entries = {};
-    const results = fs.readdirSync(entry);
-    results.forEach(file => {
-        if (/\.m?jsx?$/.test(file)) {
-            entries[file] = path.resolve(entry, file);
-        }
-    });
+    if (stats.isDirectory()) {
+        const entries = {};
+        const results = fs.readdirSync(entry);
+        results.forEach(file => {
+            if (/\.m?jsx?$/.test(file)) {
+                entries[file] = path.resolve(entry, file);
+            }
+        });
 
-    entry = entries;
+        entry = entries;
+    }
 }
 
 packez[executor](entry, outputDir, {

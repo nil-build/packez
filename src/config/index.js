@@ -3,8 +3,6 @@ import path from "path";
 import fs from "fs-extra";
 
 export default function(opts = {}) {
-    opts = { ...opts };
-
     const defaultOptions = {
         cwd: process.cwd(),
         mode: "development", // development  production
@@ -145,5 +143,5 @@ export default function(opts = {}) {
         }
     }
 
-    return defaultsDeep(config, opts, defaultOptions);
+    return defaultsDeep(config, _opts);
 }
