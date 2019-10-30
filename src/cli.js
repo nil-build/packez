@@ -58,7 +58,7 @@ if (args[0] === "init") {
     if (!fs.existsSync(path.resolve(process.cwd(), "packez.config.js"))) {
         fs.writeFileSync(
             path.resolve(process.cwd(), "packez.config.js"),
-            fs.readFileSync(__dirname + "/packez.config.ejs")
+            fs.readFileSync(__dirname + "/packez.config.template.js")
         );
     }
 

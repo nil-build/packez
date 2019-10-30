@@ -1,7 +1,5 @@
-const _ = require("lodash");
-
 module.exports = function(options, state) {
-    const opts = {
+    return {
         /**
          * @param {"development" | "production"}
          */
@@ -87,7 +85,7 @@ module.exports = function(options, state) {
          * enforce: "pre"
          */
         // preLoaderExtra: [],
-        // 内置插件
+        // 内置插件参数
         // plugins: {
         //     manifest: true
         // },
@@ -158,6 +156,4 @@ module.exports = function(options, state) {
         //     poll: undefined
         // },
     };
-
-    return _.defaultsDeep(opts, deaults);
 };
