@@ -154,10 +154,9 @@ e.g. `./src/app1.js` 实际会查找 `./src/app1.html` 如果查找失败则使�
 `string | array` 默认加载以下 polyfills
 
 ```
-import "core-js/modules/es.array.iterator";
-import "core-js/modules/es.promise";
-import "core-js/modules/es.promise.finally";
-import "core-js/modules/es.object.assign";
+if (typeof window.Promise === "undefined") {
+    window.Promise = require("@babel/runtime-corejs2/core-js/promise");
+}
 
 ```
 
@@ -242,9 +241,7 @@ e.g.
     presets: [],
     plugins: [],
     runtimeOptions: {},
-    corejs: 3,
     loose: true,
-    useBuiltIns: "usage",
     modules: "commonjs",
     strictMode: true,
     其他可参考：@babel/preset-env
@@ -273,7 +270,13 @@ runtimeOptions: [transform-runtime](https://babeljs.io/docs/en/next/babel-plugin
 
 ```
 [
-    ">0.2%", "not dead", "not ie <= 11", "not op_mini all"
+    ">= .25%",
+    "not dead",
+    "not op_mini all",
+    "not Android 4.4.3-4.4.4",
+    "not ios_saf < 10",
+    "not Chrome < 50",
+    "firefox ESR"
 ]
 ```
 

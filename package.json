@@ -34,15 +34,17 @@
         "*.js"
     ],
     "devDependencies": {
-        "transform-es": "^3.3.0"
+        "transform-es": "^3.3.1"
     },
     "dependencies": {
         "@babel/core": "^7.6.4",
         "@babel/runtime": "^7.6.3",
-        "eslint-config-packez": "^0.3.0",
+        "@babel/runtime-corejs2": "^7.6.3",
+        "babel-preset-packez": "^0.5.4",
         "chalk": "^2.4.2",
         "core-js": "^3.3.5",
         "ejs-loader": "^0.3.5",
+        "eslint-config-packez": "^0.3.0",
         "extract-loader": "^2.0.1",
         "file-loader": "^1.1.11",
         "filesize": "^4.2.1",
