@@ -64,11 +64,11 @@ module.exports = function(options, state) {
          * }
          */
         // loaders: {
-        //     eslint: {},
+        //     eslint: { rules: {...} },
         //     raw: {
         //         test: /\.txt$/
         //     },
-        //     babel: {},
+        //     babel: { babel options },
         //     css: true,
         //     less: false,
         //     scss: false,
@@ -97,7 +97,7 @@ module.exports = function(options, state) {
         // webpack扩展插件
         // pluginExtra: [],
         /**
-         * 输出文件命名规范
+         * 输出文件命名规则
          * 如不设置dev模式下默认没有contenthash:8
          */
         // assest: {
@@ -129,7 +129,13 @@ module.exports = function(options, state) {
         //     "firefox ESR"
         // ],
         // webpack options
-        // optimization: {},
+        // optimization: {
+        //     runtimeChunk: true,
+        //     splitChunks: {
+        //         chunks: "all",
+        //         name: false
+        //     }
+        // },
         // target: "web",
         // resolve: {},
         // externals: {},
