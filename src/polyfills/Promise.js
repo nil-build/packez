@@ -1,3 +1,2 @@
-if (typeof window.Promise === "undefined") {
-    window.Promise = require("@babel/runtime-corejs2/core-js/promise");
-}
+import "core-js/modules/es.promise";
+import "core-js/modules/es.promise.finally";

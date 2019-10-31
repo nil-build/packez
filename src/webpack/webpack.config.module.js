@@ -130,8 +130,8 @@ module.exports = function(opts) {
                             ]),
                             {
                                 loose: true,
+                                modules: false,
                                 strictMode: true,
-                                modules: "commonjs",
                                 decoratorsBeforeExport: true
                             }
                         )
@@ -247,7 +247,7 @@ module.exports = function(opts) {
     return {
         rules: [
             // Disable require.ensure
-            { parser: { requireEnsure: false } },
+            // { parser: { requireEnsure: false } },
 
             ...preLoaderExtra.map(loader => {
                 return {

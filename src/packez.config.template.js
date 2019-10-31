@@ -54,6 +54,11 @@ module.exports = function(options, state) {
          * @example
          * {
          *      babel: {
+         *          corejs: 3,
+         *          useBuiltIns: "usage",
+         *          runtimeOptions: {
+         *              ...
+         *          },
          *          plugins: [....]
          *      }
          * }
