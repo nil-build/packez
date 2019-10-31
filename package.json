@@ -1,6 +1,6 @@
 {
     "name": "packez",
-    "version": "2.5.0-next",
+    "version": "2.5.1-next",
     "description": "",
     "keywords": [
         "react",
@@ -34,13 +34,12 @@
         "*.js"
     ],
     "devDependencies": {
-        "transform-es": "^3.3.1"
+        "transform-es": "^3.3.2"
     },
     "dependencies": {
         "@babel/core": "^7.6.4",
         "@babel/runtime": "^7.6.3",
-        "@babel/runtime-corejs2": "^7.6.3",
-        "babel-preset-packez": "^0.5.4",
+        "babel-preset-packez": "^0.6.1",
         "chalk": "^2.4.2",
         "core-js": "^3.3.5",
         "ejs-loader": "^0.3.5",

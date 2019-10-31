@@ -154,9 +154,8 @@ e.g. `./src/app1.js` 实际会查找 `./src/app1.html` 如果查找失败则使�
 `string | array` 默认加载以下 polyfills
 
 ```
-if (typeof window.Promise === "undefined") {
-    window.Promise = require("@babel/runtime-corejs2/core-js/promise");
-}
+import "core-js/modules/es.promise";
+import "core-js/modules/es.promise.finally";
 
 ```
 
@@ -240,9 +239,12 @@ e.g.
     compact: false,
     presets: [],
     plugins: [],
-    runtimeOptions: {},
+    runtimeOptions: {
+        corejs: false,
+        helpers: true
+    },
     loose: true,
-    modules: "commonjs",
+    modules: false,
     strictMode: true,
     其他可参考：@babel/preset-env
 }
