@@ -244,7 +244,7 @@ e.g.
         helpers: true
     },
     loose: true,
-    modules: "auto",
+    modules: false,
     strictMode: true,
     其他可参考：@babel/preset-env
 }

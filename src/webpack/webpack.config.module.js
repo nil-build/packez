@@ -130,7 +130,7 @@ module.exports = function(opts) {
                             ]),
                             {
                                 loose: true,
-                                modules: "auto",
+                                modules: false,
                                 strictMode: true,
                                 decoratorsBeforeExport: true
                             }
