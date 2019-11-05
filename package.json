@@ -1,6 +1,6 @@
 {
     "name": "packez",
-    "version": "2.5.3",
+    "version": "2.5.4",
     "description": "",
     "keywords": [
         "react",
@@ -37,13 +37,13 @@
         "transform-es": "^3.3.2"
     },
     "dependencies": {
-        "@babel/core": "^7.6.4",
-        "@babel/runtime": "^7.6.3",
+        "@babel/core": "^7.7.0",
+        "@babel/runtime": "^7.7.1",
         "babel-eslint": "^10.0.3",
         "babel-loader": "^8.0.6",
         "babel-preset-packez": "^0.6.1",
         "chalk": "^2.4.2",
-        "core-js": "^3.3.5",
+        "core-js": "^3.3.6",
         "css-loader": "^3.2.0",
         "ejs-loader": "^0.3.5",
         "eslint": "^6.6.0",
