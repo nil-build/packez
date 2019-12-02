@@ -12,9 +12,9 @@ module.exports = {
         // "postcss-flexbugs-fixes",
         // "postcss-preset-env"
     ],
-    less: ["less", "less-loader"],
-    sass: ["node-sass", "sass-loader"],
-    scss: ["node-sass", "sass-loader"],
+    // less: ["less", "less-loader"],
+    // sass: ["node-sass", "sass-loader"],
+    // scss: ["node-sass", "sass-loader"],
     eslint: [
         // "eslint",
         // "babel-eslint",

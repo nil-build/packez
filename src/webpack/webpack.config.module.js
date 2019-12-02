@@ -146,14 +146,64 @@ module.exports = function(opts) {
         };
     };
 
+    const getTSLoader = babelOptions => {
+        return {
+            test: /\.tsx?$/,
+            use: [
+                {
+                    loader: require.resolve("babel-loader"),
+                    options: {
+                        babelrc: _.get(babelOptions, "babelrc", true),
+                        configFile: _.get(babelOptions, "configFile", true),
+                        compact: _.get(babelOptions, "compact", false),
+                        presets: [
+                            [
+                                require.resolve("babel-preset-packez"),
+                                _.defaultsDeep(
+                                    {},
+                                    _.omit(babelOptions, [
+                                        "presets",
+                                        "plugins",
+                                        "babelrc",
+                                        "configFile",
+                                        "compact"
+                                    ]),
+                                    {
+                                        loose: true,
+                                        modules: false,
+                                        strictMode: true,
+                                        decoratorsBeforeExport: true
+                                    }
+                                )
+                            ],
+                            ...presets
+                        ],
+                        plugins: [...plugins],
+                        cacheDirectory: true,
+                        cacheCompression: isEnvProduction,
+                        compact: isEnvProduction
+                    }
+                },
+                {
+                    loader: require.resolve("ts-loader"),
+                    options: {
+                        transpileOnly: true
+                        // configFile: getTSCommonConfig.getConfigFilePath(),
+                        // compilerOptions: tsConfig
+                    }
+                }
+            ]
+        };
+    };
+
     oneOf = [
         //扩展模块
         ...loaderExtra,
         //自定义匹配规则
-        loaders.raw && {
-            test: _.get(loaders, "raw.test") || /\.txt$/,
-            loader: require.resolve("raw-loader")
-        },
+        // loaders.raw && {
+        //     test: _.get(loaders, "raw.test") || /\.txt$/,
+        //     loader: require.resolve("raw-loader")
+        // },
 
         {
             test: /\.ejs?$/,
@@ -161,15 +211,17 @@ module.exports = function(opts) {
         },
 
         //html文件加载
-        loaders.html && {
-            test: /\.html?$/,
-            loader: require.resolve("html-loader"),
-            options: {
-                ...loaders.html
-            }
-        },
+        // loaders.html && {
+        //     test: /\.html?$/,
+        //     loader: require.resolve("html-loader"),
+        //     options: {
+        //         ...loaders.html
+        //     }
+        // },
         // js文件处理
-        loaders.babel && getBabelLoader(loaders.babel),
+        getBabelLoader(loaders.babel),
+
+        getTSLoader(loaders.babel),
 
         //资源文件如图片
         assestMedia.regexp && {
@@ -187,48 +239,47 @@ module.exports = function(opts) {
             ]
         },
 
-        //处理json5
-        loaders.json5 && {
+        {
             test: /\.json5$/,
             loader: require.resolve("json5-loader")
         }
     ].filter(Boolean);
 
-    if (loaders.css) {
-        oneOf.push(
-            ...getStyleLoaders({
-                cssRegex,
-                cssModuleRegex,
-                importLoaders: 1
-            })
-        );
-    }
+    // if (loaders.css) {
+    oneOf.push(
+        ...getStyleLoaders({
+            cssRegex,
+            cssModuleRegex,
+            importLoaders: 1
+        })
+    );
+    // }
 
-    if (loaders.scss || loaders.sass) {
-        oneOf.push(
-            ...getStyleLoaders(
-                {
-                    cssRegex: sassRegex,
-                    cssModuleRegex: sassModuleRegex,
-                    importLoaders: 2
-                },
-                "sass-loader"
-            )
-        );
-    }
+    // if (loaders.scss || loaders.sass) {
+    oneOf.push(
+        ...getStyleLoaders(
+            {
+                cssRegex: sassRegex,
+                cssModuleRegex: sassModuleRegex,
+                importLoaders: 2
+            },
+            "sass-loader"
+        )
+    );
+    // }
 
-    if (loaders.less) {
-        oneOf.push(
-            ...getStyleLoaders(
-                {
-                    cssRegex: lessRegex,
-                    cssModuleRegex: lessModuleRegex,
-                    importLoaders: 2
-                },
-                "less-loader"
-            )
-        );
-    }
+    // if (loaders.less) {
+    oneOf.push(
+        ...getStyleLoaders(
+            {
+                cssRegex: lessRegex,
+                cssModuleRegex: lessModuleRegex,
+                importLoaders: 2
+            },
+            "less-loader"
+        )
+    );
+    // }
     // 使用file-loader处理其他文件
     oneOf.push({
         loader: require.resolve("file-loader"),
@@ -247,7 +298,7 @@ module.exports = function(opts) {
     return {
         rules: [
             // Disable require.ensure
-            // { parser: { requireEnsure: false } },
+            { parser: { requireEnsure: false } },
 
             ...preLoaderExtra.map(loader => {
                 return {
