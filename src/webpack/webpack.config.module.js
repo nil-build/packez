@@ -1,10 +1,49 @@
 import _ from "lodash";
 import path from "path";
-const postConfig = require("../config/postcss.config");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const getCSSModuleLocalIdent = require("../utils/getCSSModuleLocalIdent");
+const getPostCSSConfig = require("../config/postcss.config");
+
+function getBabelConfig(options) {
+    const plugins = options.plugins || [];
+    const presets = options.presets || [];
+
+    return {
+        babelrc: _.get(options, "babelrc", true),
+        configFile: _.get(options, "configFile", true),
+        compact: _.get(options, "compact", false),
+        presets: [
+            [
+                require.resolve("babel-preset-packez"),
+                _.defaultsDeep(
+                    {},
+                    _.omit(options, [
+                        "presets",
+                        "plugins",
+                        "babelrc",
+                        "configFile",
+                        "compact"
+                    ]),
+                    {
+                        loose: true,
+                        modules: false,
+                        strictMode: true,
+                        decoratorsBeforeExport: true
+                    }
+                )
+            ],
+            ...presets
+        ],
+        plugins: [...plugins]
+    };
+}
 
 module.exports = function(opts) {
-    let oneOf = [];
+    const inlineStyle = opts.inlineStyle;
+    const shouldUseSourceMap = opts.shouldUseSourceMap;
+    const isEnvDevelopment = opts.mode === "development";
     const isEnvProduction = opts.mode === "production";
+    const cssPublicPath = _.get(opts, "assest.css.publicPath", opts.publicPath);
     const mediaPublicPath = _.get(
         opts,
         "assest.media.publicPath",
@@ -20,6 +59,9 @@ module.exports = function(opts) {
     const sassModuleRegex = /\.module\.(scss|sass)$/;
     const lessRegex = /\.less$/;
     const lessModuleRegex = /\.module\.less$/;
+    const babelOptions = _.get(opts, "babel", {});
+    const exclude = babelOptions.exclude;
+    delete babelOptions.exclude;
 
     const appSrc = Array.isArray(opts.appSrc) ? opts.appSrc : [opts.appSrc];
     let includePaths = [
@@ -30,270 +72,45 @@ module.exports = function(opts) {
 
     includePaths = includePaths.length ? includePaths : undefined;
 
-    const getStyleLoaders = function(cssOptions, preProcessor) {
-        const publicPath = _.get(
-            opts,
-            "assest.css.publicPath",
-            opts.publicPath
-        );
-
-        return [
+    // common function to get style loaders
+    const getStyleLoaders = (cssOptions, preProcessor) => {
+        const loaders = [
+            inlineStyle
+                ? require.resolve("style-loader")
+                : {
+                      loader: MiniCssExtractPlugin.loader,
+                      options: { publicPath: cssPublicPath }
+                  },
             {
-                test: cssOptions.cssRegex,
-                exclude: cssOptions.cssModuleRegex,
-                use: [
-                    opts.inlineStyle
-                        ? require.resolve("style-loader")
-                        : {
-                              loader: require(require.resolve(
-                                  "mini-css-extract-plugin"
-                              )).loader,
-                              options: {
-                                  publicPath
-                              }
-                          },
-                    {
-                        loader: require.resolve("css-loader"),
-                        options: {
-                            importLoaders: cssOptions.importLoaders,
-                            sourceMap:
-                                isEnvProduction && opts.shouldUseSourceMap
-                        }
-                    },
-                    {
-                        loader: require.resolve("postcss-loader"),
-                        options: postConfig(opts)
-                    },
-                    preProcessor && require.resolve(preProcessor)
-                ].filter(Boolean)
+                loader: require.resolve("css-loader"),
+                options: cssOptions
             },
             {
-                test: cssOptions.cssModuleRegex,
-                use: [
-                    opts.inlineStyle
-                        ? require.resolve("style-loader")
-                        : {
-                              loader: require(require.resolve(
-                                  "mini-css-extract-plugin"
-                              )).loader,
-                              options: {
-                                  publicPath
-                              }
-                          },
-                    {
-                        loader: require.resolve("css-loader"),
-                        options: {
-                            importLoaders: cssOptions.importLoaders,
-                            modules: true,
-                            sourceMap:
-                                isEnvProduction && opts.shouldUseSourceMap
-                        }
-                    },
-                    {
-                        loader: require.resolve("postcss-loader"),
-                        options: postConfig(opts)
-                    },
-                    preProcessor && require.resolve(preProcessor)
-                ].filter(Boolean)
+                // Options for PostCSS as we reference these options twice
+                // Adds vendor prefixing based on your specified browser support in
+                // package.json
+                loader: require.resolve("postcss-loader"),
+                options: getPostCSSConfig(opts)
             }
-        ];
-    };
-
-    const getBabelLoader = function(babelOptions) {
-        babelOptions = _.isObject(loaders.babel) ? loaders.babel : {};
-        const exclude = babelOptions.exclude;
-        const plugins = babelOptions.plugins || [];
-        const presets = babelOptions.presets || [];
-
-        delete babelOptions.exclude;
-
-        return {
-            test: /\.(js|mjs|jsx)$/,
-            loader: require.resolve("babel-loader"),
-            include: includePaths,
-            exclude: exclude || /node_modules/,
-            options: {
-                babelrc: _.get(babelOptions, "babelrc", true),
-                configFile: _.get(babelOptions, "configFile", true),
-                compact: _.get(babelOptions, "compact", false),
-                presets: [
-                    [
-                        require.resolve("babel-preset-packez"),
-                        _.defaultsDeep(
-                            {},
-                            _.omit(babelOptions, [
-                                "presets",
-                                "plugins",
-                                "babelrc",
-                                "configFile",
-                                "compact"
-                            ]),
-                            {
-                                loose: true,
-                                modules: false,
-                                strictMode: true,
-                                decoratorsBeforeExport: true
-                            }
-                        )
-                    ],
-                    ...presets
-                ],
-                plugins: [...plugins],
-                cacheDirectory: true,
-                cacheCompression: isEnvProduction,
-                compact: isEnvProduction
-            }
-        };
-    };
-
-    const getTSLoader = babelOptions => {
-        return {
-            test: /\.tsx?$/,
-            use: [
+        ].filter(Boolean);
+        if (preProcessor) {
+            loaders.push(
                 {
-                    loader: require.resolve("babel-loader"),
+                    loader: require.resolve("resolve-url-loader"),
                     options: {
-                        babelrc: _.get(babelOptions, "babelrc", true),
-                        configFile: _.get(babelOptions, "configFile", true),
-                        compact: _.get(babelOptions, "compact", false),
-                        presets: [
-                            [
-                                require.resolve("babel-preset-packez"),
-                                _.defaultsDeep(
-                                    {},
-                                    _.omit(babelOptions, [
-                                        "presets",
-                                        "plugins",
-                                        "babelrc",
-                                        "configFile",
-                                        "compact"
-                                    ]),
-                                    {
-                                        loose: true,
-                                        modules: false,
-                                        strictMode: true,
-                                        decoratorsBeforeExport: true
-                                    }
-                                )
-                            ],
-                            ...presets
-                        ],
-                        plugins: [...plugins],
-                        cacheDirectory: true,
-                        cacheCompression: isEnvProduction,
-                        compact: isEnvProduction
+                        sourceMap: isEnvProduction && shouldUseSourceMap
                     }
                 },
                 {
-                    loader: require.resolve("ts-loader"),
+                    loader: require.resolve(preProcessor),
                     options: {
-                        transpileOnly: true
-                        // configFile: getTSCommonConfig.getConfigFilePath(),
-                        // compilerOptions: tsConfig
+                        sourceMap: true
                     }
                 }
-            ]
-        };
+            );
+        }
+        return loaders;
     };
-
-    oneOf = [
-        //扩展模块
-        ...loaderExtra,
-        //自定义匹配规则
-        // loaders.raw && {
-        //     test: _.get(loaders, "raw.test") || /\.txt$/,
-        //     loader: require.resolve("raw-loader")
-        // },
-
-        {
-            test: /\.ejs?$/,
-            loader: require.resolve("ejs-loader")
-        },
-
-        //html文件加载
-        // loaders.html && {
-        //     test: /\.html?$/,
-        //     loader: require.resolve("html-loader"),
-        //     options: {
-        //         ...loaders.html
-        //     }
-        // },
-        // js文件处理
-        getBabelLoader(loaders.babel),
-
-        getTSLoader(loaders.babel),
-
-        //资源文件如图片
-        assestMedia.regexp && {
-            test: assestMedia.regexp,
-            use: [
-                {
-                    loader: require.resolve("url-loader"),
-                    options: {
-                        limit: assestMedia.limit,
-                        name: assestMedia.name,
-                        outputPath: assestMedia.output,
-                        publicPath: mediaPublicPath
-                    }
-                }
-            ]
-        },
-
-        {
-            test: /\.json5$/,
-            loader: require.resolve("json5-loader")
-        }
-    ].filter(Boolean);
-
-    // if (loaders.css) {
-    oneOf.push(
-        ...getStyleLoaders({
-            cssRegex,
-            cssModuleRegex,
-            importLoaders: 1
-        })
-    );
-    // }
-
-    // if (loaders.scss || loaders.sass) {
-    oneOf.push(
-        ...getStyleLoaders(
-            {
-                cssRegex: sassRegex,
-                cssModuleRegex: sassModuleRegex,
-                importLoaders: 2
-            },
-            "sass-loader"
-        )
-    );
-    // }
-
-    // if (loaders.less) {
-    oneOf.push(
-        ...getStyleLoaders(
-            {
-                cssRegex: lessRegex,
-                cssModuleRegex: lessModuleRegex,
-                importLoaders: 2
-            },
-            "less-loader"
-        )
-    );
-    // }
-    // 使用file-loader处理其他文件
-    oneOf.push({
-        loader: require.resolve("file-loader"),
-        // Exclude `js` files to keep "css" loader working as it injects
-        // its runtime that would otherwise be processed through "file" loader.
-        // Also exclude `html` and `json` extensions so they get processed
-        // by webpacks internal loaders.
-        exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.ejs$/, /\.json$/],
-        options: {
-            name: assestMedia.name,
-            outputPath: assestMedia.output,
-            publicPath: mediaPublicPath
-        }
-    });
 
     return {
         rules: [
@@ -308,7 +125,7 @@ module.exports = function(opts) {
             }),
 
             // run the linter.
-            loaders.eslint && {
+            {
                 enforce: "pre",
                 test: /\.(js|mjs|jsx)$/,
                 include: includePaths,
@@ -321,7 +138,160 @@ module.exports = function(opts) {
                 }
             },
             {
-                oneOf
+                oneOf: [
+                    //扩展模块
+                    ...loaderExtra,
+                    {
+                        test: assestMedia.regexp,
+                        use: [
+                            {
+                                loader: require.resolve("url-loader"),
+                                options: {
+                                    limit: assestMedia.limit,
+                                    name: assestMedia.name,
+                                    outputPath: assestMedia.output,
+                                    publicPath: mediaPublicPath
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        test: /\.(js|mjs|jsx)$/,
+                        loader: require.resolve("babel-loader"),
+                        include: includePaths,
+                        exclude: exclude || /node_modules/,
+                        options: {
+                            ...getBabelConfig(babelOptions),
+                            cacheDirectory: true,
+                            cacheCompression: isEnvProduction,
+                            compact: isEnvProduction
+                        }
+                    },
+                    {
+                        test: /\.tsx?$/,
+                        exclude: /node_modules/,
+                        use: [
+                            {
+                                loader: require.resolve("babel-loader"),
+                                options: {
+                                    ...getBabelConfig(babelOptions),
+                                    cacheDirectory: true,
+                                    cacheCompression: isEnvProduction,
+                                    compact: isEnvProduction
+                                }
+                            },
+                            {
+                                loader: require.resolve("ts-loader"),
+                                options: {
+                                    transpileOnly: true
+                                    // configFile: getTSCommonConfig.getConfigFilePath(),
+                                    // compilerOptions: tsConfig
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        test: cssRegex,
+                        exclude: cssModuleRegex,
+                        use: getStyleLoaders({
+                            importLoaders: 1,
+                            sourceMap: isEnvProduction && shouldUseSourceMap
+                        }),
+                        // Don't consider CSS imports dead code even if the
+                        // containing package claims to have no side effects.
+                        // Remove this when webpack adds a warning or an error for this.
+                        // See https://github.com/webpack/webpack/issues/6571
+                        sideEffects: true
+                    },
+                    // using the extension .module.css
+                    {
+                        test: cssModuleRegex,
+                        use: getStyleLoaders({
+                            importLoaders: 1,
+                            sourceMap: isEnvProduction && shouldUseSourceMap,
+                            modules: true,
+                            getLocalIdent: getCSSModuleLocalIdent
+                        })
+                    },
+                    {
+                        test: sassRegex,
+                        exclude: sassModuleRegex,
+                        use: getStyleLoaders(
+                            {
+                                importLoaders: 2,
+                                sourceMap: isEnvProduction && shouldUseSourceMap
+                            },
+                            "sass-loader"
+                        ),
+                        // Don't consider CSS imports dead code even if the
+                        // containing package claims to have no side effects.
+                        // Remove this when webpack adds a warning or an error for this.
+                        // See https://github.com/webpack/webpack/issues/6571
+                        sideEffects: true
+                    },
+                    // using the extension .module.scss or .module.sass
+                    {
+                        test: sassModuleRegex,
+                        use: getStyleLoaders(
+                            {
+                                importLoaders: 2,
+                                sourceMap:
+                                    isEnvProduction && shouldUseSourceMap,
+                                modules: true,
+                                getLocalIdent: getCSSModuleLocalIdent
+                            },
+                            "sass-loader"
+                        )
+                    },
+                    {
+                        test: lessRegex,
+                        exclude: lessModuleRegex,
+                        use: getStyleLoaders(
+                            {
+                                importLoaders: 2,
+                                sourceMap: isEnvProduction && shouldUseSourceMap
+                            },
+                            "less-loader"
+                        ),
+                        // Don't consider CSS imports dead code even if the
+                        // containing package claims to have no side effects.
+                        // Remove this when webpack adds a warning or an error for this.
+                        // See https://github.com/webpack/webpack/issues/6571
+                        sideEffects: true
+                    },
+                    // using the extension .module.less or .module.less
+                    {
+                        test: lessModuleRegex,
+                        use: getStyleLoaders(
+                            {
+                                importLoaders: 2,
+                                sourceMap:
+                                    isEnvProduction && shouldUseSourceMap,
+                                modules: true,
+                                getLocalIdent: getCSSModuleLocalIdent
+                            },
+                            "less-loader"
+                        )
+                    },
+                    //不匹配的情况下统一使用file-loader
+                    {
+                        loader: require.resolve("file-loader"),
+                        // Exclude `js` files to keep "css" loader working as it injects
+                        // its runtime that would otherwise be processed through "file" loader.
+                        // Also exclude `html` and `json` extensions so they get processed
+                        // by webpacks internal loaders.
+                        exclude: [
+                            /\.(js|mjs|jsx|ts|tsx)$/,
+                            /\.html$/,
+                            /\.json$/
+                        ],
+                        options: {
+                            name: assestMedia.name,
+                            outputPath: assestMedia.output,
+                            publicPath: mediaPublicPath
+                        }
+                    }
+                ]
             }
         ].filter(Boolean)
     };
