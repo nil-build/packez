@@ -2,8 +2,11 @@ const path = require("path");
 const fs = require("fs");
 const webpack = require("webpack");
 const _ = require("lodash");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+const typescriptFormatter = require("../utils/typescriptFormatter");
 //
 //const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 //var Visualizer = require('webpack-visualizer-plugin');
@@ -103,6 +106,28 @@ module.exports = function(opts) {
             plugins.push(new HtmlWebpackPlugin(htmlOpts));
         });
     }
+
+    plugins.push(
+        new ForkTsCheckerWebpackPlugin({
+            // tsconfig: "xxx/tsconfig.json",
+            compilerOptions: {
+                module: "esnext",
+                target: "es2016",
+                jsx: "react",
+                allowSyntheticDefaultImports: true,
+                forceConsistentCasingInFileNames: true,
+                noImplicitReturns: true,
+                suppressImplicitAnyIndexErrors: true,
+                allowJs: false,
+                noImplicitThis: false,
+                experimentalDecorators: true
+            },
+            async: true,
+            useTypescriptIncrementalApi: true,
+            checkSyntacticErrors: true,
+            formatter: typescriptFormatter
+        })
+    );
 
     return plugins;
 };

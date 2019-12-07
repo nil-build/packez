@@ -1,8 +1,35 @@
 import _ from "lodash";
 import path from "path";
+import fs from "fs-extra";
+// const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const getCSSModuleLocalIdent = require("../utils/getCSSModuleLocalIdent");
 const getPostCSSConfig = require("../config/postcss.config");
+
+const tsConfig = require("../config/tsconfig");
+
+function getTSConfigFilePath(options) {
+    const filePath = path.resolve(options.cwd, "tsconfig.json");
+
+    if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, JSON.stringify(tsConfig, null, 2));
+    }
+
+    return filePath;
+}
+
+function getTSCompilerOptions(options) {
+    let customizeConfig = {};
+    const configPath = path.join(options.cwd, "tsconfig.json");
+    if (fs.existsSync(configPath)) {
+        customizeConfig = require(configPath) || {};
+    }
+    return {
+        ...tsConfig.compilerOptions,
+        ...options.tsCompilerOptions,
+        ...customizeConfig.compilerOptions
+    };
+}
 
 function getBabelConfig(options) {
     const plugins = options.plugins || [];
@@ -25,6 +52,8 @@ function getBabelConfig(options) {
                         "compact"
                     ]),
                     {
+                        corejs: 3,
+                        useBuiltIns: "usage", //entry|usage|false
                         loose: true,
                         modules: false,
                         strictMode: true,
@@ -40,6 +69,8 @@ function getBabelConfig(options) {
 
 module.exports = function(opts) {
     const inlineStyle = opts.inlineStyle;
+    const include = opts.include;
+    const exclude = opts.exclude;
     const shouldUseSourceMap = opts.shouldUseSourceMap;
     const isEnvDevelopment = opts.mode === "development";
     const isEnvProduction = opts.mode === "production";
@@ -60,17 +91,13 @@ module.exports = function(opts) {
     const lessRegex = /\.less$/;
     const lessModuleRegex = /\.module\.less$/;
     const babelOptions = _.get(opts, "babel", {});
-    const exclude = babelOptions.exclude;
-    delete babelOptions.exclude;
 
-    const appSrc = Array.isArray(opts.appSrc) ? opts.appSrc : [opts.appSrc];
-    let includePaths = [
-        ...appSrc
-            .filter(Boolean)
-            .map(appPath => path.resolve(opts.cwd, appPath))
-    ];
-
-    includePaths = includePaths.length ? includePaths : undefined;
+    let includePaths = include ? include : undefined;
+    // let includePaths = [
+    //     ...appSrc
+    //         .filter(Boolean)
+    //         .map(appPath => path.resolve(opts.cwd, appPath))
+    // ];
 
     // common function to get style loaders
     const getStyleLoaders = (cssOptions, preProcessor) => {
@@ -127,7 +154,7 @@ module.exports = function(opts) {
             // run the linter.
             {
                 enforce: "pre",
-                test: /\.(js|mjs|jsx)$/,
+                test: /\.(js|mjs|jsx|ts|tsx)$/,
                 include: includePaths,
                 exclude: /node_modules/,
                 loader: require.resolve("eslint-loader"),
@@ -169,6 +196,7 @@ module.exports = function(opts) {
                     },
                     {
                         test: /\.tsx?$/,
+                        include: includePaths,
                         exclude: /node_modules/,
                         use: [
                             {
@@ -183,9 +211,10 @@ module.exports = function(opts) {
                             {
                                 loader: require.resolve("ts-loader"),
                                 options: {
-                                    transpileOnly: true
-                                    // configFile: getTSCommonConfig.getConfigFilePath(),
-                                    // compilerOptions: tsConfig
+                                    //编译时不做类型检查
+                                    transpileOnly: true,
+                                    configFile: getTSConfigFilePath(opts),
+                                    compilerOptions: getTSCompilerOptions(opts)
                                 }
                             }
                         ]
@@ -209,8 +238,9 @@ module.exports = function(opts) {
                         use: getStyleLoaders({
                             importLoaders: 1,
                             sourceMap: isEnvProduction && shouldUseSourceMap,
-                            modules: true,
-                            getLocalIdent: getCSSModuleLocalIdent
+                            modules: {
+                                getLocalIdent: getCSSModuleLocalIdent
+                            }
                         })
                     },
                     {
@@ -237,8 +267,9 @@ module.exports = function(opts) {
                                 importLoaders: 2,
                                 sourceMap:
                                     isEnvProduction && shouldUseSourceMap,
-                                modules: true,
-                                getLocalIdent: getCSSModuleLocalIdent
+                                modules: {
+                                    getLocalIdent: getCSSModuleLocalIdent
+                                }
                             },
                             "sass-loader"
                         )
@@ -267,8 +298,9 @@ module.exports = function(opts) {
                                 importLoaders: 2,
                                 sourceMap:
                                     isEnvProduction && shouldUseSourceMap,
-                                modules: true,
-                                getLocalIdent: getCSSModuleLocalIdent
+                                modules: {
+                                    getLocalIdent: getCSSModuleLocalIdent
+                                }
                             },
                             "less-loader"
                         )

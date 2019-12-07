@@ -1,19 +1,24 @@
+import "core-js";
 // import "./style/common.css"
 // import React from 'react';
 // import ReactDOM from 'react-dom';
-import "./style/index.css"
-import scope from "./style/index.module.css"
+import "./style/index.css";
+import scope from "./style/index.module.css";
 import a from "./index.html";
 import a1 from "./index.ext";
-import j from "./index.json"
+import j from "./index.json";
 // var sum = require('./lib/sum')
 // var max = require('./lib/max')
 // // var min = require('lodash')
 // var min = require('./lib/min')
 
-console.log(scope)
+import { Horse } from "./main";
 
-const React = () => { }
+new Horse();
+
+console.log(scope);
+
+const React = () => {};
 
 // var react = require('./vendor/react-dom')
 // require('jquery')
@@ -23,16 +28,15 @@ const React = () => { }
 //console.log(jQuery)
 
 class AsyncLoadSetting extends React.Component {
-
-    state = { Ctrl: () => '加载中...' }
+    state = { Ctrl: () => "加载中..." };
 
     componentDidMount() {
-        import('./lib/sum').then(Ctrl => this.setState({ Ctrl: Ctrl.default }));
+        import("./lib/sum").then(Ctrl => this.setState({ Ctrl: Ctrl.default }));
     }
 
     render() {
         const { Ctrl } = this.state;
-        return <Ctrl {...this.props} />
+        return <Ctrl {...this.props} />;
     }
 }
 
@@ -43,9 +47,12 @@ const c = <div>111</div>;
 
 Promise.resolve();
 
+"abcc".contains("cc");
+[1, 2, 3, 4].includes(1);
+
 var z = 111;
 
-Object.assign({})
+Object.assign({});
 
 function avc() {
     import("react").then();
@@ -59,4 +66,6 @@ function avc() {
 // max();
 // min();
 
-console.log(z)
+Array.from([1, 2, 3, 4]);
+
+console.log(z);

@@ -7,6 +7,8 @@ export default function(opts = {}) {
         cwd: process.cwd(),
         mode: "development", // development  production
         appSrc: [],
+        include: null,
+        exclude: null,
         //outputDir: 'dist',
         publicPath: "",
 
@@ -27,6 +29,8 @@ export default function(opts = {}) {
         cnpm: false,
 
         clear: true,
+
+        tsCompilerOptions: {},
 
         //内置加载器
         loaders: {
