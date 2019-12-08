@@ -1,6 +1,6 @@
 module.exports = {
     babel: [
-        // "babel-loader"
+        // "babel-loader" //tst
     ],
     css: [
         // "style-loader",

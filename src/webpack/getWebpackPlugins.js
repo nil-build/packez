@@ -1,17 +1,21 @@
-const path = require("path");
-const fs = require("fs");
-const webpack = require("webpack");
-const _ = require("lodash");
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-
+import _ from "lodash";
+import path from "path";
+import fs from "fs-extra";
+import webpack from "webpack";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import ManifestPlugin from "webpack-manifest-plugin";
+import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
+import {
+    getTSCompilerOptions,
+    getTSConfigFilePath
+} from "../config/getTSConfig";
 const typescriptFormatter = require("../utils/typescriptFormatter");
+
 //
 //const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 //var Visualizer = require('webpack-visualizer-plugin');
 
-module.exports = function(opts) {
+export default function(opts) {
     const isEnvProduction = opts.mode === "production";
     const loaders = opts.loaders;
     const corePlugins = opts.plugins;
@@ -47,10 +51,14 @@ module.exports = function(opts) {
     }
 
     //开启manifest模式
-    if (corePlugins.manifest && isEnvProduction) {
-        const ManifestPlugin = require("webpack-manifest-plugin");
-        plugins.push(new ManifestPlugin({ ...corePlugins.manifest }));
-    }
+    // if (corePlugins.manifest && isEnvProduction) {
+    plugins.push(
+        new ManifestPlugin({
+            fileName: "asset-manifest.json",
+            publicPath: opts.publicPath
+        })
+    );
+    // }
 
     //生成html页面
     if (opts.shouldUseEntryHTML) {
@@ -89,17 +97,16 @@ module.exports = function(opts) {
                 opts.entryHTMLTemplates[key] ||
                 entry.replace(/\.(?:js|mjs|jsx|ts|tsx)$/, ".html");
 
-            // if (template) {
             template = path.resolve(opts.cwd, template);
             if (fs.existsSync(template)) {
                 htmlOpts.template = template;
             } else {
                 htmlOpts.template = path.resolve(
                     __dirname,
-                    "../template_index.ejs"
+                    "../public/index.html"
                 );
             }
-            //}
+
             htmlOpts.filename = key + ".html";
             htmlOpts.chunks = [key];
 
@@ -109,19 +116,8 @@ module.exports = function(opts) {
 
     plugins.push(
         new ForkTsCheckerWebpackPlugin({
-            // tsconfig: "xxx/tsconfig.json",
-            compilerOptions: {
-                module: "esnext",
-                target: "es2016",
-                jsx: "react",
-                allowSyntheticDefaultImports: true,
-                forceConsistentCasingInFileNames: true,
-                noImplicitReturns: true,
-                suppressImplicitAnyIndexErrors: true,
-                allowJs: false,
-                noImplicitThis: false,
-                experimentalDecorators: true
-            },
+            tsconfig: getTSConfigFilePath(opts),
+            compilerOptions: getTSCompilerOptions(opts),
             async: true,
             useTypescriptIncrementalApi: true,
             checkSyntacticErrors: true,
@@ -130,4 +126,4 @@ module.exports = function(opts) {
     );
 
     return plugins;
-};
+}

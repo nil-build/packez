@@ -20,10 +20,10 @@ packez.start(
 // packez.build(
 //     {
 //         index: [
-//             require.resolve('./src/boot.js'),
-//             require.resolve('./src/index.js')
+//             require.resolve("./src/boot.js"),
+//             require.resolve("./src/index.js")
 //         ],
-//         app: require.resolve('./src/news.js')
+//         app: require.resolve("./src/news.js")
 //     },
 //     distBuild,
 //     {

@@ -1,10 +1,10 @@
 // https://alloyteam.github.io/eslint-config-alloy/
 module.exports = {
-    "extends": require.resolve("eslint-config-packez"),
-    "rules": {
-        'no-restricted-globals': "off",
+    extends: require.resolve("eslint-config-packez"),
+    rules: {
+        "no-restricted-globals": "off",
         "no-unused-vars": "off",
-        "eqeqeq": "off",
+        eqeqeq: "off",
         "new-parens": "off",
         "no-mixed-operators": "off",
         "no-multi-assign": "off",
@@ -37,7 +37,7 @@ module.exports = {
         "no-fallthrough": "off",
         "prefer-numeric-literals": "off",
         "no-useless-concat": "off",
-        "strict": "off",
+        strict: "off",
         "no-lone-blocks": "off",
         "no-labels": "off",
         "no-useless-escape": "off",
@@ -46,6 +46,6 @@ module.exports = {
         "no-script-url": "off",
         "jsx-a11y/anchor-is-valid": "off",
         "no-template-curly-in-string": "off",
-        "jsx-a11y/alt-text": "off",
+        "jsx-a11y/alt-text": "off"
     }
 };

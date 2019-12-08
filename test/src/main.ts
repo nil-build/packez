@@ -1,6 +1,9 @@
+import calc from "./calc";
 export class Animal {
     name: string = "abc";
-    constructor(name: string) {}
+    constructor(name: string) {
+        calc(1, 2);
+    }
 
     move(distanceInMeters: number = 0) {
         console.log(`${this.name} moved ${distanceInMeters}m.`);

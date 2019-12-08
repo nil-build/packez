@@ -1,7 +1,7 @@
 import { defaultsDeep } from "lodash";
 import TerserPlugin from "terser-webpack-plugin";
 
-module.exports = function(opts) {
+export default function(opts) {
     const shouldUseSourceMap = opts.shouldUseSourceMap;
     const loaders = opts.loaders;
     const isEnvProduction = opts.mode === "production";
@@ -71,4 +71,4 @@ module.exports = function(opts) {
             }
         }
     );
-};
+}

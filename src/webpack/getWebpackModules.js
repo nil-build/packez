@@ -1,73 +1,14 @@
 import _ from "lodash";
-import path from "path";
-import fs from "fs-extra";
-// const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+import {
+    getTSCompilerOptions,
+    getTSConfigFilePath
+} from "../config/getTSConfig";
+import getBabelConfig from "../config/getBabelConfig";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
 const getCSSModuleLocalIdent = require("../utils/getCSSModuleLocalIdent");
 const getPostCSSConfig = require("../config/postcss.config");
 
-const tsConfig = require("../config/tsconfig");
-
-function getTSConfigFilePath(options) {
-    const filePath = path.resolve(options.cwd, "tsconfig.json");
-
-    if (!fs.existsSync(filePath)) {
-        fs.writeFileSync(filePath, JSON.stringify(tsConfig, null, 2));
-    }
-
-    return filePath;
-}
-
-function getTSCompilerOptions(options) {
-    let customizeConfig = {};
-    const configPath = path.join(options.cwd, "tsconfig.json");
-    if (fs.existsSync(configPath)) {
-        customizeConfig = require(configPath) || {};
-    }
-    return {
-        ...tsConfig.compilerOptions,
-        ...options.tsCompilerOptions,
-        ...customizeConfig.compilerOptions
-    };
-}
-
-function getBabelConfig(options) {
-    const plugins = options.plugins || [];
-    const presets = options.presets || [];
-
-    return {
-        babelrc: _.get(options, "babelrc", true),
-        configFile: _.get(options, "configFile", true),
-        compact: _.get(options, "compact", false),
-        presets: [
-            [
-                require.resolve("babel-preset-packez"),
-                _.defaultsDeep(
-                    {},
-                    _.omit(options, [
-                        "presets",
-                        "plugins",
-                        "babelrc",
-                        "configFile",
-                        "compact"
-                    ]),
-                    {
-                        corejs: 3,
-                        useBuiltIns: "usage", //entry|usage|false
-                        loose: true,
-                        modules: false,
-                        strictMode: true,
-                        decoratorsBeforeExport: true
-                    }
-                )
-            ],
-            ...presets
-        ],
-        plugins: [...plugins]
-    };
-}
-
-module.exports = function(opts) {
+export default function(opts) {
     const inlineStyle = opts.inlineStyle;
     const include = opts.include;
     const exclude = opts.exclude;
@@ -93,11 +34,6 @@ module.exports = function(opts) {
     const babelOptions = _.get(opts, "babel", {});
 
     let includePaths = include ? include : undefined;
-    // let includePaths = [
-    //     ...appSrc
-    //         .filter(Boolean)
-    //         .map(appPath => path.resolve(opts.cwd, appPath))
-    // ];
 
     // common function to get style loaders
     const getStyleLoaders = (cssOptions, preProcessor) => {
@@ -140,6 +76,7 @@ module.exports = function(opts) {
     };
 
     return {
+        strictExportPresence: true,
         rules: [
             // Disable require.ensure
             { parser: { requireEnsure: false } },
@@ -327,4 +264,4 @@ module.exports = function(opts) {
             }
         ].filter(Boolean)
     };
-};
+}

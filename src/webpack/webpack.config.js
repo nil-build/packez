@@ -1,8 +1,8 @@
-const path = require("path");
-const _ = require("lodash");
-const getWebpackModule = require("./webpack.config.module");
-const getWebpackPlugins = require("./webpack.config.plugins");
-const getWebpackOptimization = require("./webpack.config.optimization");
+import path from "path";
+import _ from "lodash";
+import getWebpackModules from "./getWebpackModules";
+import getWebpackPlugins from "./getWebpackPlugins";
+import getWebpackOptimization from "./getWebpackOptimization";
 
 module.exports = function(opts) {
     const assestJs = opts.assest.js;
@@ -31,7 +31,7 @@ module.exports = function(opts) {
             opts.output || {}
         ),
 
-        module: getWebpackModule(opts),
+        module: getWebpackModules(opts),
         plugins: getWebpackPlugins(opts),
         optimization: getWebpackOptimization(opts),
         externals: opts.externals,

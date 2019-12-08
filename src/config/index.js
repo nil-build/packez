@@ -32,6 +32,10 @@ export default function(opts = {}) {
 
         tsCompilerOptions: {},
 
+        babel: {},
+
+        eslint: {},
+
         //内置加载器
         loaders: {
             //eslint-loader
