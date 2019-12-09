@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs-extra";
-const tsConfig = require("./tsconfig");
+const tsConfig = require("./tsconfig.json");
 
 export function getTSCompilerOptions(options) {
     const config = getTSConfig(options);
@@ -8,10 +8,10 @@ export function getTSCompilerOptions(options) {
 }
 
 export function getTSConfigFilePath(options) {
-    const filePath = path.resolve(options.cwd, "tsconfig.json");
+    let filePath = path.resolve(options.cwd, "tsconfig.json");
 
     if (!fs.existsSync(filePath)) {
-        fs.writeFileSync(filePath, JSON.stringify(tsConfig, null, 2));
+        filePath = path.resolve(__dirname, "./tsconfig.json");
     }
 
     return filePath;

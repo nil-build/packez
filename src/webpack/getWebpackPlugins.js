@@ -17,7 +17,6 @@ const typescriptFormatter = require("../utils/typescriptFormatter");
 
 export default function(opts) {
     const isEnvProduction = opts.mode === "production";
-    const loaders = opts.loaders;
     const corePlugins = opts.plugins;
     const plugins = [
         ...opts.pluginExtra,
@@ -33,21 +32,19 @@ export default function(opts) {
 
     //打包合并css成文件
     if (!opts.inlineStyle) {
-        if (loaders.css || loaders.less || loaders.sass || loaders.scss) {
-            const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-            plugins.push(
-                new MiniCssExtractPlugin({
-                    filename: [
-                        opts.assest.css.output || ".",
-                        opts.assest.css.name
-                    ].join("/"),
-                    chunkFilename: [
-                        opts.assest.css.output || ".",
-                        opts.assest.css.chunkName
-                    ].join("/")
-                })
-            );
-        }
+        const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+        plugins.push(
+            new MiniCssExtractPlugin({
+                filename: [
+                    opts.assest.css.output || ".",
+                    opts.assest.css.name
+                ].join("/"),
+                chunkFilename: [
+                    opts.assest.css.output || ".",
+                    opts.assest.css.chunkName
+                ].join("/")
+            })
+        );
     }
 
     //开启manifest模式

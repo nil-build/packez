@@ -3,7 +3,6 @@ import TerserPlugin from "terser-webpack-plugin";
 
 export default function(opts) {
     const shouldUseSourceMap = opts.shouldUseSourceMap;
-    const loaders = opts.loaders;
     const isEnvProduction = opts.mode === "production";
 
     const minimizer = [
@@ -33,28 +32,24 @@ export default function(opts) {
         })
     ];
 
-    if (loaders.css || loaders.scss || loaders.sass || loaders.less) {
-        const OptimizeCSSAssetsPlugin = require(require.resolve(
-            "optimize-css-assets-webpack-plugin"
-        ));
-        const safePostCssParser = require(require.resolve(
-            "postcss-safe-parser"
-        ));
+    const OptimizeCSSAssetsPlugin = require(require.resolve(
+        "optimize-css-assets-webpack-plugin"
+    ));
+    const safePostCssParser = require(require.resolve("postcss-safe-parser"));
 
-        minimizer.push(
-            new OptimizeCSSAssetsPlugin({
-                cssProcessorOptions: {
-                    parser: safePostCssParser,
-                    map: shouldUseSourceMap
-                        ? {
-                              inline: false,
-                              annotation: true
-                          }
-                        : false
-                }
-            })
-        );
-    }
+    minimizer.push(
+        new OptimizeCSSAssetsPlugin({
+            cssProcessorOptions: {
+                parser: safePostCssParser,
+                map: shouldUseSourceMap
+                    ? {
+                          inline: false,
+                          annotation: true
+                      }
+                    : false
+            }
+        })
+    );
 
     return defaultsDeep(
         {

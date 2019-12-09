@@ -35,7 +35,7 @@
     ],
     "devDependencies": {
         "react": "^16.12.0",
-        "transform-es": "^4.5.5"
+        "transform-es": "^4.6.1"
     },
     "dependencies": {
         "@babel/code-frame": "^7.5.5",

@@ -22,7 +22,6 @@ export default function(opts) {
         opts.publicPath
     );
     const assestMedia = opts.assest.media;
-    const loaders = opts.loaders || {};
     const preLoaderExtra = opts.preLoaderExtra || [];
     const loaderExtra = opts.loaderExtra || [];
     const cssRegex = /\.css$/;
@@ -96,7 +95,7 @@ export default function(opts) {
                 exclude: /node_modules/,
                 loader: require.resolve("eslint-loader"),
                 options: {
-                    ...loaders.eslint,
+                    ...opts.eslint,
                     baseConfig: require("../config/eslint.config.js"),
                     eslintPath: require.resolve("eslint")
                 }

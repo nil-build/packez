@@ -6,7 +6,6 @@ export default function(opts = {}) {
     const defaultOptions = {
         cwd: process.cwd(),
         mode: "development", // development  production
-        appSrc: [],
         include: null,
         exclude: null,
         //outputDir: 'dist',
@@ -26,8 +25,6 @@ export default function(opts = {}) {
 
         inlineStyle: false,
 
-        cnpm: false,
-
         clear: true,
 
         tsCompilerOptions: {},
@@ -36,37 +33,11 @@ export default function(opts = {}) {
 
         eslint: {},
 
-        //内置加载器
-        loaders: {
-            //eslint-loader
-            eslint: true,
-            //raw-loader
-            raw: {
-                test: /\.txt$/
-            },
-            //babel-loader
-            babel: true,
-            //css-loader
-            css: true,
-            //less-loader
-            less: false,
-            //sass-loader
-            scss: false,
-            //sass-loader
-            sass: false,
-            //json5-loader
-            json5: true,
-            //html-loader
-            html: true
-        },
         //扩展加载器
         loaderExtra: [],
         //预处理加载器
         preLoaderExtra: [],
-        //内置插件
-        plugins: {
-            manifest: true
-        },
+
         //扩展插件
         pluginExtra: [],
 
@@ -91,7 +62,7 @@ export default function(opts = {}) {
         //打包时如果检查到package.json未设置browserslist时则将该配置写到package.json中
         //后续如果需要修改browserslist则直接修改package.json文件
         browserslist: [
-            ">= .25%",
+            ">=0.2%",
             "not dead",
             "not op_mini all",
             "not Android 4.4.3-4.4.4",

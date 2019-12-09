@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "declaration": true,
+        "module": "esnext",
+        "target": "es2016",
+        "jsx": "react",
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitReturns": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "allowJs": false,
+        "noImplicitThis": false,
+        "experimentalDecorators": true
+    }
+}
