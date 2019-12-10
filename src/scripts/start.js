@@ -38,7 +38,7 @@ export default function(entry, output, opts = {}) {
 
     fs.ensureDirSync(webpackConfig.output.path);
 
-    if (config.clear) {
+    if (config.clean) {
         fs.emptyDirSync(webpackConfig.output.path);
     }
 

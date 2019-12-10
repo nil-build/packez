@@ -17,25 +17,18 @@ program
         /^node|web$/,
         "web"
     )
-    .option("-c, --clear", "转换前清空输出目录")
+    .option("-c, --clean", "转换前清空输出目录")
     .option("-p, --publicPath [publicPath]", "publicPath", "")
     .option("-l, --loaders [loaders]")
     .option("--config [config]", "configFile", "./packez.config.js")
-    .option("--cnpm", "使用cnpm安装依赖")
-    .option("--helpers [helpers]", "参考 babel-runtime", false)
-    .option("--regenerator [regenerator]", "参考 babel-runtime", false)
     .option("--state [state]", "state", "")
     .parse(process.argv);
 
 const options = {
     watch: _.get(program, "watch", false),
     target: _.get(program, "target", "web"),
-    clear: _.get(program, "clear", true),
-    cnpm: _.get(program, "cnpm", false),
-    publicPath: _.get(program, "publicPath", ""),
-    helpers: _.get(program, "helpers", true),
-    regenerator: _.get(program, "regenerator", true),
-    loaders: _.get(program, "loaders", "")
+    clean: _.get(program, "clean", true),
+    publicPath: _.get(program, "publicPath", "")
 };
 
 const validExecuors = ["start", "build", "server", "analyzer"];
@@ -134,18 +127,6 @@ packez[executor](entry, outputDir, {
     publicPath: options.publicPath,
     watch: options.watch,
     target: options.target,
-    cnpm: options.cnpm,
-    clear: options.clear,
-    loaders: {
-        babel: {
-            runtimeOptions: {
-                helpers: options.helpers,
-                regenerator: options.regenerator
-            }
-        },
-        scss: options.loaders.indexOf("scss") !== -1,
-        sass: options.loaders.indexOf("sass") !== -1,
-        less: options.loaders.indexOf("less") !== -1
-    },
+    clean: options.clean,
     program
 });

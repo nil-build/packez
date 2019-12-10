@@ -5,10 +5,11 @@ module.exports = function(options, state) {
          */
         // mode: options.mode,
         /**
-         * 项目目录，如果设置则只处理项目目录的文件，作用同babel-loader的include
+         * 项目目录，如果设置则只处理项目目录的文件
          * @param {string[]}
          */
-        // appSrc: [],
+        // include: [],
+        // exclude: [],
         /**
          * 同webpack的entry
          * @param {string | string[]}
@@ -47,35 +48,7 @@ module.exports = function(options, state) {
         /**
          * 打包前清除outputDir文件里的内容
          */
-        // clear: true,
-        /**
-         * 内置webpack加载器
-         * @param {{ [string]: boolean | {} }}
-         * @example
-         * {
-         *      babel: {
-         *          corejs: 3,
-         *          useBuiltIns: "usage",
-         *          runtimeOptions: {
-         *              ...
-         *          },
-         *          plugins: [....]
-         *      }
-         * }
-         */
-        // loaders: {
-        //     eslint: { rules: {...} },
-        //     raw: {
-        //         test: /\.txt$/
-        //     },
-        //     babel: { babel options },
-        //     css: true,
-        //     less: false,
-        //     scss: false,
-        //     sass: false,
-        //     json5: true,
-        //     html: true
-        // },
+        // clean: true,
         /**
          * 自定义webpack加载器, 同webpack的modules
          * @example
@@ -86,14 +59,22 @@ module.exports = function(options, state) {
          */
         // loaderExtra: [],
         /**
+         * babel 配置参数
+         */
+        //babel: {},
+        /**
+         * eslint 配置参数
+         */
+        //eslint: {},
+        /**
+         * tsCompilerOptions 配置参数
+         */
+        //tsCompilerOptions: {},
+        /**
          * 自定义webpack加载器
          * enforce: "pre"
          */
         // preLoaderExtra: [],
-        // 内置插件参数
-        // plugins: {
-        //     manifest: true
-        // },
         // webpack扩展插件
         // pluginExtra: [],
         /**
@@ -120,7 +101,7 @@ module.exports = function(options, state) {
         // },
         // 初始化时有效，后期需要修改则修改package.json里的browserslist
         // browserslist: [
-        //     ">= .25%",
+        //     ">=0.2%",
         //     "not dead",
         //     "not op_mini all",
         //     "not Android 4.4.3-4.4.4",

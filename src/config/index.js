@@ -25,7 +25,7 @@ export default function(opts = {}) {
 
         inlineStyle: false,
 
-        clear: true,
+        clean: true,
 
         tsCompilerOptions: {},
 

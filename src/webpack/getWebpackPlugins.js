@@ -20,10 +20,6 @@ export default function(opts) {
     const corePlugins = opts.plugins;
     const plugins = [
         ...opts.pluginExtra,
-        // new Visualizer({
-        //     filename: './statistics.html'
-        // }),
-        //new BundleAnalyzerPlugin(),
         new webpack.IgnorePlugin({
             resourceRegExp: /^\.\/locale$/,
             contextRegExp: /moment$/
@@ -47,15 +43,12 @@ export default function(opts) {
         );
     }
 
-    //开启manifest模式
-    // if (corePlugins.manifest && isEnvProduction) {
     plugins.push(
         new ManifestPlugin({
             fileName: "asset-manifest.json",
             publicPath: opts.publicPath
         })
     );
-    // }
 
     //生成html页面
     if (opts.shouldUseEntryHTML) {

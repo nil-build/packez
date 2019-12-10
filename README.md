@@ -66,11 +66,11 @@ packez.start({
 
 当前工作路径
 
-### `appSrc`
+### `include`
 
 `string` or `array`
 
-设置项目目录，该选项不是必须，设定后 babel-loader 及 eslint 只会对 appSrc 的文件进行处理及校验。
+设置项目目录，该选项不是必须，设定后 babel-loader 及 eslint 只会对 include 的文件进行处理及校验。
 
 `注`：`node_modules`一直都会被排除
 
@@ -94,17 +94,11 @@ packez.start({
 
 `string` or `boolean` 默认： `./packez.config.js`
 
-### `clear`
+### `clean`
 
 `boolean` 默认：`true`
 
 启动打包时是否清空输出目录。
-
-### `cnpm`
-
-`boolean` 默认：`false`
-
-是否使用`cnpm`来安装依赖。
 
 ### `inlineStyle`
 
@@ -188,30 +182,13 @@ import "core-js/modules/es.promise.finally";
 
 > 设置输出文件的路径就文件名规则，`注`:在`start` `server`下 `name`和`chunkName`默认不会设置`chunkhash:8`
 
-### `loaders`
-
-`object` 默认：
+### `tsCompilerOptions`
 
 ```
-{
-    "eslint": true,
-    "raw": {
-        test: /\.txt$/,
-    },
-    "babel": true,
-    "css": true,
-    "less": false,
-    "scss": false,
-    "sass": false,
-    "json5": true,
-    "html": true,
-}
+{...}
 ```
 
-内置 webpack 加载器
-
-如果传对象则会传递给加载器
-e.g.
+### `eslint`
 
 ```
 {
@@ -225,7 +202,7 @@ e.g.
 
 其他
 
-#### `loaders.babel`
+### `babel`
 
 `boolean` or `object` 默认：`true`
 
@@ -272,7 +249,7 @@ runtimeOptions: [transform-runtime](https://babeljs.io/docs/en/next/babel-plugin
 
 ```
 [
-    ">= .25%",
+    ">=0.2%",
     "not dead",
     "not op_mini all",
     "not Android 4.4.3-4.4.4",
@@ -380,8 +357,4 @@ runtimeOptions: [transform-runtime](https://babeljs.io/docs/en/next/babel-plugin
     .option('-c, --clear', '转换前清空输出目录')
     .option('-p, --publicPath [publicPath]', 'publicPath', '')
     .option('-l, --loaders [loaders]')
-    .option('--cnpm', '使用cnpm安装依赖')
-    .option('--corejs [corejs]', '参考 babel-runtime', true)
-    .option('--helpers [helpers]', '参考 babel-runtime', true)
-    .option('--regenerator [regenerator]', '参考 babel-runtime', true)
 ```
