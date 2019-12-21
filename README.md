@@ -14,6 +14,8 @@ npx `packez build ./src/index.js -d dist -w -c`;
 
 npx `packez analyzer ./src/index.js -d dist -w -c`;
 
+npx `packez bundle ./src/index.js -d dist -c`;
+
 初始化 cli：
 
 `npx packez init`
@@ -31,6 +33,7 @@ packez.start(entry, output, options);
 packez.build(entry, output, options);
 packez.server(entry, output, options);
 packez.analyzer(entry, output, options);
+packez.bundle(entry, output, options);
 
 ```
 
@@ -100,11 +103,23 @@ packez.start({
 
 启动打包时是否清空输出目录。
 
+### `tsCheck`
+
+`boolean` 默认：`false`
+
+启用 TypeScript 类型检测，只对 ts|tsx 文件类型有效
+
 ### `inlineStyle`
 
-`boolean` 默认：false
+`boolean` 默认：`false`
 
 开启后使用`style-loader` 否则使用 `mini-css-extract-plugin`。前提是需要先开启`loaders.css: true`
+
+### `manifest`
+
+`boolean` 默认：`true`
+
+是否生成 manifest 文件
 
 ### `shouldUseSourceMap`
 
