@@ -90,12 +90,25 @@ export default function(opts) {
             // run the linter.
             {
                 enforce: "pre",
-                test: /\.(js|mjs|jsx|ts|tsx)$/,
+                test: /\.(js|mjs|jsx)$/,
                 include: includePaths,
                 exclude: /node_modules/,
                 loader: require.resolve("eslint-loader"),
                 options: {
                     ...opts.eslint,
+                    baseConfig: require("../config/eslint.config.js"),
+                    eslintPath: require.resolve("eslint")
+                }
+            },
+            {
+                enforce: "pre",
+                test: /\.(ts|tsx)$/,
+                include: includePaths,
+                exclude: /node_modules/,
+                loader: require.resolve("eslint-loader"),
+                options: {
+                    ...opts.eslint,
+                    parser: "@typescript-eslint/parser",
                     baseConfig: require("../config/eslint.config.js"),
                     eslintPath: require.resolve("eslint")
                 }

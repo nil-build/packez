@@ -18,6 +18,8 @@ const typescriptFormatter = require("../utils/typescriptFormatter");
 export default function(opts) {
     const isEnvProduction = opts.mode === "production";
     const corePlugins = opts.plugins;
+    const manifest = opts.manifest;
+    const tsCheck = opts.tsCheck;
     const plugins = [
         ...opts.pluginExtra,
         new webpack.IgnorePlugin({
@@ -43,12 +45,14 @@ export default function(opts) {
         );
     }
 
-    plugins.push(
-        new ManifestPlugin({
-            fileName: "asset-manifest.json",
-            publicPath: opts.publicPath
-        })
-    );
+    if (manifest) {
+        plugins.push(
+            new ManifestPlugin({
+                fileName: "asset-manifest.json",
+                publicPath: opts.publicPath
+            })
+        );
+    }
 
     //生成html页面
     if (opts.shouldUseEntryHTML) {
@@ -104,16 +108,18 @@ export default function(opts) {
         });
     }
 
-    plugins.push(
-        new ForkTsCheckerWebpackPlugin({
-            tsconfig: getTSConfigFilePath(opts),
-            compilerOptions: getTSCompilerOptions(opts),
-            async: true,
-            useTypescriptIncrementalApi: true,
-            checkSyntacticErrors: true,
-            formatter: typescriptFormatter
-        })
-    );
+    if (tsCheck) {
+        plugins.push(
+            new ForkTsCheckerWebpackPlugin({
+                tsconfig: getTSConfigFilePath(opts),
+                compilerOptions: getTSCompilerOptions(opts),
+                async: true,
+                useTypescriptIncrementalApi: true,
+                checkSyntacticErrors: true,
+                formatter: typescriptFormatter
+            })
+        );
+    }
 
     return plugins;
 }

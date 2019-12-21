@@ -17,6 +17,14 @@ packez.start(
     }
 );
 
+packez.bundle(
+    {
+        app: require.resolve("./src/index.js")
+    },
+    distBuild,
+    {}
+);
+
 // packez.build(
 //     {
 //         index: [

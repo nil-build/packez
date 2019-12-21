@@ -1,4 +1,3 @@
-import "core-js";
 // import "./style/common.css"
 // import React from 'react';
 // import ReactDOM from 'react-dom';
@@ -7,16 +6,15 @@ import scope from "./style/index.module.css";
 import a from "./index.html";
 import a1 from "./index.ext";
 import j from "./index.json";
-// var sum = require('./lib/sum')
-// var max = require('./lib/max')
+import num, { Horse } from "./main";
+var sum = require("./lib/sum");
+var max = require("./lib/max");
 // // var min = require('lodash')
 // var min = require('./lib/min')
 
-import { Horse } from "./main";
-
 new Horse();
 
-console.log(scope);
+console.log(scope, num);
 
 const React = () => {};
 

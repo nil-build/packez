@@ -14,8 +14,11 @@ export default function(opts = {}) {
         configFile: "./packez.config.js",
 
         //useTypeScript: false,
+        tsCheck: false,
 
         polyfills: require.resolve("../polyfills"),
+
+        manifest: true,
 
         shouldUseEntryHTML: true,
         //默认根据entry自动获取对于的.html文件
@@ -73,6 +76,7 @@ export default function(opts = {}) {
         ],
 
         //webpack options
+        devtool: null,
         optimization: {},
         target: "web",
         resolve: {},

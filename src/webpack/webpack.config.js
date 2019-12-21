@@ -12,24 +12,22 @@ module.exports = function(opts) {
         context: opts.cwd,
         mode: opts.mode,
         bail: isEnvProduction,
-        devtool: isEnvProduction
-            ? opts.shouldUseSourceMap
-                ? "source-map"
-                : false
-            : isEnvDevelopment && "cheap-module-source-map",
+        devtool:
+            opts.devtool ||
+            (isEnvProduction
+                ? opts.shouldUseSourceMap
+                    ? "source-map"
+                    : false
+                : isEnvDevelopment && "cheap-module-source-map"),
         entry: opts.entry,
-        output: _.defaultsDeep(
-            {
-                path: path.resolve(opts.cwd, opts.outputDir),
-                filename: [assestJs.output || ".", assestJs.name].join("/"),
-                chunkFilename: [
-                    assestJs.output || ".",
-                    assestJs.chunkName
-                ].join("/"),
-                publicPath: opts.publicPath
-            },
-            opts.output || {}
-        ),
+        output: _.defaultsDeep(opts.output || {}, {
+            path: path.resolve(opts.cwd, opts.outputDir),
+            filename: [assestJs.output || ".", assestJs.name].join("/"),
+            chunkFilename: [assestJs.output || ".", assestJs.chunkName].join(
+                "/"
+            ),
+            publicPath: opts.publicPath
+        }),
 
         module: getWebpackModules(opts),
         plugins: getWebpackPlugins(opts),

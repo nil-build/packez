@@ -34,15 +34,16 @@
         "*.js"
     ],
     "devDependencies": {
+        "jquery": "^3.4.1",
         "react": "^16.12.0",
-        "transform-es": "^4.6.1"
+        "transform-es": "^4.6.4"
     },
     "dependencies": {
         "@babel/code-frame": "^7.5.5",
         "@babel/core": "^7.7.0",
         "@babel/runtime": "^7.7.1",
         "@typescript-eslint/eslint-plugin": "^2.10.0",
-        "@typescript-eslint/parser": "^2.10.0",
+        "@typescript-eslint/parser": "^2.12.0",
         "babel-eslint": "^10.0.3",
         "babel-loader": "^8.0.6",
         "babel-preset-packez": "^0.6.1",
@@ -82,7 +83,7 @@
         "style-loader": "^0.23.1",
         "terser-webpack-plugin": "^1.4.1",
         "ts-loader": "^6.2.1",
-        "typescript": "^3.7.3",
+        "typescript": "^3.7.4",
         "url-loader": "^1.0.1",
         "warning": "^4.0.3",
         "webpack": "^4.41.2",

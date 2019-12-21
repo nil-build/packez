@@ -8,6 +8,7 @@
         "noImplicitReturns": true,
         "suppressImplicitAnyIndexErrors": true,
         "allowJs": false,
+        "checkJs": false,
         "noImplicitThis": false,
         "experimentalDecorators": true
     }

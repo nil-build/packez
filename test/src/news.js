@@ -1,4 +1,7 @@
-import "./style/product.css"
+import "./style/product.css";
+const product = require("./product");
+
+console.log(product);
 
 // require('jquery')
 

@@ -1,4 +1,7 @@
 import calc from "./calc";
+
+export default 123;
+
 export class Animal {
     name: string = "abc";
     constructor(name: string) {
@@ -16,6 +19,8 @@ export class Snake extends Animal {
     }
     move(distanceInMeters = 5) {
         console.log("Slithering...");
+        let t: any = 1;
+        (t as { value: any }).value = 5;
         super.move(distanceInMeters);
     }
 }

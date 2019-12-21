@@ -1,6 +1,6 @@
-var warning = require('warning');
-var ReactDOM = require('react-dom');
+var warning = require("warning");
+// var ReactDOM = require('react-dom');
 
-module.exports = function () {
-    warning('max');
-}
+module.exports = function() {
+    warning("max");
+};

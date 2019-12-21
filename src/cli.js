@@ -31,7 +31,7 @@ const options = {
     publicPath: _.get(program, "publicPath", "")
 };
 
-const validExecuors = ["start", "build", "server", "analyzer"];
+const validExecuors = ["start", "build", "server", "analyzer", "bundle"];
 const args = program.args;
 const outputDir = _.get(program, "outDir", "dist");
 let entry = "./src/index.js";
