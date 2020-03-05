@@ -118,6 +118,8 @@ export default function(opts) {
 				useTypescriptIncrementalApi: true,
 				checkSyntacticErrors: true,
 				formatter: typescriptFormatter,
+				resolveModuleNameModule: `${__dirname}/pnpTs.js`,
+				resolveTypeReferenceDirectiveModule: `${__dirname}/pnpTs.js`,
 			})
 		);
 	}
