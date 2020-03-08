@@ -5,10 +5,8 @@ import webpack from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import ManifestPlugin from "webpack-manifest-plugin";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
-import {
-	getTSCompilerOptions,
-	getTSConfigFilePath,
-} from "../config/getTSConfig";
+import { getTSConfigFilePath } from "../config/getTSConfig";
+
 const typescriptFormatter = require("../utils/typescriptFormatter");
 
 //
@@ -20,7 +18,7 @@ export default function(opts) {
 	const isEnvDevelopment = opts.mode === "development";
 	const corePlugins = opts.plugins;
 	const manifest = opts.manifest;
-	const tsCheck = opts.tsCheck;
+	const useTypeScript = opts.useTypeScript;
 	const plugins = [
 		...opts.pluginExtra,
 		new webpack.IgnorePlugin({
@@ -109,17 +107,15 @@ export default function(opts) {
 		});
 	}
 
-	if (tsCheck) {
+	if (useTypeScript) {
 		plugins.push(
 			new ForkTsCheckerWebpackPlugin({
 				tsconfig: getTSConfigFilePath(opts),
-				compilerOptions: getTSCompilerOptions(opts),
 				async: isEnvDevelopment,
 				useTypescriptIncrementalApi: true,
 				checkSyntacticErrors: true,
-				formatter: typescriptFormatter,
-				resolveModuleNameModule: `${__dirname}/pnpTs.js`,
-				resolveTypeReferenceDirectiveModule: `${__dirname}/pnpTs.js`,
+				silent: true,
+				formatter: isEnvProduction ? typescriptFormatter : undefined,
 			})
 		);
 	}

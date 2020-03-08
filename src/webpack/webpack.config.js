@@ -3,47 +3,65 @@ import _ from "lodash";
 import getWebpackModules from "./getWebpackModules";
 import getWebpackPlugins from "./getWebpackPlugins";
 import getWebpackOptimization from "./getWebpackOptimization";
+// import PnpWebpackPlugin from "pnp-webpack-plugin";
 
-module.exports = function(opts) {
-    const assestJs = opts.assest.js;
-    const isEnvProduction = opts.mode === "production";
-    const isEnvDevelopment = opts.mode === "development";
-    const options = {
-        context: opts.cwd,
-        mode: opts.mode,
-        bail: isEnvProduction,
-        devtool:
-            opts.devtool ||
-            (isEnvProduction
-                ? opts.shouldUseSourceMap
-                    ? "source-map"
-                    : false
-                : isEnvDevelopment && "cheap-module-source-map"),
-        entry: opts.entry,
-        output: _.defaultsDeep(opts.output || {}, {
-            path: path.resolve(opts.cwd, opts.outputDir),
-            filename: [assestJs.output || ".", assestJs.name].join("/"),
-            chunkFilename: [assestJs.output || ".", assestJs.chunkName].join(
-                "/"
-            ),
-            publicPath: opts.publicPath
-        }),
+export default function(opts) {
+	const assestJs = opts.assest.js;
+	const shouldUseSourceMap = opts.shouldUseSourceMap;
+	const isEnvProduction = opts.mode === "production";
+	const isEnvDevelopment = opts.mode === "development";
 
-        module: getWebpackModules(opts),
-        plugins: getWebpackPlugins(opts),
-        optimization: getWebpackOptimization(opts),
-        externals: opts.externals,
-        resolve: {
-            extensions: [".js", ".jsx", ".mjs", ".ts", ".tsx"],
-            ...opts.resolve
-        },
-        performance: opts.performance,
-        target: opts.target
-    };
+	return {
+		context: opts.cwd,
+		mode: isEnvProduction
+			? "production"
+			: isEnvDevelopment && "development",
+		bail: isEnvProduction,
+		devtool:
+			opts.devtool ||
+			(isEnvProduction
+				? shouldUseSourceMap
+					? "source-map"
+					: false
+				: isEnvDevelopment && "cheap-module-source-map"),
+		entry: opts.entry,
+		output: _.defaultsDeep(opts.output || {}, {
+			path: path.resolve(opts.cwd, opts.outputDir),
+			filename: [assestJs.output || ".", assestJs.name].join("/"),
+			chunkFilename: [assestJs.output || ".", assestJs.chunkName].join(
+				"/"
+			),
+			publicPath: opts.publicPath,
+		}),
 
-    if (opts.node) {
-        options.node = opts.node;
-    }
-
-    return options;
-};
+		module: getWebpackModules(opts),
+		plugins: getWebpackPlugins(opts),
+		optimization: getWebpackOptimization(opts),
+		externals: opts.externals,
+		resolve: {
+			extensions: [".js", ".jsx", ".mjs", ".ts", ".tsx"],
+			// plugins: [PnpWebpackPlugin],
+			...opts.resolve,
+		},
+		// resolveLoader: {
+		// 	plugins: [PnpWebpackPlugin.moduleLoader(module)],
+		// },
+		target: opts.target,
+		// Some libraries import Node modules but don't use them in the browser.
+		// Tell webpack to provide empty mocks for them so importing them works.
+		node: {
+			module: "empty",
+			dgram: "empty",
+			dns: "mock",
+			fs: "empty",
+			http2: "empty",
+			net: "empty",
+			tls: "empty",
+			child_process: "empty",
+		},
+		// Turn off performance processing because we utilize
+		// our own hints via the FileSizeReporter
+		// performance: opts.performance,
+		performance: false,
+	};
+}

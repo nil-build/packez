@@ -1,11 +1,12 @@
-import { defaultsDeep, isFunction, isString } from "lodash";
+import { defaultsDeep, isFunction, isString, get } from "lodash";
 import path from "path";
 import fs from "fs-extra";
+import hasTSConfig from "../utils/hasTSConfig";
 
-export default (opts = {}) => {
+export default opts => {
 	const defaultOptions = {
 		cwd: process.cwd(),
-		mode: "development", // development  production
+		mode: "development", // development production
 		include: null,
 		exclude: null,
 		//outputDir: 'dist',
@@ -13,8 +14,7 @@ export default (opts = {}) => {
 
 		configFile: "./packez.config.js",
 
-		useTypeScript: false,
-		// tsCheck: false,
+		useTypeScript: get(opts, "useTypeScript", hasTSConfig()),
 
 		polyfills: require.resolve("../polyfills"),
 
@@ -29,8 +29,6 @@ export default (opts = {}) => {
 		inlineStyle: false,
 
 		clean: true,
-
-		tsCompilerOptions: {},
 
 		babel: {},
 
@@ -65,7 +63,7 @@ export default (opts = {}) => {
 		//打包时如果检查到package.json未设置browserslist时则将该配置写到package.json中
 		//后续如果需要修改browserslist则直接修改package.json文件
 		browserslist: [
-			">=0.2%",
+			">=0.25%",
 			"not dead",
 			"not op_mini all",
 			"not Android 4.4.3-4.4.4",

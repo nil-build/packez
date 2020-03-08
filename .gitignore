@@ -3,3 +3,7 @@
 /.idea
 /test/dist-build
 /test/dist-cli
+/test/dist-server
+/test/dist-start
+/test/dist-typescript
+/lib

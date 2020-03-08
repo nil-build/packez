@@ -1,15 +1,18 @@
 {
 	"compilerOptions": {
-		"module": "esnext",
-		"target": "es2016",
+		"outDir": "lib2",
+		"declaration": true,
+		"module": "ESNext",
+		"target": "ESNext",
+		"lib": ["es6", "dom"],
 		"jsx": "react",
 		"allowSyntheticDefaultImports": true,
+		"moduleResolution": "node",
 		"forceConsistentCasingInFileNames": true,
 		"noImplicitReturns": true,
 		"suppressImplicitAnyIndexErrors": true,
-		"allowJs": false,
-		"checkJs": false,
 		"noImplicitThis": false,
-		"experimentalDecorators": true
+		"experimentalDecorators": true,
+		"strictNullChecks": true
 	}
 }

@@ -1,40 +1,40 @@
 // import path from "path";
 import isObject from "lodash/isObject";
-import getConfig from "./config";
+import normalizeConfig from "./config/normalize";
 
 export default function initConfig(
-    entry = "./src/index.js",
-    outputDir = "dist",
-    opts = {}
+	entry = "./src/index.js",
+	outputDir = "dist",
+	opts = {}
 ) {
-    if (arguments.length === 1 && isObject(entry)) {
-        opts = entry;
-        entry = "./src/index.js";
-        outputDir = "dist";
-    }
+	if (arguments.length === 1 && isObject(entry)) {
+		opts = entry;
+		entry = "./src/index.js";
+		outputDir = "dist";
+	}
 
-    const options = getConfig(opts);
+	const options = normalizeConfig(opts);
 
-    let entries = options.entry || entry;
-    if (typeof entry === "string" || Array.isArray(entry)) {
-        entries = {
-            index: entry
-        };
-    }
+	let entries = options.entry || entry;
+	if (typeof entry === "string" || Array.isArray(entry)) {
+		entries = {
+			index: entry,
+		};
+	}
 
-    options.entry = entries;
-    options.outputDir = options.outputDir || outputDir;
+	options.entry = entries;
+	options.outputDir = options.outputDir || outputDir;
 
-    let polyfills = options.polyfills;
-    if (polyfills) {
-        polyfills = Array.isArray(polyfills) ? polyfills : [polyfills];
-    } else {
-        polyfills = [];
-    }
+	let polyfills = options.polyfills;
+	if (polyfills) {
+		polyfills = Array.isArray(polyfills) ? polyfills : [polyfills];
+	} else {
+		polyfills = [];
+	}
 
-    Object.keys(entries).forEach(key => {
-        entries[key] = [].concat(polyfills, entries[key]);
-    });
+	Object.keys(entries).forEach(key => {
+		entries[key] = [].concat(polyfills, entries[key]);
+	});
 
-    return options;
+	return options;
 }

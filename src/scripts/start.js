@@ -1,54 +1,64 @@
 import _ from "lodash";
 import fs from "fs-extra";
+import chalk from "chalk";
 import initConfig from "../initConfig";
 import checkDeps from "../checkDeps";
-import getWebpackConfig from "../webpack/webpack.config";
-import run from "../utils/webpackRun";
+import webpackConfigFactory from "../webpack/webpack.config";
+import createWebpackCompiler from "../utils/createWebpackCompiler";
+import printBuildError from "../utils/printBuildError";
+import log from "../utils/logger";
 
 export default function(entry, output, opts = {}) {
-    if (opts.mode !== "production") {
-        opts = _.defaultsDeep({}, opts, {
-            assest: {
-                css: {
-                    name: "[name].css",
-                    chunkName: "[name].chunk.css"
-                },
-                js: {
-                    name: "[name].js",
-                    chunkName: "[name].chunk.js"
-                },
-                media: {
-                    name: "[name].[ext]"
-                }
-            },
-            watch: true
-        });
-    }
+	if (opts.mode !== "production") {
+		opts = _.defaultsDeep({}, opts, {
+			assest: {
+				css: {
+					name: "[name].css",
+					chunkName: "[name].chunk.css",
+				},
+				js: {
+					name: "[name].js",
+					chunkName: "[name].chunk.js",
+				},
+				media: {
+					name: "[name].[ext]",
+				},
+			},
+			watch: true,
+		});
+	}
 
-    const config = initConfig(entry, output, opts);
+	const config = initConfig(entry, output, opts);
 
-    checkDeps(config);
+	fs.ensureDirSync(config.outputDir);
 
-    let webpackConfig = getWebpackConfig(config);
+	if (config.clean) {
+		fs.emptyDirSync(config.outputDir);
+	}
 
-    //自定义
-    if (_.isFunction(config.getWebpackConfig)) {
-        webpackConfig = config.getWebpackConfig(webpackConfig);
-    }
+	const watch = config.watch;
+	const watchOptions = config.watchOptions;
 
-    fs.ensureDirSync(webpackConfig.output.path);
+	const compiler = createWebpackCompiler(config);
 
-    if (config.clean) {
-        fs.emptyDirSync(webpackConfig.output.path);
-    }
+	const printError = err => {
+		log(chalk.red("Failed to compile.\n"));
+		printBuildError(err);
+	};
 
-    const watch = config.watch;
-    const watchOptions = config.watchOptions;
+	const cb = err => {
+		if (err) {
+			if (!err.message) {
+				printError(err);
+			} else {
+				printError(new Error(err.message));
+			}
+		}
+	};
 
-    run(
-        Object.assign(webpackConfig, {
-            watch,
-            watchOptions
-        })
-    );
+	if (watch) {
+		compiler.watch(watchOptions, cb);
+	} else {
+		compiler.run(cb);
+	}
 }
