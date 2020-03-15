@@ -60,6 +60,7 @@ export default function(opts) {
 				{
 					loader: require.resolve("resolve-url-loader"),
 					options: {
+						removeCR: true,
 						sourceMap: isEnvProduction && shouldUseSourceMap,
 					},
 				},
