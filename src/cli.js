@@ -19,7 +19,6 @@ program
 	)
 	.option("-c, --clean", "转换前清空输出目录")
 	.option("-p, --publicPath [publicPath]", "publicPath", "")
-	.option("-l, --loaders [loaders]")
 	.option("--config [config]", "configFile", "./packez.config.js")
 	.option("--state [state]", "state", "")
 	.parse(process.argv);
@@ -32,7 +31,7 @@ const options = {
 	state: _.get(program, "state", ""),
 };
 
-const validExecuors = ["start", "build", "server", "analyzer", "bundle"];
+const validExecutors = ["start", "build", "server", "analyzer", "bundle"];
 const args = program.args;
 const outputDir = _.get(program, "outDir", "dist");
 let entry = "./src/index.js";
@@ -86,7 +85,7 @@ if (args[0] === "init") {
 let isShortCmd = false;
 
 if (args.length === 1) {
-	if (validExecuors.indexOf(args[0]) === -1) {
+	if (validExecutors.indexOf(args[0]) === -1) {
 		entry = args[0];
 	} else {
 		isShortCmd = true;
@@ -96,7 +95,7 @@ if (args.length === 1) {
 	entry = args[1];
 }
 
-if (validExecuors.indexOf(executor) === -1) {
+if (validExecutors.indexOf(executor) === -1) {
 	throw new Error(
 		`packez method ${executor} not exists! you may use start,build,server,analyzer,bundle`
 	);
@@ -113,7 +112,7 @@ if (!isShortCmd) {
 		const entries = {};
 		const results = fs.readdirSync(entry);
 		results.forEach(file => {
-			if (/\.m?jsx?$/.test(file)) {
+			if (/\.(js|mjs|jsx|ts|tsx)$/.test(file)) {
 				entries[file] = path.resolve(entry, file);
 			}
 		});

@@ -103,11 +103,11 @@ packez.start({
 
 启动打包时是否清空输出目录。
 
-### `tsCheck`
+### `useTypeScript`
 
-`boolean` 默认：`false`
+自动检测`tsconfig.json`
 
-启用 TypeScript 类型检测，只对 ts|tsx 文件类型有效
+启用 TypeScript
 
 ### `inlineStyle`
 
@@ -170,7 +170,7 @@ import "core-js/modules/es.promise.finally";
 
 内置的 polyfills，可以通过`entry`为数组的方式来扩展自己的`polyfills`
 
-### `assest`
+### `assets`
 
 `object` 默认：
 
@@ -197,13 +197,9 @@ import "core-js/modules/es.promise.finally";
 
 > 设置输出文件的路径就文件名规则，`注`:在`start` `server`下 `name`和`chunkName`默认不会设置`chunkhash:8`
 
-### `tsCompilerOptions`
-
-```
-{...}
-```
-
 ### `eslint`
+
+e.g.
 
 ```
 {
@@ -219,7 +215,7 @@ import "core-js/modules/es.promise.finally";
 
 ### `babel`
 
-`boolean` or `object` 默认：`true`
+`object`
 
 当为`object`时默认为：
 
@@ -231,14 +227,7 @@ import "core-js/modules/es.promise.finally";
     compact: false,
     presets: [],
     plugins: [],
-    runtimeOptions: {
-        corejs: false,
-        helpers: true
-    },
-    loose: true,
     modules: false,
-    strictMode: true,
-    其他可参考：@babel/preset-env
 }
 ```
 
@@ -246,13 +235,13 @@ runtimeOptions: [transform-runtime](https://babeljs.io/docs/en/next/babel-plugin
 
 [@babel/preset-env](https://babeljs.io/docs/en/next/babel-preset-env)
 
-### `loaderExtra`
+### `loaders`
 
 `array`
 
 自定义 webpack 加载器
 
-### `pluginExtra`
+### `plugins`
 
 `array`
 
@@ -355,12 +344,6 @@ runtimeOptions: [transform-runtime](https://babeljs.io/docs/en/next/babel-plugin
 
 `目前不支持HMR，hot不要开启`
 
-### `getWebpackConfig`
-
-`function(webpackConfig) => object`
-
-接收`packez`生成的 webpackConfig 配置对象
-
 ## cli
 
 `packez [start|build|server|analyzer] [file|dir] -d -w -c ...`
@@ -371,5 +354,4 @@ runtimeOptions: [transform-runtime](https://babeljs.io/docs/en/next/babel-plugin
     .option('-t, --target [target]', '转换目标格式：web | node 默认为 web', /^node|web$/, 'web')
     .option('-c, --clear', '转换前清空输出目录')
     .option('-p, --publicPath [publicPath]', 'publicPath', '')
-    .option('-l, --loaders [loaders]')
 ```

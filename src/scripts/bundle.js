@@ -28,7 +28,7 @@ export default function(entry, output, opts = {}) {
 		...opts.output,
 	};
 
-	opts.assest = _.defaultsDeep(opts.assest, {
+	opts.assets = _.defaultsDeep(opts.assets, {
 		js: {
 			name: "[name].js",
 			output: "",

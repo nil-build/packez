@@ -6,7 +6,7 @@ import getWebpackOptimization from "./getWebpackOptimization";
 // import PnpWebpackPlugin from "pnp-webpack-plugin";
 
 export default function(opts) {
-	const assestJs = opts.assest.js;
+	const assetsJs = opts.assets.js;
 	const shouldUseSourceMap = opts.shouldUseSourceMap;
 	const isEnvProduction = opts.mode === "production";
 	const isEnvDevelopment = opts.mode === "development";
@@ -27,8 +27,8 @@ export default function(opts) {
 		entry: opts.entry,
 		output: _.defaultsDeep(opts.output || {}, {
 			path: path.resolve(opts.cwd, opts.outputDir),
-			filename: [assestJs.output || ".", assestJs.name].join("/"),
-			chunkFilename: [assestJs.output || ".", assestJs.chunkName].join(
+			filename: [assetsJs.output || ".", assetsJs.name].join("/"),
+			chunkFilename: [assetsJs.output || ".", assetsJs.chunkName].join(
 				"/"
 			),
 			publicPath: opts.publicPath,

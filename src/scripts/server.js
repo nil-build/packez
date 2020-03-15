@@ -18,11 +18,11 @@ import log from "../utils/logger";
 export default function(entry, output, opts = {}) {
 	const config = initConfig(entry, output, opts);
 
-	config.assest.css.name = "[name].css";
-	config.assest.css.chunkName = "[name].chunk.css";
-	config.assest.js.name = "[name].js";
-	config.assest.js.chunkName = "[name].chunk.js";
-	config.assest.media.name = "[name].[ext]";
+	config.assets.css.name = "[name].css";
+	config.assets.css.chunkName = "[name].chunk.css";
+	config.assets.js.name = "[name].js";
+	config.assets.js.chunkName = "[name].chunk.js";
+	config.assets.media.name = "[name].[ext]";
 
 	const devServerOptions = config.devServer || {};
 	devServerOptions.contentBase = path.resolve(config.cwd, config.outputDir);

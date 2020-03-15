@@ -9,18 +9,13 @@ import { getTSConfigFilePath } from "../config/getTSConfig";
 
 const typescriptFormatter = require("../utils/typescriptFormatter");
 
-//
-//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-//var Visualizer = require('webpack-visualizer-plugin');
-
 export default function(opts) {
 	const isEnvProduction = opts.mode === "production";
 	const isEnvDevelopment = opts.mode === "development";
-	const corePlugins = opts.plugins;
 	const manifest = opts.manifest;
 	const useTypeScript = opts.useTypeScript;
 	const plugins = [
-		...opts.pluginExtra,
+		...opts.plugins,
 		new webpack.IgnorePlugin({
 			resourceRegExp: /^\.\/locale$/,
 			contextRegExp: /moment$/,
@@ -33,12 +28,12 @@ export default function(opts) {
 		plugins.push(
 			new MiniCssExtractPlugin({
 				filename: [
-					opts.assest.css.output || ".",
-					opts.assest.css.name,
+					opts.assets.css.output || ".",
+					opts.assets.css.name,
 				].join("/"),
 				chunkFilename: [
-					opts.assest.css.output || ".",
-					opts.assest.css.chunkName,
+					opts.assets.css.output || ".",
+					opts.assets.css.chunkName,
 				].join("/"),
 			})
 		);

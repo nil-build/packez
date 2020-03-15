@@ -34,15 +34,15 @@ export default opts => {
 
 		eslint: {},
 
-		//扩展加载器
-		loaderExtra: [],
-		//预处理加载器
-		preLoaderExtra: [],
+		//webpack加载器
+		loaders: [],
+		//webpack预处理加载器
+		preLoaders: [],
 
-		//扩展插件
-		pluginExtra: [],
+		//webpack扩展插件
+		plugins: [],
 
-		assest: {
+		assets: {
 			css: {
 				name: "[name].[contenthash:8].css",
 				chunkName: "[name].[chunkhash:8].chunk.css",

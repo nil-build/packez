@@ -11,7 +11,7 @@ import log from "../utils/logger";
 export default function(entry, output, opts = {}) {
 	if (opts.mode !== "production") {
 		opts = _.defaultsDeep({}, opts, {
-			assest: {
+			assets: {
 				css: {
 					name: "[name].css",
 					chunkName: "[name].chunk.css",
