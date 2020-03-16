@@ -1,9 +1,8 @@
+import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
+import build from "./build";
 
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-import build from './build';
-
-export default function (entry, output, opts = {}) {
-    opts.pluginExtra = opts.pluginExtra || [];
-    opts.pluginExtra.push(new BundleAnalyzerPlugin());
+export default function(entry, output, opts = {}) {
+    opts.plugins = opts.plugins || [];
+    opts.plugins.push(new BundleAnalyzerPlugin());
     build(entry, output, opts);
 }
