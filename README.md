@@ -235,6 +235,10 @@ runtimeOptions: [transform-runtime](https://babeljs.io/docs/en/next/babel-plugin
 
 [@babel/preset-env](https://babeljs.io/docs/en/next/babel-preset-env)
 
+### postcss
+
+`Array`
+
 ### `loaders`
 
 `array`

@@ -34,6 +34,8 @@ export default opts => {
 
 		eslint: {},
 
+		postcss: [],
+
 		//webpack加载器
 		loaders: [],
 		//webpack预处理加载器

@@ -66,6 +66,8 @@ module.exports = function(options, state) {
 		 * babel 配置参数
 		 */
 		//babel: {},
+		//postcss plugins
+		// postcss:[],
 		/**
 		 * eslint 配置参数
 		 */
