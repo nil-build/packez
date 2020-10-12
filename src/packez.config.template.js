@@ -1,4 +1,4 @@
-module.exports = function(options, state) {
+module.exports = function (options, state) {
 	return {
 		/**
 		 * @param {"development" | "production"}

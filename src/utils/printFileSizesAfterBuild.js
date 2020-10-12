@@ -11,8 +11,8 @@ export default function printFileSizesAfterBuild(stats, config) {
 
 	const assets = stats
 		.toJson({ all: false, assets: true })
-		.assets.filter(assets => /\.(?:css|js|html?)$/.test(assets.name))
-		.map(asset => {
+		.assets.filter((assets) => /\.(?:css|js|html?)$/.test(assets.name))
+		.map((asset) => {
 			let sizeLabel = filesize(asset.size);
 
 			if (isEnvProduction) {
@@ -35,10 +35,10 @@ export default function printFileSizesAfterBuild(stats, config) {
 
 	var longestSizeLabelLength = Math.max.apply(
 		null,
-		assets.map(a => stripAnsi(a.sizeLabel).length)
+		assets.map((a) => stripAnsi(a.sizeLabel).length)
 	);
 
-	assets.forEach(asset => {
+	assets.forEach((asset) => {
 		let sizeLabel = asset.sizeLabel;
 		let sizeLength = stripAnsi(sizeLabel).length;
 		if (sizeLength < longestSizeLabelLength) {

@@ -8,12 +8,12 @@ import server from "./scripts/server";
 import bundle from "./scripts/bundle";
 
 export {
-    initConfig,
-    getWebpackConfig,
-    checkDeps,
-    start,
-    build,
-    analyzer,
-    server,
-    bundle
+	initConfig,
+	getWebpackConfig,
+	checkDeps,
+	start,
+	build,
+	analyzer,
+	server,
+	bundle,
 };

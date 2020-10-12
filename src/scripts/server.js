@@ -15,7 +15,7 @@ import printBuildError from "../utils/printBuildError";
 
 import log from "../utils/logger";
 
-export default function(entry, output, opts = {}) {
+export default function (entry, output, opts = {}) {
 	const config = initConfig(entry, output, opts);
 
 	config.assets.css.name = "[name].css";
@@ -46,7 +46,7 @@ export default function(entry, output, opts = {}) {
 
 	const compiler = createWebpackCompiler(config);
 
-	compiler.hooks.done.tap("done", async stats => {
+	compiler.hooks.done.tap("done", async (stats) => {
 		const statsData = stats.toJson({
 			all: false,
 			warnings: true,

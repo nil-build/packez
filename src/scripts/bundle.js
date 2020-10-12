@@ -6,7 +6,7 @@ import checkDeps from "../checkDeps";
 import getWebpackConfig from "../webpack/webpack.config";
 import createWebpackCompiler from "../utils/createWebpackCompiler";
 
-export default function(entry, output, opts = {}) {
+export default function (entry, output, opts = {}) {
 	opts.shouldUseEntryHTML = false;
 	opts.polyfills = null;
 	opts.devtool = null;

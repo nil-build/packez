@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs-extra";
 import hasTSConfig from "../utils/hasTSConfig";
 
-export default opts => {
+export default (opts) => {
 	const defaultOptions = {
 		cwd: process.cwd(),
 		mode: "development", // development production

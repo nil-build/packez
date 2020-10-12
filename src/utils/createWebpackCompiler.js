@@ -33,8 +33,8 @@ export default function createCompiler(options) {
 			if (!isFirstCompile) {
 				log("Compiling...\n");
 			}
-			tsMessagesPromise = new Promise(resolve => {
-				tsMessagesResolver = msgs => resolve(msgs);
+			tsMessagesPromise = new Promise((resolve) => {
+				tsMessagesResolver = (msgs) => resolve(msgs);
 			});
 		});
 
@@ -42,21 +42,21 @@ export default function createCompiler(options) {
 			.getCompilerHooks(compiler)
 			.receive.tap("afterTypeScriptCheck", (diagnostics, lints) => {
 				const allMsgs = [...diagnostics, ...lints];
-				const format = message =>
+				const format = (message) =>
 					`${message.file}\n${typescriptFormatter(message, true)}`;
 
 				tsMessagesResolver({
 					errors: allMsgs
-						.filter(msg => msg.severity === "error")
+						.filter((msg) => msg.severity === "error")
 						.map(format),
 					warnings: allMsgs
-						.filter(msg => msg.severity === "warning")
+						.filter((msg) => msg.severity === "warning")
 						.map(format),
 				});
 			});
 	}
 
-	compiler.hooks.done.tap("done", async stats => {
+	compiler.hooks.done.tap("done", async (stats) => {
 		const statsData = stats.toJson({
 			all: false,
 			warnings: true,

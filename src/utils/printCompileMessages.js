@@ -5,7 +5,7 @@ import printBuildError from "./printBuildError";
 import log from "./logger";
 import _ from "lodash";
 
-const printError = err => {
+const printError = (err) => {
 	log(chalk.red("Failed to compile.\n"));
 	printBuildError(err);
 };

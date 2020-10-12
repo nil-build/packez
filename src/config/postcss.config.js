@@ -2,7 +2,7 @@
 // const autoprefixer = require('autoprefixer');
 const postcssNormalize = require("postcss-normalize");
 
-module.exports = function(opts) {
+module.exports = function (opts) {
 	return {
 		ident: "postcss",
 		plugins: () => [

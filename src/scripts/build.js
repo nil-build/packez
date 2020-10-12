@@ -1,9 +1,9 @@
-import start from './start';
+import start from "./start";
 
 export default function (entry, output, opts = {}) {
-    start(entry, output, {
-        watch: false,
-        ...opts,
-        mode: "production",
-    })
+	start(entry, output, {
+		watch: false,
+		...opts,
+		mode: "production",
+	});
 }

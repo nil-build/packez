@@ -1,7 +1,7 @@
 var { start, build, server, analyzer, bundle } = require("./lib");
 
 function packez(entry, output, opts = {}) {
-    return start(entry, output, opts);
+	return start(entry, output, opts);
 }
 
 packez.start = start;

@@ -111,7 +111,7 @@ if (!isShortCmd) {
 	if (stats.isDirectory()) {
 		const entries = {};
 		const results = fs.readdirSync(entry);
-		results.forEach(file => {
+		results.forEach((file) => {
 			if (/\.(js|mjs|jsx|ts|tsx)$/.test(file)) {
 				entries[file] = path.resolve(entry, file);
 			}

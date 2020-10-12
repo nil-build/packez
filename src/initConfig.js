@@ -32,7 +32,7 @@ export default function initConfig(
 		polyfills = [];
 	}
 
-	Object.keys(entries).forEach(key => {
+	Object.keys(entries).forEach((key) => {
 		entries[key] = [].concat(polyfills, entries[key]);
 	});
 

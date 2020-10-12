@@ -1,7 +1,7 @@
 import { defaultsDeep } from "lodash";
 import TerserPlugin from "terser-webpack-plugin";
 
-export default function(opts) {
+export default function (opts) {
 	const shouldUseSourceMap = opts.shouldUseSourceMap;
 	const isEnvProduction = opts.mode === "production";
 
@@ -66,7 +66,7 @@ export default function(opts) {
 			minimize: isEnvProduction,
 			minimizer: minimizer,
 			runtimeChunk: {
-				name: entrypoint => `runtime-${entrypoint.name}`,
+				name: (entrypoint) => `runtime-${entrypoint.name}`,
 			},
 			splitChunks: {
 				chunks: "all",

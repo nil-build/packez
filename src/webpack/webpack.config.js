@@ -5,7 +5,7 @@ import getWebpackPlugins from "./getWebpackPlugins";
 import getWebpackOptimization from "./getWebpackOptimization";
 // import PnpWebpackPlugin from "pnp-webpack-plugin";
 
-export default function(opts) {
+export default function (opts) {
 	const assetsJs = opts.assets.js;
 	const shouldUseSourceMap = opts.shouldUseSourceMap;
 	const isEnvProduction = opts.mode === "production";

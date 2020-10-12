@@ -9,7 +9,7 @@ import { getTSConfigFilePath } from "../config/getTSConfig";
 
 const typescriptFormatter = require("../utils/typescriptFormatter");
 
-export default function(opts) {
+export default function (opts) {
 	const isEnvProduction = opts.mode === "production";
 	const isEnvDevelopment = opts.mode === "development";
 	const manifest = opts.manifest;
@@ -77,7 +77,7 @@ export default function(opts) {
 		// }
 		// 如果不指定html模板则默认寻找 ./src/index.html 和 ./src/app.html 文件
 
-		Object.keys(opts.entry).forEach(key => {
+		Object.keys(opts.entry).forEach((key) => {
 			var htmlOpts = Object.assign({}, defaultHtmlOpts);
 			const len = opts.entry[key].length;
 			const entry = opts.entry[key][len - 1];

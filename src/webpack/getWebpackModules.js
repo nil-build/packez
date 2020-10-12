@@ -8,7 +8,7 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 const getCSSModuleLocalIdent = require("../utils/getCSSModuleLocalIdent");
 const getPostCSSConfig = require("../config/postcss.config");
 
-export default function(opts) {
+export default function (opts) {
 	const inlineStyle = opts.inlineStyle;
 	const include = opts.include;
 	const exclude = opts.exclude;
@@ -81,7 +81,7 @@ export default function(opts) {
 			// Disable require.ensure
 			{ parser: { requireEnsure: false } },
 
-			...preLoaderExtra.map(loader => {
+			...preLoaderExtra.map((loader) => {
 				return {
 					...loader,
 					enforce: "pre",

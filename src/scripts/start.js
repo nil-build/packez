@@ -8,7 +8,7 @@ import createWebpackCompiler from "../utils/createWebpackCompiler";
 import printBuildError from "../utils/printBuildError";
 import log from "../utils/logger";
 
-export default function(entry, output, opts = {}) {
+export default function (entry, output, opts = {}) {
 	if (opts.mode !== "production") {
 		opts = _.defaultsDeep({}, opts, {
 			assets: {
@@ -41,12 +41,12 @@ export default function(entry, output, opts = {}) {
 
 	const compiler = createWebpackCompiler(config);
 
-	const printError = err => {
+	const printError = (err) => {
 		log(chalk.red("Failed to compile.\n"));
 		printBuildError(err);
 	};
 
-	const cb = err => {
+	const cb = (err) => {
 		if (err) {
 			if (!err.message) {
 				printError(err);
