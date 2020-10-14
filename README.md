@@ -235,6 +235,14 @@ runtimeOptions: [transform-runtime](https://babeljs.io/docs/en/next/babel-plugin
 
 [@babel/preset-env](https://babeljs.io/docs/en/next/babel-preset-env)
 
+### `less`
+
+`less-loader` 的配置参数
+
+### `sass`
+
+`sass-loader` 的配置参数
+
 ### postcss
 
 `Array`

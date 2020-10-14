@@ -31,11 +31,13 @@ export default function (opts) {
 	const lessRegex = /\.less$/;
 	const lessModuleRegex = /\.module\.less$/;
 	const babelOptions = _.get(opts, "babel", {});
+	const lessOptions = _.get(opts, "less", {});
+	const sassOptions = _.get(opts, "sass", {});
 
 	let includePaths = include ? include : undefined;
 
 	// common function to get style loaders
-	const getStyleLoaders = (cssOptions, preProcessor) => {
+	const getStyleLoaders = (cssOptions, preProcessor, preLoaderOptions) => {
 		const loaders = [
 			inlineStyle
 				? require.resolve("style-loader")
@@ -68,6 +70,7 @@ export default function (opts) {
 					loader: require.resolve(preProcessor),
 					options: {
 						sourceMap: true,
+						...preLoaderOptions,
 					},
 				}
 			);
@@ -202,7 +205,8 @@ export default function (opts) {
 								sourceMap:
 									isEnvProduction && shouldUseSourceMap,
 							},
-							"sass-loader"
+							"sass-loader",
+							sassOptions
 						),
 						// Don't consider CSS imports dead code even if the
 						// containing package claims to have no side effects.
@@ -222,7 +226,8 @@ export default function (opts) {
 									getLocalIdent: getCSSModuleLocalIdent,
 								},
 							},
-							"sass-loader"
+							"sass-loader",
+							sassOptions
 						),
 					},
 					{
@@ -234,7 +239,8 @@ export default function (opts) {
 								sourceMap:
 									isEnvProduction && shouldUseSourceMap,
 							},
-							"less-loader"
+							"less-loader",
+							lessOptions
 						),
 						// Don't consider CSS imports dead code even if the
 						// containing package claims to have no side effects.
@@ -254,7 +260,8 @@ export default function (opts) {
 									getLocalIdent: getCSSModuleLocalIdent,
 								},
 							},
-							"less-loader"
+							"less-loader",
+							lessOptions
 						),
 					},
 					//不匹配的情况下统一使用file-loader

@@ -34,6 +34,10 @@ export default (opts) => {
 
 		eslint: {},
 
+		less: {},
+
+		sass: {},
+
 		postcss: [],
 
 		//webpack加载器
