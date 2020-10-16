@@ -65,6 +65,11 @@ export default (opts) => {
 				output: "static/media",
 				limit: 10000,
 			},
+			raw: {
+				regexp: /\.(?:svg|txt)$/,
+				esModule: true,
+				options: {},
+			},
 		},
 		//打包时如果检查到package.json未设置browserslist时则将该配置写到package.json中
 		//后续如果需要修改browserslist则直接修改package.json文件

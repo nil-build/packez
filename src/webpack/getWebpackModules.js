@@ -22,6 +22,7 @@ export default function (opts) {
 		opts.publicPath
 	);
 	const assetsMedia = opts.assets.media;
+	const assetsRaw = opts.assets.raw;
 	const preLoaderExtra = opts.preLoaders || [];
 	const loaderExtra = opts.loaders || [];
 	const cssRegex = /\.css$/;
@@ -121,6 +122,18 @@ export default function (opts) {
 				oneOf: [
 					//扩展模块
 					...loaderExtra,
+					{
+						test: assetsRaw.regexp,
+						use: [
+							{
+								loader: require.resolve("raw-loader"),
+								options: {
+									esModule: assetsRaw.esModule,
+									...assetsRaw.options,
+								},
+							},
+						],
+					},
 					{
 						test: assetsMedia.regexp,
 						use: [

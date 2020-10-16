@@ -191,7 +191,12 @@ import "core-js/modules/es.promise.finally";
         name: "[name].[hash:8].[ext]",
         output: "static/media",
         limit: 10000,
-    }
+    },
+    raw: {
+				regexp: /\.(?:svg|txt)$/,
+				esModule: true,
+				options: {},
+		},
 }
 ```
 
