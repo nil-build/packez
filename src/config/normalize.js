@@ -132,6 +132,10 @@ export default (opts) => {
 		config = require(configFile);
 		if (isFunction(config)) {
 			config = config(_opts, opts.state);
+			//hook
+			if (config && !config.assets && config.assest) {
+				config.assets = config.assest;
+			}
 		}
 	}
 
