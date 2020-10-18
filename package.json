@@ -91,7 +91,7 @@
 		"webpack-manifest-plugin": "^2.2.0"
 	},
 	"browserslist": [
-		">=0.2%",
+		">=0.25%",
 		"not dead",
 		"not op_mini all",
 		"not Android 4.4.3-4.4.4",

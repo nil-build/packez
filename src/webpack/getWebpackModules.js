@@ -93,7 +93,7 @@ export default function (opts) {
 			}),
 
 			// run the linter.
-			{
+			opts.eslint && {
 				enforce: "pre",
 				test: /\.(js|mjs|jsx)$/,
 				include: includePaths,
@@ -105,7 +105,7 @@ export default function (opts) {
 					eslintPath: require.resolve("eslint"),
 				},
 			},
-			{
+			opts.eslint && {
 				enforce: "pre",
 				test: /\.(ts|tsx)$/,
 				include: includePaths,
