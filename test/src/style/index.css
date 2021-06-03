@@ -1,7 +1,6 @@
-@import "./global.scss";
 
 .main {
-    background: url(images/a.jpg);
+    background: url('images/a.jpg');
 }
 
 body {

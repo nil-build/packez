@@ -1,5 +1,6 @@
 import "./style/product.css";
-const product = require("./product");
+import "./style/global.less";
+const product = require("~/product");
 
 console.log(product);
 

@@ -1,6 +1,6 @@
 {
   "name": "packez",
-  "version": "4.5.0",
+  "version": "4.5.1",
   "description": "",
   "keywords": [
     "react",
@@ -24,12 +24,14 @@
   "license": "MIT",
   "scripts": {
     "start": "transform-es src -d lib -t node -w -c",
+    "build": "transform-es src -d lib -t node -c",
     "test:start": "node test/start",
     "test:typescript": "node test/typescript",
     "test:build": "node test/build",
     "test:server": "node test/server",
     "test:cli": "node cli ./test/src/index.js -d ./test/dist-cli",
-    "tag": "npm publish --tag next"
+    "tag": "npm publish --tag next",
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "*.md",
@@ -53,7 +55,7 @@
     "chalk": "^2.4.2",
     "commander": "3.0.2",
     "core-js": "^3.4.7",
-    "css-loader": "^3.6.0",
+    "css-loader": "^4.3.0",
     "eslint": "^6.6.0",
     "eslint-config-packez": "^0.4.2",
     "eslint-loader": "^3.0.2",
@@ -64,7 +66,7 @@
     "gzip-size": "^5.1.1",
     "html-webpack-plugin": "^4.5.0",
     "less": "^3.12.2",
-    "less-loader": "^5.0.0",
+    "less-loader": "^7.3.0",
     "loader-utils": "^1.2.3",
     "lodash": "^4.17.20",
     "mini-css-extract-plugin": "^0.8.0",
@@ -89,6 +91,9 @@
     "webpack-bundle-analyzer": "^3.9.0",
     "webpack-dev-server": "^3.9.0",
     "webpack-manifest-plugin": "^2.2.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
   },
   "browserslist": [
     ">=0.25%",
