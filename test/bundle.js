@@ -1,14 +1,13 @@
-const packez = require("../lib");
+const { bundle } = require("../lib/scripts/bundle");
 const path = require("path");
 
 const dist = __dirname + "/dist-bundle";
-packez.bundle(
+bundle(
   {
     app: require.resolve("./src/news.js"),
   },
   dist,
   {
-    useTypeScript: false,
     resolve: {
       alias: {
         "~": path.resolve(__dirname, "./src"),

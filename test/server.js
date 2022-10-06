@@ -1,8 +1,8 @@
-const packez = require("../lib");
+const { server } = require("../lib/scripts/server");
 const path = require("path");
 
 const dist = __dirname + "/dist-server";
-packez.server(
+server(
   {
     index: [
       require.resolve("./src/boot.js"),
@@ -12,7 +12,6 @@ packez.server(
   },
   dist,
   {
-    useTypeScript: false,
     resolve: {
       alias: {
         "~": path.resolve(__dirname, "./src"),
