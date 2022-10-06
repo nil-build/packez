@@ -1,69 +1,32 @@
-import _ from "lodash";
 import webpack from "webpack";
-import fs from "fs-extra";
-import path from "path";
-import chalk from "chalk";
 import webpackDevServer from "webpack-dev-server";
-import opn from "opn";
-import initConfig from "../initConfig";
-import checkDeps from "../checkDeps";
-import printCompileMessages from "../utils/printCompileMessages";
 
-import webpackConfigFactory from "../webpack/webpack.config";
-import createWebpackCompiler from "../utils/createWebpackCompiler";
-import printBuildError from "../utils/printBuildError";
+import getWebpackConfig from "../config/webpack.dev";
+import paths from "../config/paths";
 
-import log from "../utils/logger";
+import loadConfigFile from "../utils/loadConfigFile";
 
-export default function (entry, output, opts = {}) {
-	const config = initConfig(entry, output, opts);
+export function server(entry = paths.root + "/index", outDir = paths.dist, options = {}) {
+  process.env.NODE_ENV = "development";
 
-	config.assets.css.name = "[name].css";
-	config.assets.css.chunkName = "[name].chunk.css";
-	config.assets.js.name = "[name].js";
-	config.assets.js.chunkName = "[name].chunk.js";
-	config.assets.media.name = "[name].[ext]";
+  const webpackConfig = getWebpackConfig({
+    ...options,
+    // entry 路径必须绝对地址
+    entry: entry,
+    output: {
+      path: outDir,
+    },
+  });
 
-	const devServerOptions = config.devServer || {};
-	devServerOptions.contentBase = path.resolve(config.cwd, config.outputDir);
+  loadConfigFile(webpackConfig, options);
 
-	// let webpackConfig = webpackConfigFactory(config);
+  const devServerOptions = webpackConfig.devServer || {};
 
-	//自定义
-	// if (_.isFunction(config.getWebpackConfig)) {
-	// 	webpackConfig = config.getWebpackConfig(webpackConfig);
-	// }
+  const compiler = webpack(webpackConfig);
 
-	fs.ensureDirSync(config.outputDir);
+  const server = new webpackDevServer(devServerOptions, compiler);
 
-	if (config.clean) {
-		fs.emptyDirSync(config.outputDir);
-	}
-
-	const url = `${devServerOptions.https ? "https" : "http"}://127.0.0.1:${
-		devServerOptions.port
-	}`;
-
-	const compiler = createWebpackCompiler(config);
-
-	compiler.hooks.done.tap("done", async (stats) => {
-		const statsData = stats.toJson({
-			all: false,
-			warnings: true,
-			errors: true,
-		});
-
-		if (!statsData.errors.length) {
-			console.log(`  address: ${chalk.underline(url)}`);
-			console.log();
-		}
-	});
-	//https://webpack.js.org/guides/hot-module-replacement/
-	// webpackDevServer.addDevServerEntrypoints(webpackConfig, devServerOptions);
-	const server = new webpackDevServer(compiler, devServerOptions);
-
-	server.listen(devServerOptions.port, devServerOptions.host, () => {
-		log(chalk.cyan("Starting the development server..."));
-		opn(url);
-	});
+  server.startCallback(() => {
+    // console.log("Successfully started server on " + url);
+  });
 }

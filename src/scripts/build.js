@@ -1,9 +1,22 @@
-import start from "./start";
+import webpack from "webpack";
 
-export default function (entry, output, opts = {}) {
-	start(entry, output, {
-		watch: false,
-		...opts,
-		mode: "production",
-	});
+import getWebpackConfig from "../config/webpack.prod";
+import paths from "../config/paths";
+import loadConfigFile from "../utils/loadConfigFile";
+
+export function build(entry = paths.root + "/index", outDir = paths.dist, options = {}) {
+  process.env.NODE_ENV = "development";
+
+  const webpackConfig = getWebpackConfig({
+    ...options,
+    entry,
+    output: {
+      path: outDir,
+    },
+  });
+
+  loadConfigFile(webpackConfig, options);
+
+  const compiler = webpack(webpackConfig);
+  compiler.run();
 }
