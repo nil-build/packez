@@ -5,7 +5,7 @@ import paths from "../config/paths";
 import loadConfigFile from "../utils/loadConfigFile";
 
 export function build(entry = paths.root + "/index", outDir = paths.dist, options = {}) {
-  process.env.NODE_ENV = "development";
+  process.env.NODE_ENV = "production";
 
   const webpackConfig = getWebpackConfig({
     ...options,
