@@ -8,8 +8,8 @@ export default function loadConfigFile(webpackConfig, options = {}) {
 
   if (fs.existsSync(configFile)) {
     let config = require(configFile);
-    if (isFunction(fn)) {
-      config = fn();
+    if (isFunction(config)) {
+      config = config();
     }
 
     if (config.webpack) {
