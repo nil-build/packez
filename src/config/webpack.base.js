@@ -151,9 +151,7 @@ module.exports = (options = {}) => {
         title: "Web App",
         template: templateHtmlFile,
         filename: "index.html",
-        templateParameters: {
-          PUBLIC_URL: output.publicPath,
-        },
+        templateParameters: {},
       }),
 
       new SizePlugin(),
