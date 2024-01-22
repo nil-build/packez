@@ -6,9 +6,9 @@
 
 cli
 
-npx `packez server ./src/index.js -d dist -w -c`;
+npx `packez server ./src/index.js -d dist`;
 
-npx `packez build ./src/index.js -d dist -w -c`;
+npx `packez build ./src/index.js -d dist`;
 
 ## API
 
