@@ -2,7 +2,7 @@
 
 `npm install --save-dev packez`
 
-## Useage
+## Usage
 
 cli
 
